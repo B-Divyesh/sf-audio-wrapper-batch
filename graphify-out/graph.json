@@ -397,15 +397,15 @@
       "source_location": "L39"
     },
     {
-      "id": "src_db_getrecipes",
-      "label": "getRecipes()",
+      "id": "src_main_addfiles",
+      "label": "addFiles()",
       "_callable": true,
       "_origin": "ast",
       "community": 6,
       "file_type": "code",
-      "norm_label": "getrecipes()",
-      "source_file": "src/db.ts",
-      "source_location": "L38"
+      "norm_label": "addfiles()",
+      "source_file": "src/main.ts",
+      "source_location": "L229"
     },
     {
       "id": "src_main_assetfrom",
@@ -430,15 +430,15 @@
       "source_location": "L386"
     },
     {
-      "id": "src_main_dataurlblob",
-      "label": "dataUrlBlob()",
+      "id": "src_main_clearbatchdownload",
+      "label": "clearBatchDownload()",
       "_callable": true,
       "_origin": "ast",
       "community": 6,
       "file_type": "code",
-      "norm_label": "dataurlblob()",
+      "norm_label": "clearbatchdownload()",
       "source_file": "src/main.ts",
-      "source_location": "L300"
+      "source_location": "L243"
     },
     {
       "id": "src_main_download",
@@ -452,17 +452,6 @@
       "source_location": "L251"
     },
     {
-      "id": "src_main_fillrecipeform",
-      "label": "fillRecipeForm()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 6,
-      "file_type": "code",
-      "norm_label": "fillrecipeform()",
-      "source_file": "src/main.ts",
-      "source_location": "L162"
-    },
-    {
       "id": "src_main_freshrecipe",
       "label": "freshRecipe()",
       "_callable": true,
@@ -474,15 +463,15 @@
       "source_location": "L145"
     },
     {
-      "id": "src_main_importrecipe",
-      "label": "importRecipe()",
+      "id": "src_main_message",
+      "label": "message()",
       "_callable": true,
       "_origin": "ast",
       "community": 6,
       "file_type": "code",
-      "norm_label": "importrecipe()",
+      "norm_label": "message()",
       "source_file": "src/main.ts",
-      "source_location": "L307"
+      "source_location": "L150"
     },
     {
       "id": "src_main_now",
@@ -518,48 +507,81 @@
       "source_location": "L186"
     },
     {
-      "id": "src_main_addfiles",
-      "label": "addFiles()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "file_type": "code",
-      "norm_label": "addfiles()",
-      "source_file": "src/main.ts",
-      "source_location": "L229"
-    },
-    {
-      "id": "src_main_clearbatchdownload",
-      "label": "clearBatchDownload()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "file_type": "code",
-      "norm_label": "clearbatchdownload()",
-      "source_file": "src/main.ts",
-      "source_location": "L243"
-    },
-    {
-      "id": "src_main_message",
-      "label": "message()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "file_type": "code",
-      "norm_label": "message()",
-      "source_file": "src/main.ts",
-      "source_location": "L150"
-    },
-    {
       "id": "src_main_renderbatch",
       "label": "renderBatch()",
       "_callable": true,
       "_origin": "ast",
-      "community": 7,
+      "community": 6,
       "file_type": "code",
       "norm_label": "renderbatch()",
       "source_file": "src/main.ts",
       "source_location": "L323"
+    },
+    {
+      "id": "src_main_uid",
+      "label": "uid()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "file_type": "code",
+      "norm_label": "uid()",
+      "source_file": "src/main.ts",
+      "source_location": "L131"
+    },
+    {
+      "id": "src_main_validaudio",
+      "label": "validAudio()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 6,
+      "file_type": "code",
+      "norm_label": "validaudio()",
+      "source_file": "src/main.ts",
+      "source_location": "L133"
+    },
+    {
+      "id": "src_license_verifylicense",
+      "label": "verifyLicense()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "file_type": "code",
+      "norm_label": "verifylicense()",
+      "source_file": "src/license.ts",
+      "source_location": "L55"
+    },
+    {
+      "id": "src_main_escapehtml",
+      "label": "escapeHtml()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "file_type": "code",
+      "norm_label": "escapehtml()",
+      "source_file": "src/main.ts",
+      "source_location": "L130"
+    },
+    {
+      "id": "src_main_init",
+      "label": "init()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "file_type": "code",
+      "norm_label": "init()",
+      "source_file": "src/main.ts",
+      "source_location": "L496"
+    },
+    {
+      "id": "src_main_registerserviceworker",
+      "label": "registerServiceWorker()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "file_type": "code",
+      "norm_label": "registerserviceworker()",
+      "source_file": "src/main.ts",
+      "source_location": "L479"
     },
     {
       "id": "src_main_renderqueue",
@@ -573,15 +595,37 @@
       "source_location": "L213"
     },
     {
-      "id": "src_main_uid",
-      "label": "uid()",
+      "id": "src_main_renderreceipts",
+      "label": "renderReceipts()",
       "_callable": true,
       "_origin": "ast",
       "community": 7,
       "file_type": "code",
-      "norm_label": "uid()",
+      "norm_label": "renderreceipts()",
       "source_file": "src/main.ts",
-      "source_location": "L131"
+      "source_location": "L260"
+    },
+    {
+      "id": "src_main_renderrecipeoptions",
+      "label": "renderRecipeOptions()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "file_type": "code",
+      "norm_label": "renderrecipeoptions()",
+      "source_file": "src/main.ts",
+      "source_location": "L178"
+    },
+    {
+      "id": "src_main_syncconnection",
+      "label": "syncConnection()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "file_type": "code",
+      "norm_label": "syncconnection()",
+      "source_file": "src/main.ts",
+      "source_location": "L156"
     },
     {
       "id": "src_main_updatelicenseui",
@@ -595,92 +639,48 @@
       "source_location": "L269"
     },
     {
-      "id": "src_main_validaudio",
-      "label": "validAudio()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "file_type": "code",
-      "norm_label": "validaudio()",
-      "source_file": "src/main.ts",
-      "source_location": "L133"
-    },
-    {
-      "id": "src_license_verifylicense",
-      "label": "verifyLicense()",
+      "id": "src_db_getrecipes",
+      "label": "getRecipes()",
       "_callable": true,
       "_origin": "ast",
       "community": 8,
       "file_type": "code",
-      "norm_label": "verifylicense()",
-      "source_file": "src/license.ts",
-      "source_location": "L55"
+      "norm_label": "getrecipes()",
+      "source_file": "src/db.ts",
+      "source_location": "L38"
     },
     {
-      "id": "src_main_escapehtml",
-      "label": "escapeHtml()",
+      "id": "src_main_dataurlblob",
+      "label": "dataUrlBlob()",
       "_callable": true,
       "_origin": "ast",
       "community": 8,
       "file_type": "code",
-      "norm_label": "escapehtml()",
+      "norm_label": "dataurlblob()",
       "source_file": "src/main.ts",
-      "source_location": "L130"
+      "source_location": "L300"
     },
     {
-      "id": "src_main_init",
-      "label": "init()",
+      "id": "src_main_fillrecipeform",
+      "label": "fillRecipeForm()",
       "_callable": true,
       "_origin": "ast",
       "community": 8,
       "file_type": "code",
-      "norm_label": "init()",
+      "norm_label": "fillrecipeform()",
       "source_file": "src/main.ts",
-      "source_location": "L496"
+      "source_location": "L162"
     },
     {
-      "id": "src_main_registerserviceworker",
-      "label": "registerServiceWorker()",
+      "id": "src_main_importrecipe",
+      "label": "importRecipe()",
       "_callable": true,
       "_origin": "ast",
       "community": 8,
       "file_type": "code",
-      "norm_label": "registerserviceworker()",
+      "norm_label": "importrecipe()",
       "source_file": "src/main.ts",
-      "source_location": "L479"
-    },
-    {
-      "id": "src_main_renderreceipts",
-      "label": "renderReceipts()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "file_type": "code",
-      "norm_label": "renderreceipts()",
-      "source_file": "src/main.ts",
-      "source_location": "L260"
-    },
-    {
-      "id": "src_main_renderrecipeoptions",
-      "label": "renderRecipeOptions()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "file_type": "code",
-      "norm_label": "renderrecipeoptions()",
-      "source_file": "src/main.ts",
-      "source_location": "L178"
-    },
-    {
-      "id": "src_main_syncconnection",
-      "label": "syncConnection()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 8,
-      "file_type": "code",
-      "norm_label": "syncconnection()",
-      "source_file": "src/main.ts",
-      "source_location": "L156"
+      "source_location": "L307"
     },
     {
       "id": "src_sw_template_cachefirst",
@@ -4281,5 +4281,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "5e1e5c68ba88520f7fc0702e049774ae99f625ab"
+  "built_at_commit": "ab7e75f024263895398b32f5fe5573dddf629448"
 }

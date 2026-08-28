@@ -110,37 +110,37 @@
       "package_version"
     ],
     "6": [
-      "src_db_getrecipes",
+      "src_main_addfiles",
       "src_main_assetfrom",
       "src_main_bindevents",
-      "src_main_dataurlblob",
+      "src_main_clearbatchdownload",
       "src_main_download",
-      "src_main_fillrecipeform",
       "src_main_freshrecipe",
-      "src_main_importrecipe",
+      "src_main_message",
       "src_main_now",
       "src_main_preservedraftfields",
-      "src_main_readrecipe"
+      "src_main_readrecipe",
+      "src_main_renderbatch",
+      "src_main_uid",
+      "src_main_validaudio"
     ],
     "7": [
       "src_license_licensestate",
-      "src_main_addfiles",
-      "src_main_clearbatchdownload",
-      "src_main_message",
-      "src_main_renderbatch",
-      "src_main_renderqueue",
-      "src_main_uid",
-      "src_main_updatelicenseui",
-      "src_main_validaudio"
-    ],
-    "8": [
       "src_license_verifylicense",
       "src_main_escapehtml",
       "src_main_init",
       "src_main_registerserviceworker",
+      "src_main_renderqueue",
       "src_main_renderreceipts",
       "src_main_renderrecipeoptions",
-      "src_main_syncconnection"
+      "src_main_syncconnection",
+      "src_main_updatelicenseui"
+    ],
+    "8": [
+      "src_db_getrecipes",
+      "src_main_dataurlblob",
+      "src_main_fillrecipeform",
+      "src_main_importrecipe"
     ],
     "9": [
       "src_sw_template",
@@ -177,9 +177,9 @@
     "3": 0.21978021978021978,
     "4": 0.15384615384615385,
     "5": 0.15384615384615385,
-    "6": 0.2545454545454545,
-    "7": 0.3333333333333333,
-    "8": 0.3333333333333333,
+    "6": 0.28205128205128205,
+    "7": 0.26666666666666666,
+    "8": 0.5,
     "9": 0.5,
     "10": 0.6666666666666666,
     "11": 1.0,
@@ -195,13 +195,13 @@
       "degree": 25
     },
     {
-      "id": "tsconfig_compileroptions",
-      "label": "compilerOptions",
+      "id": "src_main_init",
+      "label": "init()",
       "degree": 14
     },
     {
-      "id": "src_main_init",
-      "label": "init()",
+      "id": "tsconfig_compileroptions",
+      "label": "compilerOptions",
       "degree": 14
     },
     {
@@ -220,49 +220,27 @@
       "degree": 10
     },
     {
-      "id": "package_scripts",
-      "label": "scripts",
-      "degree": 8
-    },
-    {
       "id": "src_main_renderqueue",
       "label": "renderQueue()",
       "degree": 8
     },
     {
-      "id": "src_main_message",
-      "label": "message()",
-      "degree": 7
+      "id": "package_scripts",
+      "label": "scripts",
+      "degree": 8
     },
     {
       "id": "src_main_addfiles",
       "label": "addFiles()",
       "degree": 7
+    },
+    {
+      "id": "src_main_message",
+      "label": "message()",
+      "degree": 7
     }
   ],
   "surprises": [
-    {
-      "source": "init()",
-      "target": "getReceipts()",
-      "source_files": [
-        "src/main.ts",
-        "src/db.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "init()",
-      "target": "getRecipes()",
-      "source_files": [
-        "src/main.ts",
-        "src/db.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
     {
       "source": "renderBatch()",
       "target": "createZip()",
@@ -288,6 +266,28 @@
     {
       "source": "renderBatch()",
       "target": "renderWrappedFile()",
+      "source_files": [
+        "src/main.ts",
+        "src/audio.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "bindEvents()",
+      "target": "sanitizeFilename()",
+      "source_files": [
+        "src/main.ts",
+        "src/audio.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "renderBatch()",
+      "target": "sanitizeFilename()",
       "source_files": [
         "src/main.ts",
         "src/audio.ts"
