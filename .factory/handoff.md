@@ -1,4 +1,4 @@
-# Wrapline repair handoff — ready to deploy
+# Wrapline repair handoff — deployed
 
 **Repair base:** `4171cdfc593d324f254238bacbbfa0b543dc0092` (failed candidate `176839c1033969b62a3fe7ccc91e27b912cb3fe1`)
 
@@ -28,4 +28,12 @@ npm run build
 
 ## Deployment and final live verification
 
-Deploy `dist/` as the existing static PWA using the work-order static configuration. After deployment, verify the live bundle identity, enabled checkout CTA, hosted checkout 303, desktop/390px browser smoke, headers, offline reload, and `/privacy/` and `/terms/` routes. No known product gaps remain before that final deployment check.
+Deployed with `/opt/fleet/lib/deploy-static.sh audio-wrapper-batch /work/repo/dist` to <https://audio-wrapper-batch.sociobot.in>. Azure Static Web Apps reported deployment `1a7f7d3f-a9f1-4f6c-89e6-17cadc0fb99e` as successful.
+
+- Live identity: SHA-256 matched the local `dist/` for `index.html`, `sw.js`, manifest, and the fingerprinted JS/CSS. The deployed JS is `assets/index-Dyc02NVd.js` and contains the enabled Studio CTA.
+- Live response policy: root is `no-cache`; the hashed JS/CSS are `public, max-age=31536000, immutable`; `sw.js` is `no-cache, no-store, must-revalidate`. CSP permits only self plus the Sociobot API connection, with HSTS, frame denial, nosniff, and Permissions-Policy present.
+- Live browser verification: fresh 1366px desktop and 390 × 844 mobile Chromium sessions had no console/page errors, zero axe serious/critical findings, no mobile horizontal overflow, the first Tab reached “Skip to main content,” and the enabled checkout link had the exact Sociobot URL. A fresh mobile service-worker session reloaded offline with the H1 and offline banner visible.
+- Live basic verifier passed: title, `lang`, one H1, main landmark, and image alternative text. `/privacy/` and `/terms/` both returned 200.
+- Hosted purchase path: checkout returns HTTP 303 to `checkout.dodopayments.com`; the public catalog reports `Wrapline Studio`, USD 29, and the product URL above.
+
+No known gaps remain.
