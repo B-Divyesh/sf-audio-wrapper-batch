@@ -197,13 +197,13 @@
       "degree": 25
     },
     {
-      "id": "tsconfig_compileroptions",
-      "label": "compilerOptions",
+      "id": "src_main_init",
+      "label": "init()",
       "degree": 14
     },
     {
-      "id": "src_main_init",
-      "label": "init()",
+      "id": "tsconfig_compileroptions",
+      "label": "compilerOptions",
       "degree": 14
     },
     {
@@ -222,18 +222,18 @@
       "degree": 10
     },
     {
-      "id": "package_scripts",
-      "label": "scripts",
-      "degree": 8
-    },
-    {
       "id": "src_main_renderqueue",
       "label": "renderQueue()",
       "degree": 8
     },
     {
-      "id": "src_main_message",
-      "label": "message()",
+      "id": "package_scripts",
+      "label": "scripts",
+      "degree": 8
+    },
+    {
+      "id": "tests_license_test_memorystorage",
+      "label": "MemoryStorage",
       "degree": 7
     },
     {
@@ -243,39 +243,6 @@
     }
   ],
   "surprises": [
-    {
-      "source": "renderBatch()",
-      "target": "createZip()",
-      "source_files": [
-        "src/main.ts",
-        "src/audio.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "renderQueue()",
-      "target": "outputName()",
-      "source_files": [
-        "src/main.ts",
-        "src/audio.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "renderBatch()",
-      "target": "renderWrappedFile()",
-      "source_files": [
-        "src/main.ts",
-        "src/audio.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
     {
       "source": "bindEvents()",
       "target": "sanitizeFilename()",
@@ -288,11 +255,44 @@
       "why": "bridges separate communities"
     },
     {
-      "source": "renderBatch()",
-      "target": "sanitizeFilename()",
+      "source": "bindEvents()",
+      "target": "deleteRecipe()",
       "source_files": [
         "src/main.ts",
-        "src/audio.ts"
+        "src/db.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "bindEvents()",
+      "target": "saveRecipe()",
+      "source_files": [
+        "src/main.ts",
+        "src/db.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "bindEvents()",
+      "target": "storeLicense()",
+      "source_files": [
+        "src/main.ts",
+        "src/license.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "importRecipe()",
+      "target": "saveRecipe()",
+      "source_files": [
+        "src/main.ts",
+        "src/db.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
