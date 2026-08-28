@@ -1,34 +1,6 @@
 {
   "communities": {
     "0": [
-      "src_license",
-      "src_license_billingbase",
-      "src_license_cachedverdict",
-      "src_license_capturereturnedlicense",
-      "src_license_checkouturl",
-      "src_license_licensestate",
-      "src_license_storelicense",
-      "src_license_verifylicense",
-      "src_main",
-      "src_main_app",
-      "src_main_assetfrom",
-      "src_main_blobtodataurl",
-      "src_main_current",
-      "src_main_download",
-      "src_main_exportedrecipe",
-      "src_main_job",
-      "src_main_jobs",
-      "src_main_preservedraftfields",
-      "src_main_receipts",
-      "src_main_recipes",
-      "src_types",
-      "src_types_audioasset",
-      "src_types_receipt",
-      "src_types_receiptitem",
-      "src_types_recipe",
-      "src_types_renderedfile"
-    ],
-    "1": [
       "ref_dom",
       "ref_dom_iterable",
       "ref_es2022",
@@ -54,32 +26,7 @@
       "tsconfig_compileroptions_usedefineforclassfields",
       "tsconfig_include"
     ],
-    "2": [
-      "src_db_getreceipts",
-      "src_db_getrecipes",
-      "src_main_addfiles",
-      "src_main_bindevents",
-      "src_main_clearbatchdownload",
-      "src_main_dataurlblob",
-      "src_main_escapehtml",
-      "src_main_fillrecipeform",
-      "src_main_freshrecipe",
-      "src_main_importrecipe",
-      "src_main_init",
-      "src_main_message",
-      "src_main_now",
-      "src_main_readrecipe",
-      "src_main_registerserviceworker",
-      "src_main_renderbatch",
-      "src_main_renderqueue",
-      "src_main_renderreceipts",
-      "src_main_renderrecipeoptions",
-      "src_main_syncconnection",
-      "src_main_uid",
-      "src_main_updatelicenseui",
-      "src_main_validaudio"
-    ],
-    "3": [
+    "1": [
       "src_audio",
       "src_audio_clamp",
       "src_audio_concat",
@@ -97,6 +44,40 @@
       "src_audio_sanitizefilename",
       "src_audio_sha256",
       "tests_audio_test"
+    ],
+    "2": [
+      "src_license",
+      "src_license_billingbase",
+      "src_license_cachedverdict",
+      "src_license_capturereturnedlicense",
+      "src_license_checkouturl",
+      "src_license_storelicense",
+      "src_license_studiocheckoutavailable",
+      "src_main",
+      "src_main_app",
+      "src_main_blobtodataurl",
+      "src_main_current",
+      "src_main_exportedrecipe",
+      "src_main_job",
+      "src_main_jobs",
+      "src_main_receipts",
+      "src_main_recipes"
+    ],
+    "3": [
+      "src_db",
+      "src_db_all",
+      "src_db_deleterecipe",
+      "src_db_getreceipts",
+      "src_db_opendb",
+      "src_db_put",
+      "src_db_savereceipt",
+      "src_db_saverecipe",
+      "src_types",
+      "src_types_audioasset",
+      "src_types_receipt",
+      "src_types_receiptitem",
+      "src_types_recipe",
+      "src_types_renderedfile"
     ],
     "4": [
       "axe_core_playwright",
@@ -120,6 +101,7 @@
       "package_scripts",
       "package_scripts_build",
       "package_scripts_dev",
+      "package_scripts_lint",
       "package_scripts_preview",
       "package_scripts_test",
       "package_scripts_test_e2e",
@@ -128,51 +110,83 @@
       "package_version"
     ],
     "6": [
-      "src_db",
-      "src_db_all",
-      "src_db_deleterecipe",
-      "src_db_opendb",
-      "src_db_put",
-      "src_db_savereceipt",
-      "src_db_saverecipe"
+      "src_db_getrecipes",
+      "src_main_assetfrom",
+      "src_main_bindevents",
+      "src_main_dataurlblob",
+      "src_main_download",
+      "src_main_fillrecipeform",
+      "src_main_freshrecipe",
+      "src_main_importrecipe",
+      "src_main_now",
+      "src_main_preservedraftfields",
+      "src_main_readrecipe"
     ],
     "7": [
-      "public_sw",
-      "public_sw_cachefirst",
-      "public_sw_networkfirst",
-      "public_sw_shell"
+      "src_license_licensestate",
+      "src_main_addfiles",
+      "src_main_clearbatchdownload",
+      "src_main_message",
+      "src_main_renderbatch",
+      "src_main_renderqueue",
+      "src_main_uid",
+      "src_main_updatelicenseui",
+      "src_main_validaudio"
     ],
     "8": [
+      "src_license_verifylicense",
+      "src_main_escapehtml",
+      "src_main_init",
+      "src_main_registerserviceworker",
+      "src_main_renderreceipts",
+      "src_main_renderrecipeoptions",
+      "src_main_syncconnection"
+    ],
+    "9": [
+      "src_sw_template",
+      "src_sw_template_cachefirst",
+      "src_sw_template_networkfirst",
+      "src_sw_template_precacheshell"
+    ],
+    "10": [
+      "vite_config",
+      "vite_config_offlineshell",
+      "vite_config_workertemplatepath"
+    ],
+    "11": [
       "tests_e2e_app_spec",
       "tests_e2e_app_spec_wavbuffer"
     ],
-    "9": [
+    "12": [
       "playwright_config"
     ],
-    "10": [
+    "13": [
       "src_vite_env_d"
     ],
-    "11": [
-      "vite_config"
+    "14": [
+      "tests_release_test"
     ],
-    "12": [
+    "15": [
       "vitest_config"
     ]
   },
   "cohesion": {
-    "0": 0.1076923076923077,
-    "1": 0.08333333333333333,
-    "2": 0.20553359683794467,
-    "3": 0.2426470588235294,
+    "0": 0.08333333333333333,
+    "1": 0.2426470588235294,
+    "2": 0.16666666666666666,
+    "3": 0.21978021978021978,
     "4": 0.15384615384615385,
-    "5": 0.16666666666666666,
-    "6": 0.5238095238095238,
-    "7": 0.5,
-    "8": 1.0,
-    "9": 1.0,
-    "10": 1.0,
+    "5": 0.15384615384615385,
+    "6": 0.2545454545454545,
+    "7": 0.3333333333333333,
+    "8": 0.3333333333333333,
+    "9": 0.5,
+    "10": 0.6666666666666666,
     "11": 1.0,
-    "12": 1.0
+    "12": 1.0,
+    "13": 1.0,
+    "14": 1.0,
+    "15": 1.0
   },
   "gods": [
     {
@@ -181,13 +195,13 @@
       "degree": 25
     },
     {
-      "id": "src_main_init",
-      "label": "init()",
+      "id": "tsconfig_compileroptions",
+      "label": "compilerOptions",
       "degree": 14
     },
     {
-      "id": "tsconfig_compileroptions",
-      "label": "compilerOptions",
+      "id": "src_main_init",
+      "label": "init()",
       "degree": 14
     },
     {
@@ -206,14 +220,14 @@
       "degree": 10
     },
     {
-      "id": "src_main_renderqueue",
-      "label": "renderQueue()",
+      "id": "package_scripts",
+      "label": "scripts",
       "degree": 8
     },
     {
-      "id": "src_main_addfiles",
-      "label": "addFiles()",
-      "degree": 7
+      "id": "src_main_renderqueue",
+      "label": "renderQueue()",
+      "degree": 8
     },
     {
       "id": "src_main_message",
@@ -221,18 +235,18 @@
       "degree": 7
     },
     {
-      "id": "package_scripts",
-      "label": "scripts",
+      "id": "src_main_addfiles",
+      "label": "addFiles()",
       "degree": 7
     }
   ],
   "surprises": [
     {
-      "source": "updateLicenseUi()",
-      "target": "LicenseState",
+      "source": "init()",
+      "target": "getReceipts()",
       "source_files": [
         "src/main.ts",
-        "src/license.ts"
+        "src/db.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
@@ -240,43 +254,43 @@
     },
     {
       "source": "init()",
-      "target": "captureReturnedLicense()",
+      "target": "getRecipes()",
       "source_files": [
         "src/main.ts",
-        "src/license.ts"
+        "src/db.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
       "why": "bridges separate communities"
     },
     {
-      "source": "bindEvents()",
-      "target": "storeLicense()",
+      "source": "renderBatch()",
+      "target": "createZip()",
       "source_files": [
         "src/main.ts",
-        "src/license.ts"
+        "src/audio.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
       "why": "bridges separate communities"
     },
     {
-      "source": "bindEvents()",
-      "target": "verifyLicense()",
+      "source": "renderQueue()",
+      "target": "outputName()",
       "source_files": [
         "src/main.ts",
-        "src/license.ts"
+        "src/audio.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
       "why": "bridges separate communities"
     },
     {
-      "source": "init()",
-      "target": "verifyLicense()",
+      "source": "renderBatch()",
+      "target": "renderWrappedFile()",
       "source_files": [
         "src/main.ts",
-        "src/license.ts"
+        "src/audio.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
