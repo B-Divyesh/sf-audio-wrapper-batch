@@ -1,6 +1,44 @@
 {
   "communities": {
     "0": [
+      "src_db_getrecipes",
+      "src_license_licensestate",
+      "src_license_verifylicense",
+      "src_main",
+      "src_main_addfiles",
+      "src_main_app",
+      "src_main_assetfrom",
+      "src_main_bindevents",
+      "src_main_blobtodataurl",
+      "src_main_clearbatchdownload",
+      "src_main_current",
+      "src_main_dataurlblob",
+      "src_main_download",
+      "src_main_escapehtml",
+      "src_main_exportedrecipe",
+      "src_main_fillrecipeform",
+      "src_main_freshrecipe",
+      "src_main_importrecipe",
+      "src_main_init",
+      "src_main_job",
+      "src_main_jobs",
+      "src_main_message",
+      "src_main_now",
+      "src_main_preservedraftfields",
+      "src_main_readrecipe",
+      "src_main_receipts",
+      "src_main_recipes",
+      "src_main_registerserviceworker",
+      "src_main_renderbatch",
+      "src_main_renderqueue",
+      "src_main_renderreceipts",
+      "src_main_renderrecipeoptions",
+      "src_main_syncconnection",
+      "src_main_uid",
+      "src_main_updatelicenseui",
+      "src_main_validaudio"
+    ],
+    "1": [
       "ref_dom",
       "ref_dom_iterable",
       "ref_es2022",
@@ -26,7 +64,7 @@
       "tsconfig_compileroptions_usedefineforclassfields",
       "tsconfig_include"
     ],
-    "1": [
+    "2": [
       "src_audio",
       "src_audio_clamp",
       "src_audio_concat",
@@ -45,7 +83,7 @@
       "src_audio_sha256",
       "tests_audio_test"
     ],
-    "2": [
+    "3": [
       "src_license",
       "src_license_billingbase",
       "src_license_cachedverdict",
@@ -53,17 +91,16 @@
       "src_license_checkouturl",
       "src_license_storelicense",
       "src_license_studiocheckoutavailable",
-      "src_main",
-      "src_main_app",
-      "src_main_blobtodataurl",
-      "src_main_current",
-      "src_main_exportedrecipe",
-      "src_main_job",
-      "src_main_jobs",
-      "src_main_receipts",
-      "src_main_recipes"
+      "tests_license_test",
+      "tests_license_test_memorystorage",
+      "tests_license_test_memorystorage_clear",
+      "tests_license_test_memorystorage_getitem",
+      "tests_license_test_memorystorage_key",
+      "tests_license_test_memorystorage_length",
+      "tests_license_test_memorystorage_removeitem",
+      "tests_license_test_memorystorage_setitem"
     ],
-    "3": [
+    "4": [
       "src_db",
       "src_db_all",
       "src_db_deleterecipe",
@@ -79,7 +116,7 @@
       "src_types_recipe",
       "src_types_renderedfile"
     ],
-    "4": [
+    "5": [
       "axe_core_playwright",
       "package_devdependencies",
       "package_devdependencies_axe_core_playwright",
@@ -94,7 +131,7 @@
       "vite",
       "vitest"
     ],
-    "5": [
+    "6": [
       "package",
       "package_name",
       "package_private",
@@ -109,84 +146,49 @@
       "package_type",
       "package_version"
     ],
-    "6": [
-      "src_main_addfiles",
-      "src_main_assetfrom",
-      "src_main_bindevents",
-      "src_main_clearbatchdownload",
-      "src_main_download",
-      "src_main_freshrecipe",
-      "src_main_message",
-      "src_main_now",
-      "src_main_preservedraftfields",
-      "src_main_readrecipe",
-      "src_main_renderbatch",
-      "src_main_uid",
-      "src_main_validaudio"
-    ],
     "7": [
-      "src_license_licensestate",
-      "src_license_verifylicense",
-      "src_main_escapehtml",
-      "src_main_init",
-      "src_main_registerserviceworker",
-      "src_main_renderqueue",
-      "src_main_renderreceipts",
-      "src_main_renderrecipeoptions",
-      "src_main_syncconnection",
-      "src_main_updatelicenseui"
-    ],
-    "8": [
-      "src_db_getrecipes",
-      "src_main_dataurlblob",
-      "src_main_fillrecipeform",
-      "src_main_importrecipe"
-    ],
-    "9": [
       "src_sw_template",
       "src_sw_template_cachefirst",
       "src_sw_template_networkfirst",
       "src_sw_template_precacheshell"
     ],
-    "10": [
+    "8": [
       "vite_config",
       "vite_config_offlineshell",
       "vite_config_workertemplatepath"
     ],
-    "11": [
+    "9": [
       "tests_e2e_app_spec",
       "tests_e2e_app_spec_wavbuffer"
     ],
-    "12": [
+    "10": [
       "playwright_config"
     ],
-    "13": [
+    "11": [
       "src_vite_env_d"
     ],
-    "14": [
+    "12": [
       "tests_release_test"
     ],
-    "15": [
+    "13": [
       "vitest_config"
     ]
   },
   "cohesion": {
-    "0": 0.08333333333333333,
-    "1": 0.2426470588235294,
-    "2": 0.16666666666666666,
-    "3": 0.21978021978021978,
-    "4": 0.15384615384615385,
+    "0": 0.1492063492063492,
+    "1": 0.08333333333333333,
+    "2": 0.2426470588235294,
+    "3": 0.13333333333333333,
+    "4": 0.21978021978021978,
     "5": 0.15384615384615385,
-    "6": 0.28205128205128205,
-    "7": 0.26666666666666666,
-    "8": 0.5,
-    "9": 0.5,
-    "10": 0.6666666666666666,
+    "6": 0.15384615384615385,
+    "7": 0.5,
+    "8": 0.6666666666666666,
+    "9": 1.0,
+    "10": 1.0,
     "11": 1.0,
     "12": 1.0,
-    "13": 1.0,
-    "14": 1.0,
-    "15": 1.0
+    "13": 1.0
   },
   "gods": [
     {
@@ -195,13 +197,13 @@
       "degree": 25
     },
     {
-      "id": "src_main_init",
-      "label": "init()",
+      "id": "tsconfig_compileroptions",
+      "label": "compilerOptions",
       "degree": 14
     },
     {
-      "id": "tsconfig_compileroptions",
-      "label": "compilerOptions",
+      "id": "src_main_init",
+      "label": "init()",
       "degree": 14
     },
     {
@@ -220,23 +222,23 @@
       "degree": 10
     },
     {
-      "id": "src_main_renderqueue",
-      "label": "renderQueue()",
-      "degree": 8
-    },
-    {
       "id": "package_scripts",
       "label": "scripts",
       "degree": 8
     },
     {
-      "id": "src_main_addfiles",
-      "label": "addFiles()",
-      "degree": 7
+      "id": "src_main_renderqueue",
+      "label": "renderQueue()",
+      "degree": 8
     },
     {
       "id": "src_main_message",
       "label": "message()",
+      "degree": 7
+    },
+    {
+      "id": "src_main_addfiles",
+      "label": "addFiles()",
       "degree": 7
     }
   ],
