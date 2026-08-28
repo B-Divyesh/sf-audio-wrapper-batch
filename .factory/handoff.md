@@ -1,16 +1,29 @@
-# Wrapline repair handoff — deployed
+# Wrapline verification 4 handoff — FAIL
 
-**Repair base:** `4171cdfc593d324f254238bacbbfa0b543dc0092` (failed candidate `176839c1033969b62a3fe7ccc91e27b912cb3fe1`)
+**Tested candidate:** `182c88ecc8f07eec15321a5c867337a31bb3f8d1`
 
-**Release blocker repaired:** the production factory catalog now registers `audio-wrapper-batch` as **Wrapline Studio**, a USD 29 one-time product, with return URL `https://audio-wrapper-batch.sociobot.in/`. The public Sociobot catalog returns that exact product and `HEAD https://api.sociobot.in/api/v1/products/audio-wrapper-batch/checkout` returns **303** to hosted `checkout.dodopayments.com`.
+**Tested deployment:** <https://audio-wrapper-batch.sociobot.in>
+**Verified:** 2026-08-28 UTC
 
-## Product changes
+## Result
 
-- `npm run build` now verifies the public product registration (slug, name, USD 29 price, and Sociobot checkout URL) before emitting the release bundle. It then sets `VITE_STUDIO_CHECKOUT_ENABLED=true`, so the product-specific checkout CTA is enabled only in a verified release build.
-- Added the exact browser regression: the desktop and 390 px release build must show “Buy studio license · $29” linking to `https://api.sociobot.in/api/v1/products/audio-wrapper-batch/checkout`, with no disabled state.
-- Kept the existing privacy-safe behavior: checkout continues through Sociobot only; no provider ID, billing secret, tracker, audio upload, or runtime CDN was added to this repository.
+**FAIL.** The candidate is fully buildable and the previous checkout-registration failure is repaired, but it does not satisfy the factory/design accessibility target-size contract: the three visible desktop header navigation links are only **24.8px high**, below the required **44 × 44 CSS px** interactive target. See `.factory/verification-4.md` for exact measurements and complete evidence.
 
-## Verification completed before deployment
+## What passed
+
+- Clean `npm ci`, exact `npm test` (6 unit + 16 desktop/mobile Playwright assertions), `npm run lint`, and exact `npm run build` all passed.
+- Live deployment hashes matched the candidate for 11 checked release resources.
+- Normal and recovery workflow: saved intro/outro/bed recipe; WAV and MP3 input; 9999/10000/10001 naming; ZIP + receipt; malformed-file recovery; validation messages; recipe persistence; free-tier and returned-license safety.
+- The live $29 Sociobot checkout is enabled, catalog-registered, and redirects (303) to Dodo hosted checkout.
+- Offline reload and controlled service-worker update succeeded; ordinary free flow makes only same-origin/blob requests and no audio uploads or tracking requests.
+- Live axe serious/critical findings: 0 on desktop and 390px mobile; no console/page errors; visible keyboard skip-link focus; no mobile overflow; mobile targets pass.
+- Live Lighthouse mobile: Performance 99, Accessibility 100, Best Practices 100, SEO 100; FCP 1.0s, LCP 1.6s, TBT 90ms, CLS 0. Output is 32.89 KB JS raw / 11.47 KB gzip and 15.76 KB CSS raw / 4.30 KB gzip.
+
+## Required next step
+
+Make the desktop `Finishing bench`, `How it works`, and `License` links at least 44px high, rebuild/redeploy, then rerun verification. No production-code changes were made by verification; this commit records evidence only.
+
+## How to reproduce the gates
 
 ```sh
 npm ci
@@ -18,22 +31,3 @@ npm test
 npm run lint
 npm run build
 ```
-
-- Clean install: 61 packages installed; `npm audit` found 0 vulnerabilities.
-- Unit/integration: 6 assertions passed (license outage safety, release headers, audio behavior).
-- Production build: passed, including the public checkout-registration guard. Output is 32.89 KB raw / 11.47 KB gzip JS and 15.76 KB raw / 4.30 KB gzip CSS; hero WebP remains 114,016 bytes.
-- Browser: 16 Playwright assertions passed across Chromium desktop and 390 × 844 mobile. These cover real local WAV rendering, recipe persistence, free-tier recovery, desktop/mobile checkout CTA, offline installed-shell reload, keyboard skip-link/focus, 44 px mobile controls, and axe serious/critical scans (0 violations).
-- Response-policy regression test passed (CSP, Permissions-Policy, frame protection, immutable hashed assets, non-cacheable worker). The free local flow remains same-origin/blob only.
-- Lighthouse was attempted with the pinned Playwright Chromium. The browser tab crashed during Lighthouse’s full-page screenshot phase, so no score is claimed; its accessibility coverage is independently supplied by the passing desktop and mobile axe scans.
-
-## Deployment and final live verification
-
-Deployed with `/opt/fleet/lib/deploy-static.sh audio-wrapper-batch /work/repo/dist` to <https://audio-wrapper-batch.sociobot.in>. Azure Static Web Apps reported deployment `1a7f7d3f-a9f1-4f6c-89e6-17cadc0fb99e` as successful.
-
-- Live identity: SHA-256 matched the local `dist/` for `index.html`, `sw.js`, manifest, and the fingerprinted JS/CSS. The deployed JS is `assets/index-Dyc02NVd.js` and contains the enabled Studio CTA.
-- Live response policy: root is `no-cache`; the hashed JS/CSS are `public, max-age=31536000, immutable`; `sw.js` is `no-cache, no-store, must-revalidate`. CSP permits only self plus the Sociobot API connection, with HSTS, frame denial, nosniff, and Permissions-Policy present.
-- Live browser verification: fresh 1366px desktop and 390 × 844 mobile Chromium sessions had no console/page errors, zero axe serious/critical findings, no mobile horizontal overflow, the first Tab reached “Skip to main content,” and the enabled checkout link had the exact Sociobot URL. A fresh mobile service-worker session reloaded offline with the H1 and offline banner visible.
-- Live basic verifier passed: title, `lang`, one H1, main landmark, and image alternative text. `/privacy/` and `/terms/` both returned 200.
-- Hosted purchase path: checkout returns HTTP 303 to `checkout.dodopayments.com`; the public catalog reports `Wrapline Studio`, USD 29, and the product URL above.
-
-No known gaps remain.
