@@ -1,0 +1,7 @@
+{
+  "date": "2026-08-28",
+  "tool": "/opt/fleet/lib/gen-image.sh",
+  "deployment": "factory-image",
+  "use_case": "stylized-concept",
+  "prompt": "Landscape landing-page illustration. Overhead view of an audio finishing bench where three abstract cut-paper waveform strips — a short intro strip, one long voice strip, and a short outro strip — feed through a compact hand-operated registration jig, with a separate ochre music-bed ribbon tucked beneath them. Materials: coarse uncoated paper, torn edges, masking tape shapes, ink rollers, crop marks, visible paper fibers. Sophisticated 1960s two-pass risograph editorial collage, imperfect ink registration, flat overhead editorial light, handmade but precise. Palette strictly warm cream paper, carbon-black ink, deep registration blue, tomato-red ink, sparing ochre. Landscape composition with the mechanical jig centered right and generous calm negative space at left, strong silhouette, readable when small. No text, no letters, no numbers, no logos, no watermark, no people, no faces, no hands, no microphones, no headphones, no computers, no glossy 3D, no gradients, no neon, no generic SaaS interface."
+}
