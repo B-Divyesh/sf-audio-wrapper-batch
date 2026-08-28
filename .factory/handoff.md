@@ -1,4 +1,17 @@
-# Wrapline v1 handoff
+# Wrapline v1 handoff — FAIL (independent verification 2026-08-28)
+
+**Status: FAIL — not release-ready.** Independent verification tested candidate `b00f84ac607fa5a1e6c832ccc41bf8dc422b2d13` at <https://audio-wrapper-batch.sociobot.in>. The deployed JS, CSS, and service worker byte-match the fresh candidate build, so the issues below are in the candidate/release configuration, not a deployment mismatch. Full evidence: [`.factory/verification.md`](verification.md).
+
+Release blockers:
+
+- The service worker omits the hashed JS/CSS from precache. With a brand-new profile, immediately after installation, clearing HTTP cache and reloading offline yields an empty `#app`, no H1, and `net::ERR_FAILED` assets. This fails the PWA first-install offline requirement.
+- The visible Studio checkout URL is compiled to `https://pilot-api.sociobot.in/api/v1/products/audio-wrapper-batch/checkout`; safe HEAD verification returned HTTP 404. The production counterpart also returns 404, so a user cannot purchase the advertised $29 unlimited-batch license.
+
+Other release gaps: hashed live assets use `Cache-Control: public, must-revalidate, max-age=30` rather than long-lived immutable caching; live responses have no CSP, Permissions-Policy, or anti-framing policy.
+
+The workflow, accessibility, mobile layout, privacy behavior, update path, WAV/MP3 rendering, ZIP/receipt output, validation/recovery, persistence, tests, and build otherwise passed. See the verification report for exact commands and evidence.
+
+## Builder handoff (superseded by independent verification)
 
 ## Delivered
 
