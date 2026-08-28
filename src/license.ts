@@ -43,8 +43,11 @@ export function licenseState(): LicenseState {
   const token = localStorage.getItem(LICENSE_KEY);
   const verdict = cachedVerdict();
   if (!token) return { token: null, unlocked: false };
-  if (verdict && !verdict.valid) return { token, unlocked: false, reason: verdict.reason };
-  return { token, unlocked: true };
+  // A token is only evidence of a purchase after the billing service has
+  // verified it.  Offline use may retain a *cached positive* verdict, but an
+  // arbitrary pasted/returned token must never unlock Studio before then.
+  if (verdict?.valid) return { token, unlocked: true };
+  return { token, unlocked: false, reason: verdict?.reason ?? 'unverified' };
 }
 
 export function storeLicense(token: string): void {

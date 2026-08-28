@@ -27,9 +27,12 @@ button, a, label { -webkit-tap-highlight-color: transparent; }
 .skip-link { position: fixed; left: 16px; top: 10px; z-index: 30; background: var(--ink); color: var(--stock); padding: 10px 14px; transform: translateY(-150%); }
 .skip-link:focus { transform: translateY(0); }
 .visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+/* The visible Import JSON button owns this picker; keeping the source input
+   out of the tab order avoids a 1 px focus target. */
+#import-recipe { display: none; }
 
 .site-header { min-height: 72px; display: flex; align-items: center; gap: 40px; padding: 12px max(24px, calc((100vw - 1180px) / 2)); border-bottom: var(--line); background: rgba(242,235,221,.96); position: sticky; top: 0; z-index: 20; }
-.brand { color: var(--ink); text-decoration: none; font: 900 23px/1 var(--display); letter-spacing: -.02em; text-transform: uppercase; white-space: nowrap; }
+.brand { min-height: 44px; display: inline-flex; align-items: center; color: var(--ink); text-decoration: none; font: 900 23px/1 var(--display); letter-spacing: -.02em; text-transform: uppercase; white-space: nowrap; }
 .brand-mark { display: inline-grid; place-items: center; width: 34px; height: 34px; margin-right: 5px; background: var(--red); color: var(--stock); border: var(--line); box-shadow: 2px 2px 0 var(--ink); }
 nav { display: flex; gap: 24px; flex: 1; }
 nav a, footer a { color: var(--ink); font-weight: 700; text-decoration: none; }
@@ -92,8 +95,8 @@ input[type="range"] { width: 100%; min-height: 44px; accent-color: var(--blue); 
 .audio-layer > div { min-width: 0; }
 .audio-layer label, .audio-layer strong { display: block; font-weight: 900; }
 .audio-layer label span { color: var(--ink-soft); font-weight: 400; }
-.audio-layer input[type="file"] { max-width: 100%; min-height: 34px; font-size: 13px; }
-.audio-layer input::file-selector-button { border: 0; padding: 5px 8px; margin-right: 6px; color: #fff; background: var(--blue); font-weight: 800; cursor: pointer; }
+.audio-layer input[type="file"] { max-width: 100%; min-height: 44px; font-size: 13px; }
+.audio-layer input::file-selector-button { min-height: 40px; border: 0; padding: 5px 8px; margin-right: 6px; color: #fff; background: var(--blue); font-weight: 800; cursor: pointer; }
 .layer-index { z-index: 1; display: grid; place-items: center; width: 32px; height: 32px; border: var(--line); background: var(--stock); font: 900 13px var(--display); }
 .voice-layer { color: #fff; background: var(--blue); }
 .voice-layer small { color: #e0eef1; }
@@ -104,7 +107,7 @@ input[type="range"] { width: 100%; min-height: 44px; accent-color: var(--blue); 
 .wave-mini { font-weight: 900; letter-spacing: -2px; }
 .icon-button { width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: var(--ink); font-size: 26px; cursor: pointer; }
 .disclosure { margin: 0 0 20px; padding: 10px 12px; border-left: 4px solid var(--ochre); background: #f5ead0; }
-.disclosure summary { min-height: 30px; font-weight: 800; cursor: pointer; }
+.disclosure summary { min-height: 44px; display: flex; align-items: center; font-weight: 800; cursor: pointer; }
 .disclosure p { margin: 8px 0 2px; color: var(--ink-soft); font-size: 14px; }
 .form-message { min-height: 24px; margin: 12px 0 0; color: var(--success); font-weight: 700; }
 .form-message.error, .job-state.error { color: var(--danger); }
@@ -112,7 +115,7 @@ input[type="range"] { width: 100%; min-height: 44px; accent-color: var(--blue); 
 .queue-sheet { position: sticky; top: 98px; }
 .drop-zone { min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 20px; padding: 18px; border: 2px dashed var(--blue); background: #e5eff0; text-align: center; cursor: pointer; transition: transform 180ms ease, background 180ms ease; }
 .drop-zone:hover, .drop-zone.is-dragging { background: #d7e7e9; transform: translateY(-2px); }
-.drop-zone input { width: 100%; margin-top: 10px; font-size: 14px; }
+.drop-zone input { width: 100%; min-height: 44px; margin-top: 10px; font-size: 14px; }
 .drop-zone input::file-selector-button { min-height: 40px; border: var(--line); background: var(--stock); font-weight: 800; cursor: pointer; }
 .drop-icon { font: 900 30px var(--display); color: var(--red); }
 .queue-empty { display: grid; place-items: center; min-height: 150px; margin: 0 20px 20px; color: var(--ink-soft); text-align: center; }
@@ -175,7 +178,8 @@ input[type="range"] { width: 100%; min-height: 44px; accent-color: var(--blue); 
 
 footer { display: grid; grid-template-columns: 1fr auto; gap: 24px 50px; padding: 38px 0 calc(38px + env(safe-area-inset-bottom)); border-top: 2px solid var(--ink); }
 footer p { margin: 6px 0; color: var(--ink-soft); }
-footer > div:nth-child(2) { display: flex; gap: 20px; }
+footer > div:nth-child(2) { display: flex; gap: 8px 20px; }
+footer > div:nth-child(2) a { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
 .generated-note { grid-column: 1/-1; font-size: 13px; }
 .update-toast { position: fixed; z-index: 40; right: 20px; bottom: calc(20px + env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 16px; padding: 12px 14px; border: var(--line); background: var(--stock); box-shadow: var(--shadow); }
 

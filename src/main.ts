@@ -18,7 +18,7 @@ app.innerHTML = `
     <span class="connection" id="connection"><span aria-hidden="true">●</span> <span>On device</span></span>
   </header>
   <div class="offline-banner" id="offline-banner" role="status" hidden>You’re offline. The bench still works; license checks will resume later.</div>
-  <main id="main">
+  <main id="main" tabindex="-1">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
         <p class="eyebrow">A local finishing line for spoken audio</p>
@@ -71,7 +71,7 @@ app.innerHTML = `
             <div class="form-actions">
               <button class="button primary" type="submit">Save recipe</button>
               <button class="button quiet" id="export-recipe" type="button">Export JSON</button>
-              <label class="button quiet file-button" for="import-recipe">Import JSON</label><input class="visually-hidden" id="import-recipe" type="file" accept="application/json,.json" />
+              <button class="button quiet file-button" id="import-recipe-button" type="button">Import JSON</button><input class="visually-hidden" id="import-recipe" type="file" accept="application/json,.json" tabindex="-1" aria-hidden="true" />
               <button class="text-button danger-text" id="delete-recipe" type="button" hidden>Delete</button>
             </div>
             <p class="form-message" id="recipe-message" aria-live="polite"></p>
@@ -186,15 +186,19 @@ function renderRecipeOptions(): void {
 function readRecipe(): Recipe {
   const name = $<HTMLInputElement>('#recipe-name').value.trim();
   const naming = $<HTMLInputElement>('#naming-template').value.trim();
+  const startNumberText = $<HTMLInputElement>('#start-number').value.trim();
   if (!name) throw new Error('Give this recipe a name.');
   if (!naming || !naming.includes('{source}')) throw new Error('The filename recipe must include {source}.');
+  if (!/^\d+$/.test(startNumberText)) throw new Error('Start number must be a whole number from 0 through 9999.');
+  const startNumber = Number(startNumberText);
+  if (!Number.isSafeInteger(startNumber) || startNumber < 0 || startNumber > 9999) throw new Error('Start number must be a whole number from 0 through 9999.');
   return {
     ...current,
     name,
     naming,
     targetLufs: Number($<HTMLSelectElement>('#target-loudness').value),
     bedDb: Number($<HTMLInputElement>('#bed-volume').value),
-    startNumber: Number($<HTMLInputElement>('#start-number').value),
+    startNumber,
     updatedAt: now(),
   };
 }
@@ -384,6 +388,15 @@ async function renderBatch(): Promise<void> {
 }
 
 function bindEvents(): void {
+  $('.skip-link').addEventListener('click', (event) => {
+    event.preventDefault();
+    const main = $<HTMLElement>('#main');
+    history.pushState(null, '', '#main');
+    main.focus({ preventScroll: true });
+    // A skip link is an orientation shortcut, so it should be immediate even
+    // when the rest of the document uses gentle anchor scrolling.
+    main.scrollIntoView({ behavior: 'auto', block: 'start' });
+  });
   window.addEventListener('online', syncConnection);
   window.addEventListener('offline', syncConnection);
   window.addEventListener('beforeinstallprompt', (event) => { event.preventDefault(); deferredInstall = event; $<HTMLButtonElement>('#install-button').hidden = false; });
@@ -450,6 +463,7 @@ function bindEvents(): void {
     try { await importRecipe(file); } catch (error) { message('#recipe-message', error instanceof Error ? error.message : 'Could not import that recipe.', true); }
     (event.currentTarget as HTMLInputElement).value = '';
   });
+  $('#import-recipe-button').addEventListener('click', () => $<HTMLInputElement>('#import-recipe').click());
   $('#voice-files').addEventListener('change', (event) => { const input = event.currentTarget as HTMLInputElement; if (input.files) addFiles(input.files); input.value = ''; });
   const dropZone = $('#drop-zone');
   dropZone.addEventListener('dragover', (event) => { event.preventDefault(); dropZone.classList.add('is-dragging'); });

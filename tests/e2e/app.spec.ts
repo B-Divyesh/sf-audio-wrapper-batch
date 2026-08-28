@@ -49,11 +49,22 @@ test('keeps a saved recipe and wrapper audio across reloads', async ({ page }) =
 test('installed shell reloads while offline', async ({ page, context }) => {
   await page.goto('/');
   await page.evaluate(() => navigator.serviceWorker.ready);
-  await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
+  await expect.poll(() => page.evaluate(() => navigator.serviceWorker.controller?.state)).toBe('activated');
   const expectedShellAssets = await page.evaluate(() =>
     Array.from(document.querySelectorAll<HTMLScriptElement | HTMLLinkElement>('script[src], link[rel="stylesheet"][href]'))
       .map((element) => new URL(element instanceof HTMLScriptElement ? element.src : element.href).pathname),
   );
+  await expect.poll(() => page.evaluate(async (expectedAssets) => {
+    const assets: Array<{ path: string; bytes: number }> = [];
+    for (const cacheName of await caches.keys()) {
+      const cache = await caches.open(cacheName);
+      for (const request of await cache.keys()) {
+        const response = await cache.match(request);
+        assets.push({ path: new URL(request.url).pathname, bytes: (await response?.arrayBuffer())?.byteLength ?? 0 });
+      }
+    }
+    return expectedAssets.filter((asset) => assets.some((cached) => cached.path === asset && cached.bytes > 0)).length;
+  }, expectedShellAssets)).toBe(expectedShellAssets.length);
   const cachedAssets = await page.evaluate(async () => {
     const assets: Array<{ path: string; bytes: number }> = [];
     for (const cacheName of await caches.keys()) {
@@ -72,6 +83,55 @@ test('installed shell reloads while offline', async ({ page, context }) => {
   await page.reload();
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Batch the wrapper');
   await expect(page.getByText(/offline/i).first()).toBeVisible();
+});
+
+test('keeps an unverified license locked during a verification outage', async ({ page }) => {
+  await page.route('**/api/v1/products/audio-wrapper-batch/verify?license=*', (route) => route.abort('failed'));
+  await page.goto('/');
+  await page.locator('#license-token').fill('arbitrary-unverified-token');
+  await page.getByRole('button', { name: 'Verify' }).click();
+  await expect(page.getByText(/could not be verified/)).toBeVisible();
+  await expect(page.locator('#buy-link')).toHaveText('Studio checkout is preparing');
+
+  await page.locator('#voice-files').setInputFiles([1, 2, 3, 4].map((index) => ({
+    name: `outage-${index}.wav`, mimeType: 'audio/wav', buffer: wavBuffer(),
+  })));
+  await page.getByRole('button', { name: 'Render batch' }).click();
+  await expect(page.getByText(/more than 3 tracks/)).toBeVisible();
+  await expect(page.locator('audio')).toHaveCount(0);
+});
+
+test('enforces start-number bounds before saving or rendering', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('#start-number').fill('-1');
+  await page.getByRole('button', { name: 'Save recipe' }).click();
+  await expect(page.locator('#recipe-message')).toHaveText('Start number must be a whole number from 0 through 9999.');
+
+  await page.locator('#voice-files').setInputFiles({ name: 'bounded.wav', mimeType: 'audio/wav', buffer: wavBuffer() });
+  await page.getByRole('button', { name: 'Render batch' }).click();
+  await expect(page.locator('#render-message')).toHaveText('Start number must be a whole number from 0 through 9999.');
+  await expect(page.locator('audio')).toHaveCount(0);
+});
+
+test('moves focus to main and preserves usable mobile-sized controls', async ({ page }) => {
+  await page.goto('/');
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('link', { name: 'Skip to main content' })).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/#main$/);
+  await expect.poll(() => page.evaluate(() => document.activeElement?.id)).toBe('main');
+
+  for (const selector of ['#intro-file', '#outro-file', '#bed-file', '.disclosure summary', '#voice-files', 'footer a']) {
+    const boxes = await page.locator(selector).evaluateAll((elements) => elements.map((element) => {
+      const box = element.getBoundingClientRect();
+      return { width: box.width, height: box.height };
+    }));
+    expect(boxes.length).toBeGreaterThan(0);
+    expect(boxes.every((box) => box.width >= 44 && box.height >= 44), `${selector}: ${JSON.stringify(boxes)}`).toBe(true);
+  }
+  await expect(page.locator('#import-recipe')).toBeHidden();
+  await page.locator('#import-recipe-button').focus();
+  await expect.poll(() => page.evaluate(() => document.activeElement?.id)).toBe('import-recipe-button');
 });
 
 test('does not expose an unregistered Studio checkout in a release build', async ({ page }) => {

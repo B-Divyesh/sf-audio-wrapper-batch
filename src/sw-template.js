@@ -45,13 +45,21 @@ async function networkFirst(request) {
 
 async function cacheFirst(request) {
   const cache = await caches.open(STATIC_CACHE);
-  const cached = await cache.match(request);
+  // Browser requests may include a version query while the precache uses the
+  // canonical pathname.  Prefer the exact response, then the canonical shell
+  // entry so a first offline navigation cannot lose its JS or CSS to a cache
+  // key mismatch.
+  const cached = await cache.match(request) || await cache.match(new URL(request.url).pathname, { ignoreSearch: true });
   if (cached) return cached;
-  const response = await fetch(request);
-  if (response.ok && request.method === 'GET') {
-    cache.put(request, response.clone());
+  try {
+    const response = await fetch(request);
+    if (response.ok && request.method === 'GET') {
+      cache.put(request, response.clone());
+    }
+    return response;
+  } catch {
+    return new Response('', { status: 504, statusText: 'Offline asset unavailable' });
   }
-  return response;
 }
 
 self.addEventListener('fetch', (event) => {
