@@ -211,8 +211,8 @@
       "degree": 8
     },
     {
-      "id": "package_scripts",
-      "label": "scripts",
+      "id": "src_main_addfiles",
+      "label": "addFiles()",
       "degree": 7
     },
     {
@@ -221,62 +221,62 @@
       "degree": 7
     },
     {
-      "id": "src_main_addfiles",
-      "label": "addFiles()",
+      "id": "package_scripts",
+      "label": "scripts",
       "degree": 7
     }
   ],
   "surprises": [
     {
+      "source": "updateLicenseUi()",
+      "target": "LicenseState",
+      "source_files": [
+        "src/main.ts",
+        "src/license.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "init()",
+      "target": "captureReturnedLicense()",
+      "source_files": [
+        "src/main.ts",
+        "src/license.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
       "source": "bindEvents()",
-      "target": "sanitizeFilename()",
+      "target": "storeLicense()",
       "source_files": [
         "src/main.ts",
-        "src/audio.ts"
+        "src/license.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
       "why": "bridges separate communities"
     },
     {
-      "source": "renderBatch()",
-      "target": "sanitizeFilename()",
+      "source": "bindEvents()",
+      "target": "verifyLicense()",
       "source_files": [
         "src/main.ts",
-        "src/audio.ts"
+        "src/license.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
       "why": "bridges separate communities"
     },
     {
-      "source": "renderQueue()",
-      "target": "outputName()",
+      "source": "init()",
+      "target": "verifyLicense()",
       "source_files": [
         "src/main.ts",
-        "src/audio.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "renderBatch()",
-      "target": "renderWrappedFile()",
-      "source_files": [
-        "src/main.ts",
-        "src/audio.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "renderBatch()",
-      "target": "createZip()",
-      "source_files": [
-        "src/main.ts",
-        "src/audio.ts"
+        "src/license.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
