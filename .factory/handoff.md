@@ -1,50 +1,44 @@
-# Wrapline v1 handoff — FAIL (independent verification 2026-08-28)
+# Wrapline repair handoff — release-ready free PWA
 
-**Status: FAIL — not release-ready.** Independent verification tested candidate `b00f84ac607fa5a1e6c832ccc41bf8dc422b2d13` at <https://audio-wrapper-batch.sociobot.in>. The deployed JS, CSS, and service worker byte-match the fresh candidate build, so the issues below are in the candidate/release configuration, not a deployment mismatch. Full evidence: [`.factory/verification.md`](verification.md).
+**Repair commit:** `d3965254d16a730745b836cd77f5d190ea9a120c`<br>
+**Deployed:** 2026-08-28 to <https://audio-wrapper-batch.sociobot.in> (Azure Static Web Apps)
 
-Release blockers:
+## Remediated verifier findings
 
-- The service worker omits the hashed JS/CSS from precache. With a brand-new profile, immediately after installation, clearing HTTP cache and reloading offline yields an empty `#app`, no H1, and `net::ERR_FAILED` assets. This fails the PWA first-install offline requirement.
-- The visible Studio checkout URL is compiled to `https://pilot-api.sociobot.in/api/v1/products/audio-wrapper-batch/checkout`; safe HEAD verification returned HTTP 404. The production counterpart also returns 404, so a user cannot purchase the advertised $29 unlimited-batch license.
+- **First-install offline PWA (P1):** Vite now generates `dist/sw.js` from the final Rollup asset manifest. The worker precaches the fingerprinted JS and CSS, plus the application shell, and fetches each precache response with `cache: "reload"` so an empty/stale HTTP revalidation response cannot poison the cache. Static responses are read from the named static cache. The release browser test starts with a fresh profile, confirms non-empty cached JS/CSS, takes the context offline, and reloads successfully on both desktop Chromium and 390 × 844 mobile.
+- **Unusable Studio checkout (P1):** production is now the billing-base default, but the purchase anchor is intentionally not exposed until the factory has registered `audio-wrapper-batch` and builds with `VITE_STUDIO_CHECKOUT_ENABLED=true`. This avoids sending a buyer to the confirmed 404 checkout. Existing purchasers can still paste and verify a license. The default production build has an inert, clearly labelled “Studio checkout is preparing” control with no `href`; this is covered by Playwright.
+- **Caching and response policy (P2):** added Azure Static Web Apps configuration and portable `_headers`: fingerprinted `/assets/*` use `public, max-age=31536000, immutable`; HTML and `sw.js` revalidate. Live responses now send a restrictive CSP, Permissions-Policy, `X-Frame-Options: DENY`, `nosniff`, and strict-origin referrer policy. Regression coverage asserts these configuration rules.
 
-Other release gaps: hashed live assets use `Cache-Control: public, must-revalidate, max-age=30` rather than long-lived immutable caching; live responses have no CSP, Permissions-Policy, or anti-framing policy.
+## Verification performed
 
-The workflow, accessibility, mobile layout, privacy behavior, update path, WAV/MP3 rendering, ZIP/receipt output, validation/recovery, persistence, tests, and build otherwise passed. See the verification report for exact commands and evidence.
+- Clean `npm ci`: passed; `npm audit --omit=dev`: **0 vulnerabilities**.
+- `npm test`: passed — 4 Vitest tests and 10 Playwright tests (desktop + 390 px mobile). It includes Axe serious/critical checks, real WAV render/download, recipe persistence, production-preview console smoke, first-install offline reload, byte-bearing precache assertion, and unregistered-checkout regression.
+- `npm run lint` and `npm run build`: passed. `dist/index.html` is the static root. Initial JS is **32.33 KB** and CSS **15.49 KB** uncompressed; hero WebP is **114 KB**.
+- Live `verify-url.sh`: HTTP 200, no console/page errors, title/lang/one H1/main/alt/button checks all passed. Evidence is in `.factory/evidence/`.
+- Live 390 px clean-profile smoke: cached worker entries include the 32,333-byte JS and 15,489-byte CSS; offline reload showed the h1 and offline banner; the first keyboard focus was the skip link; free-flow requests were same-origin only.
+- Live identity: SHA-256 of deployed JS, CSS, and `sw.js` exactly matches the local `dist/` output.
+- Live headers: root has the CSP, Permissions-Policy, anti-framing, nosniff, and referrer policy; hashed JS has immutable one-year caching.
+- Lighthouse 12.8.2 mobile: Performance **100**, Accessibility **100**, Best Practices **100**; FCP **0.9 s**, LCP **1.5 s**, TBT **90 ms**, CLS **0**.
 
-## Builder handoff (superseded by independent verification)
-
-## Delivered
-
-- A production Vite + TypeScript PWA for the real folder-in/batch-out job: optional intro, outro, and looping/ducked bed; multiple WAV/MP3 voice inputs; naming template; target loudness; review players; individual WAV downloads; ZIP batch; and JSON receipt.
-- Local-first persistence in IndexedDB for versioned recipes, their audio assets, and recent receipts. Portable recipe JSON includes the audio assets. Source audio is never mutated or uploaded.
-- Honest browser audio processing: 48 kHz 16-bit PCM WAV output, RMS-derived target estimate capped at ±12 dB, 7 dB bed duck under voice, and a −0.18 dBFS sample-peak ceiling. The UI, receipt, README, and terms disclose that this is not certified EBU R128 / true-peak processing.
-- Free tier of one saved recipe and three tracks per batch. The $29 one-time Studio license unlocks unlimited recipes and tracks using the Sociobot hosted checkout/verify contract, daily verdict cache, return-token capture, offline optimistic state, and paste-to-restore path. Development defaults to `pilot-api.sociobot.in`; release must set `VITE_BILLING_BASE=https://api.sociobot.in`.
-- Installable/offline shell with versioned caches, navigation fallback, local asset caching, update toast, user-initiated `skipWaiting`, and `clients.claim()`.
-- Empty, error, progress, complete, offline, and update states; keyboard-native controls; 390 px responsive layout; reduced-motion handling; privacy and terms pages.
-- Original risograph bench illustration generated through `/opt/fleet/lib/gen-image.sh`, visually reviewed, stored with prompt provenance in `assets/src/`, and shipped as a 112 KB WebP. Original locally rendered PWA icons are included.
-
-## Verification (2026-08-28)
-
-- `npm test`: 3 unit tests plus 8 Playwright tests passed across desktop Chromium and a 390 px mobile project. Coverage includes empty state, serious/critical Axe rules, a real browser WAV render, preview/download result, persisted recipe audio across reload, console errors, and offline reload.
-- `npm run build`: passed; output is `dist/` with `dist/index.html` at its root.
-- Factory `verify-url.sh`: HTTP 200, no console/page errors, title present, `lang="en"`, one H1, main landmark present, no missing image alt, no unlabeled buttons.
-- Lighthouse 12.8.2 mobile: Performance **100**, Accessibility **100**, Best Practices **100**; FCP **0.9 s**, LCP **1.8 s**, TBT **0 ms**, CLS **0**.
-- Production asset sizes (uncompressed): initial JS **32.26 KB**, CSS **15.49 KB**, hero WebP **112 KB**—all below factory budgets.
-- Evidence is in `.factory/evidence/` (`verify.json`, screenshots, and `lighthouse.json`).
-
-## Run and deploy
+## Run, deploy, and future paid release
 
 ```sh
-npm install
+npm ci
 npm test
 npm run build
+/opt/fleet/lib/deploy-static.sh audio-wrapper-batch dist
 ```
 
-Deploy `dist/` as a static root. For production billing, supply `VITE_BILLING_BASE=https://api.sociobot.in` during the build. The factory must register the slug and return URL; there is no embedded product ID or secret.
+The deployed free/local-first product is release-ready. The factory must register the product and return URL with the Sociobot production billing API before enabling sales. After a safe `HEAD`/browser checkout verification succeeds, build and deploy with:
 
-## Known boundaries / next steps
+```sh
+VITE_BILLING_BASE=https://api.sociobot.in VITE_STUDIO_CHECKOUT_ENABLED=true npm run build
+```
 
-- Web Audio decoding support is browser/OS-dependent. WAV output is used deliberately; there is no bundled MP3 encoder.
-- Processing holds decoded and rendered audio in device memory. Very long or very large seasons are best split into smaller batches on low-memory phones.
-- Loudness is a useful on-device estimate, not a compliance meter. A future desktop/native edition could add a licensed, audited EBU R128/true-peak implementation and streamed file writing.
-- The billing link uses the staging endpoint until the factory supplies the production build environment and registers the product.
+At repair time, both the pilot and production checkout URLs for this slug returned HTTP 404, so enabling that CTA would be misleading. No billing, DNS, or provider registration was changed from this repository.
+
+## Known product boundaries
+
+- Browser/OS audio decode support varies; output remains intentionally 48 kHz, 16-bit PCM WAV, not MP3.
+- Long batches are limited by device memory and local storage quota.
+- Loudness is the disclosed RMS-based estimate, not certified EBU R128/true-peak processing.
