@@ -1,0 +1,12 @@
+{
+  "slug": "audio-wrapper-batch",
+  "title": "Wrapline",
+  "territory": "games-creative",
+  "user": "Independent podcasters, radio makers, and course creators who need to turn many finished voice tracks into consistently branded deliverables without rebuilding the same intro, outro, bed, and export setup every time.",
+  "smallest_useful_product": "A local desktop/PWA utility that accepts WAV/MP3 voice files plus a recipe for intro, outro, bed, loudness, and naming; it renders a reviewable batch and writes a receipt.",
+  "success_measure": "At least 70% of pilot users render a second batch from a saved recipe within 14 days, with zero manually rebuilt wrapper projects.",
+  "artifact_class": "pwa-offline",
+  "monetization": "one-time",
+  "constraints": "Process files on-device; preserve source files; disclose codec/loudness behavior; use appropriately licensed bundled encoders only.",
+  "state": "RESEARCHED"
+}
