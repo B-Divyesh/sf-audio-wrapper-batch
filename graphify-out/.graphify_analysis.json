@@ -1,0 +1,290 @@
+{
+  "communities": {
+    "0": [
+      "src_license",
+      "src_license_billingbase",
+      "src_license_cachedverdict",
+      "src_license_capturereturnedlicense",
+      "src_license_checkouturl",
+      "src_license_licensestate",
+      "src_license_storelicense",
+      "src_license_verifylicense",
+      "src_main",
+      "src_main_app",
+      "src_main_assetfrom",
+      "src_main_blobtodataurl",
+      "src_main_current",
+      "src_main_download",
+      "src_main_exportedrecipe",
+      "src_main_job",
+      "src_main_jobs",
+      "src_main_preservedraftfields",
+      "src_main_receipts",
+      "src_main_recipes",
+      "src_types",
+      "src_types_audioasset",
+      "src_types_receipt",
+      "src_types_receiptitem",
+      "src_types_recipe",
+      "src_types_renderedfile"
+    ],
+    "1": [
+      "ref_dom",
+      "ref_dom_iterable",
+      "ref_es2022",
+      "ref_src",
+      "ref_tests_audio_test_ts",
+      "ref_vite_config_ts",
+      "ref_vitest_config_ts",
+      "ref_webworker",
+      "tsconfig",
+      "tsconfig_compileroptions",
+      "tsconfig_compileroptions_allowimportingtsextensions",
+      "tsconfig_compileroptions_isolatedmodules",
+      "tsconfig_compileroptions_lib",
+      "tsconfig_compileroptions_module",
+      "tsconfig_compileroptions_moduledetection",
+      "tsconfig_compileroptions_moduleresolution",
+      "tsconfig_compileroptions_noemit",
+      "tsconfig_compileroptions_nouncheckedindexedaccess",
+      "tsconfig_compileroptions_resolvejsonmodule",
+      "tsconfig_compileroptions_skiplibcheck",
+      "tsconfig_compileroptions_strict",
+      "tsconfig_compileroptions_target",
+      "tsconfig_compileroptions_usedefineforclassfields",
+      "tsconfig_include"
+    ],
+    "2": [
+      "src_db_getreceipts",
+      "src_db_getrecipes",
+      "src_main_addfiles",
+      "src_main_bindevents",
+      "src_main_clearbatchdownload",
+      "src_main_dataurlblob",
+      "src_main_escapehtml",
+      "src_main_fillrecipeform",
+      "src_main_freshrecipe",
+      "src_main_importrecipe",
+      "src_main_init",
+      "src_main_message",
+      "src_main_now",
+      "src_main_readrecipe",
+      "src_main_registerserviceworker",
+      "src_main_renderbatch",
+      "src_main_renderqueue",
+      "src_main_renderreceipts",
+      "src_main_renderrecipeoptions",
+      "src_main_syncconnection",
+      "src_main_uid",
+      "src_main_updatelicenseui",
+      "src_main_validaudio"
+    ],
+    "3": [
+      "src_audio",
+      "src_audio_clamp",
+      "src_audio_concat",
+      "src_audio_connectsource",
+      "src_audio_crc32",
+      "src_audio_crctable",
+      "src_audio_createzip",
+      "src_audio_decode",
+      "src_audio_encodewav",
+      "src_audio_estimatedgaindb",
+      "src_audio_outputname",
+      "src_audio_peakof",
+      "src_audio_renderwrappedfile",
+      "src_audio_rmsof",
+      "src_audio_sanitizefilename",
+      "src_audio_sha256",
+      "tests_audio_test"
+    ],
+    "4": [
+      "axe_core_playwright",
+      "package_devdependencies",
+      "package_devdependencies_axe_core_playwright",
+      "package_devdependencies_playwright_test",
+      "package_devdependencies_types_node",
+      "package_devdependencies_typescript",
+      "package_devdependencies_vite",
+      "package_devdependencies_vitest",
+      "playwright_test",
+      "types_node",
+      "typescript",
+      "vite",
+      "vitest"
+    ],
+    "5": [
+      "package",
+      "package_name",
+      "package_private",
+      "package_scripts",
+      "package_scripts_build",
+      "package_scripts_dev",
+      "package_scripts_preview",
+      "package_scripts_test",
+      "package_scripts_test_e2e",
+      "package_scripts_test_unit",
+      "package_type",
+      "package_version"
+    ],
+    "6": [
+      "src_db",
+      "src_db_all",
+      "src_db_deleterecipe",
+      "src_db_opendb",
+      "src_db_put",
+      "src_db_savereceipt",
+      "src_db_saverecipe"
+    ],
+    "7": [
+      "public_sw",
+      "public_sw_cachefirst",
+      "public_sw_networkfirst",
+      "public_sw_shell"
+    ],
+    "8": [
+      "tests_e2e_app_spec",
+      "tests_e2e_app_spec_wavbuffer"
+    ],
+    "9": [
+      "playwright_config"
+    ],
+    "10": [
+      "src_vite_env_d"
+    ],
+    "11": [
+      "vite_config"
+    ],
+    "12": [
+      "vitest_config"
+    ]
+  },
+  "cohesion": {
+    "0": 0.1076923076923077,
+    "1": 0.08333333333333333,
+    "2": 0.20553359683794467,
+    "3": 0.2426470588235294,
+    "4": 0.15384615384615385,
+    "5": 0.16666666666666666,
+    "6": 0.5238095238095238,
+    "7": 0.5,
+    "8": 1.0,
+    "9": 1.0,
+    "10": 1.0,
+    "11": 1.0,
+    "12": 1.0
+  },
+  "gods": [
+    {
+      "id": "src_main_bindevents",
+      "label": "bindEvents()",
+      "degree": 25
+    },
+    {
+      "id": "src_main_init",
+      "label": "init()",
+      "degree": 14
+    },
+    {
+      "id": "tsconfig_compileroptions",
+      "label": "compilerOptions",
+      "degree": 14
+    },
+    {
+      "id": "src_main_renderbatch",
+      "label": "renderBatch()",
+      "degree": 13
+    },
+    {
+      "id": "src_audio_renderwrappedfile",
+      "label": "renderWrappedFile()",
+      "degree": 11
+    },
+    {
+      "id": "src_main_importrecipe",
+      "label": "importRecipe()",
+      "degree": 10
+    },
+    {
+      "id": "src_main_renderqueue",
+      "label": "renderQueue()",
+      "degree": 8
+    },
+    {
+      "id": "package_scripts",
+      "label": "scripts",
+      "degree": 7
+    },
+    {
+      "id": "src_main_message",
+      "label": "message()",
+      "degree": 7
+    },
+    {
+      "id": "src_main_addfiles",
+      "label": "addFiles()",
+      "degree": 7
+    }
+  ],
+  "surprises": [
+    {
+      "source": "bindEvents()",
+      "target": "sanitizeFilename()",
+      "source_files": [
+        "src/main.ts",
+        "src/audio.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "renderBatch()",
+      "target": "sanitizeFilename()",
+      "source_files": [
+        "src/main.ts",
+        "src/audio.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "renderQueue()",
+      "target": "outputName()",
+      "source_files": [
+        "src/main.ts",
+        "src/audio.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "renderBatch()",
+      "target": "renderWrappedFile()",
+      "source_files": [
+        "src/main.ts",
+        "src/audio.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "renderBatch()",
+      "target": "createZip()",
+      "source_files": [
+        "src/main.ts",
+        "src/audio.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}
