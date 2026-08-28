@@ -1,4 +1,4 @@
-const VERSION = 'wrapline-v1';
+const VERSION = 'wrapline-v2';
 const STATIC_CACHE = `${VERSION}-static`;
 const PAGE_CACHE = `${VERSION}-pages`;
 const SHELL = ['/', '/index.html', '/offline.html', '/manifest.webmanifest', '/icon-192.png', '/icon-512.png', '/art/wrapline-bench.webp', '/privacy/', '/terms/'];

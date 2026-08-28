@@ -198,6 +198,17 @@ function readRecipe(): Recipe {
   };
 }
 
+function preserveDraftFields(): void {
+  current = {
+    ...current,
+    name: $<HTMLInputElement>('#recipe-name').value,
+    naming: $<HTMLInputElement>('#naming-template').value,
+    targetLufs: Number($<HTMLSelectElement>('#target-loudness').value),
+    bedDb: Number($<HTMLInputElement>('#bed-volume').value),
+    startNumber: Number($<HTMLInputElement>('#start-number').value),
+  };
+}
+
 function renderQueue(): void {
   $('#queue-count').textContent = `${jobs.length} ${jobs.length === 1 ? 'track' : 'tracks'}`;
   $<HTMLElement>('#queue-empty').hidden = jobs.length > 0;
@@ -388,6 +399,7 @@ function bindEvents(): void {
     $<HTMLInputElement>(`#${key}-file`).addEventListener('change', (event) => {
       const file = (event.currentTarget as HTMLInputElement).files?.[0];
       if (!file || !validAudio(file)) return message('#recipe-message', 'Choose a WAV or MP3 wrapper file.', true);
+      preserveDraftFields();
       current[key] = assetFrom(file);
       fillRecipeForm();
       message('#recipe-message', `${file.name} added to the recipe. Save to keep it on this device.`);
@@ -395,6 +407,7 @@ function bindEvents(): void {
   }
   document.querySelectorAll<HTMLButtonElement>('[data-clear]').forEach((button) => button.addEventListener('click', () => {
     const key = button.dataset.clear as 'intro' | 'outro' | 'bed';
+    preserveDraftFields();
     delete current[key];
     $<HTMLInputElement>(`#${key}-file`).value = '';
     fillRecipeForm();
@@ -415,7 +428,7 @@ function bindEvents(): void {
       if (!unlocked && !existing && recipes.length >= 1) throw new Error('The free bench holds one recipe. Load it to update it, or unlock unlimited recipes.');
       current = { ...readRecipe(), version: current.version + 1 };
       await saveRecipe(current);
-      await navigator.storage?.persist?.();
+      void navigator.storage?.persist?.();
       recipes = await getRecipes();
       renderRecipeOptions(); fillRecipeForm();
       message('#recipe-message', `Saved “${current.name}” as version ${current.version} on this device.`);

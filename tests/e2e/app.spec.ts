@@ -35,6 +35,17 @@ test('renders a real local WAV into a reviewable batch', async ({ page }) => {
   await expect(page.locator('audio')).toHaveCount(1);
 });
 
+test('keeps a saved recipe and wrapper audio across reloads', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('#recipe-name').fill('Field notes');
+  await page.locator('#intro-file').setInputFiles({ name: 'theme.wav', mimeType: 'audio/wav', buffer: wavBuffer() });
+  await page.getByRole('button', { name: 'Save recipe' }).click();
+  await expect(page.getByText(/Saved “Field notes” as version 1/)).toBeVisible();
+  await page.reload();
+  await expect(page.locator('#recipe-name')).toHaveValue('Field notes');
+  await expect(page.locator('#intro-status')).toHaveText('theme.wav');
+});
+
 test('installed shell reloads while offline', async ({ page, context }) => {
   await page.goto('/');
   await page.evaluate(() => navigator.serviceWorker.ready);
