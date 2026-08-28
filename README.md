@@ -46,13 +46,13 @@ The loudness target is an RMS-derived integrated estimate, capped at ±12 dB. Th
 
 ## Billing configuration
 
-The app follows the Sociobot license-unlock contract and never embeds a payment provider. Production builds default to the production API, but the purchase CTA is deliberately withheld until the factory has registered this exact product slug in that environment. That prevents users being sent to an unregistered checkout. After registration, deploy with:
+The app follows the Sociobot license-unlock contract and never embeds a payment provider. Production builds use the production API and verify the registered hosted checkout before emitting the enabled purchase CTA. This release guard prevents a deploy that advertises a dead purchase path. The product slug is registered as `audio-wrapper-batch` with a USD 29 one-time Studio license and return URL `https://audio-wrapper-batch.sociobot.in/`.
 
 ```sh
-VITE_BILLING_BASE=https://api.sociobot.in VITE_STUDIO_CHECKOUT_ENABLED=true npm run build
+npm run build
 ```
 
-For pilot/staging, explicitly set `VITE_BILLING_BASE=https://pilot-api.sociobot.in` and enable the CTA only after the pilot product is registered. The product slug is `audio-wrapper-batch`; no provider product ID or secret is stored in this repository. Returned tokens live under `sb_license:audio-wrapper-batch` in localStorage and are verified at most once per day. Audio and recipes are never sent during verification.
+For pilot/staging, explicitly set `VITE_BILLING_BASE=https://pilot-api.sociobot.in` before running `npm run build`; its checkout must be registered and return the same hosted redirect. No provider product ID or secret is stored in this repository. Returned tokens live under `sb_license:audio-wrapper-batch` in localStorage and are verified at most once per day. Audio and recipes are never sent during verification.
 
 ## Project notes
 

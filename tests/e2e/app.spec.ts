@@ -91,7 +91,7 @@ test('keeps an unverified license locked during a verification outage', async ({
   await page.locator('#license-token').fill('arbitrary-unverified-token');
   await page.getByRole('button', { name: 'Verify' }).click();
   await expect(page.getByText(/could not be verified/)).toBeVisible();
-  await expect(page.locator('#buy-link')).toHaveText('Studio checkout is preparing');
+  await expect(page.locator('#buy-link')).toHaveText('Buy studio license · $29');
 
   await page.locator('#voice-files').setInputFiles([1, 2, 3, 4].map((index) => ({
     name: `outage-${index}.wav`, mimeType: 'audio/wav', buffer: wavBuffer(),
@@ -134,10 +134,10 @@ test('moves focus to main and preserves usable mobile-sized controls', async ({ 
   await expect.poll(() => page.evaluate(() => document.activeElement?.id)).toBe('import-recipe-button');
 });
 
-test('does not expose an unregistered Studio checkout in a release build', async ({ page }) => {
+test('release build exposes the registered hosted Studio checkout', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('#buy-link')).toHaveText('Studio checkout is preparing');
-  await expect(page.locator('#buy-link')).toHaveAttribute('aria-disabled', 'true');
-  await expect(page.locator('#buy-link')).not.toHaveAttribute('href');
-  await expect(page.getByText(/Already have a Studio license/)).toBeVisible();
+  const link = page.locator('#buy-link');
+  await expect(link).toHaveText('Buy studio license · $29');
+  await expect(link).toHaveAttribute('href', 'https://api.sociobot.in/api/v1/products/audio-wrapper-batch/checkout');
+  await expect(link).not.toHaveAttribute('aria-disabled');
 });

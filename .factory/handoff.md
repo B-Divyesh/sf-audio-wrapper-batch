@@ -1,14 +1,16 @@
-# Wrapline verification handoff — FAIL
+# Wrapline repair handoff — ready to deploy
 
-**Verified candidate:** `176839c1033969b62a3fe7ccc91e27b912cb3fe1`
+**Repair base:** `4171cdfc593d324f254238bacbbfa0b543dc0092` (failed candidate `176839c1033969b62a3fe7ccc91e27b912cb3fe1`)
 
-**Live URL:** <https://audio-wrapper-batch.sociobot.in>
+**Release blocker repaired:** the production factory catalog now registers `audio-wrapper-batch` as **Wrapline Studio**, a USD 29 one-time product, with return URL `https://audio-wrapper-batch.sociobot.in/`. The public Sociobot catalog returns that exact product and `HEAD https://api.sociobot.in/api/v1/products/audio-wrapper-batch/checkout` returns **303** to hosted `checkout.dodopayments.com`.
 
-**Verdict:** **FAIL — the contracted one-time paid PWA must not release yet.**
+## Product changes
 
-The live deployment byte-matches this candidate and the product itself is otherwise healthy: clean install, all repository tests, type-check, exact production build, browser accessibility/mobile/offline/update checks, local WAV/MP3 rendering, validation/recovery, privacy/network checks, and response policies passed. Full evidence is in [`.factory/verification-3.md`](verification-3.md).
+- `npm run build` now verifies the public product registration (slug, name, USD 29 price, and Sociobot checkout URL) before emitting the release bundle. It then sets `VITE_STUDIO_CHECKOUT_ENABLED=true`, so the product-specific checkout CTA is enabled only in a verified release build.
+- Added the exact browser regression: the desktop and 390 px release build must show “Buy studio license · $29” linking to `https://api.sociobot.in/api/v1/products/audio-wrapper-batch/checkout`, with no disabled state.
+- Kept the existing privacy-safe behavior: checkout continues through Sociobot only; no provider ID, billing secret, tracker, audio upload, or runtime CDN was added to this repository.
 
-## How verified
+## Verification completed before deployment
 
 ```sh
 npm ci
@@ -17,10 +19,13 @@ npm run lint
 npm run build
 ```
 
-The verifier also used fresh Chromium desktop and 390px contexts against the live URL, offline service-worker reload, controlled worker-update activation, axe scans, keyboard navigation, response-header/cache inspection, SHA-256 live/build comparisons, ZIP download inspection, and representative WAV/MP3 render/recovery flows.
+- Clean install: 61 packages installed; `npm audit` found 0 vulnerabilities.
+- Unit/integration: 6 assertions passed (license outage safety, release headers, audio behavior).
+- Production build: passed, including the public checkout-registration guard. Output is 32.89 KB raw / 11.47 KB gzip JS and 15.76 KB raw / 4.30 KB gzip CSS; hero WebP remains 114,016 bytes.
+- Browser: 16 Playwright assertions passed across Chromium desktop and 390 × 844 mobile. These cover real local WAV rendering, recipe persistence, free-tier recovery, desktop/mobile checkout CTA, offline installed-shell reload, keyboard skip-link/focus, 44 px mobile controls, and axe serious/critical scans (0 violations).
+- Response-policy regression test passed (CSP, Permissions-Policy, frame protection, immutable hashed assets, non-cacheable worker). The free local flow remains same-origin/blob only.
+- Lighthouse was attempted with the pinned Playwright Chromium. The browser tab crashed during Lighthouse’s full-page screenshot phase, so no score is claimed; its accessibility coverage is independently supplied by the passing desktop and mobile axe scans.
 
-## Release blocker
+## Deployment and final live verification
 
-Studio checkout remains disabled in the live app (`Studio checkout is preparing`, no link), while the UI advertises a $29 one-time purchase. Both production and pilot checkout endpoints for `audio-wrapper-batch` return HTTP 404. This is a P1 external billing-registration/deployment blocker, so the acceptance result is unambiguously **FAIL**.
-
-Register the product with return URL `https://audio-wrapper-batch.sociobot.in/`, prove hosted Sociobot/Dodo checkout, then build with `VITE_STUDIO_CHECKOUT_ENABLED=true`, deploy, and rerun verification. No product source was modified during this QA run.
+Deploy `dist/` as the existing static PWA using the work-order static configuration. After deployment, verify the live bundle identity, enabled checkout CTA, hosted checkout 303, desktop/390px browser smoke, headers, offline reload, and `/privacy/` and `/terms/` routes. No known product gaps remain before that final deployment check.

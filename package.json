@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "lint": "tsc --noEmit",
-    "build": "npm run lint && vite build",
+    "verify:checkout": "node scripts/verify-checkout.mjs",
+    "build": "npm run lint && npm run verify:checkout && VITE_STUDIO_CHECKOUT_ENABLED=true vite build",
     "preview": "vite preview --host 0.0.0.0",
     "test": "npm run test:unit && npm run build && npm run test:e2e",
     "test:unit": "vitest run",
