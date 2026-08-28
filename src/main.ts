@@ -1,7 +1,7 @@
 import './styles.css';
 import { createZip, outputName, renderWrappedFile, sanitizeFilename } from './audio';
 import { deleteRecipe, getReceipts, getRecipes, saveReceipt, saveRecipe } from './db';
-import { captureReturnedLicense, checkoutUrl, licenseState, storeLicense, verifyLicense } from './license';
+import { captureReturnedLicense, checkoutUrl, licenseState, storeLicense, studioCheckoutAvailable, verifyLicense } from './license';
 import type { AudioAsset, Receipt, Recipe, RenderedFile } from './types';
 
 type Job = { id: string; file: File; output?: RenderedFile; url?: string; error?: string };
@@ -111,7 +111,8 @@ app.innerHTML = `
       <div class="unlock-mark" aria-hidden="true">∞</div>
       <div><p class="eyebrow">One-time studio license</p><h2 id="unlock-title">Run the whole season in one pass.</h2><p>Wrapline is useful for free: save one recipe and render three tracks per batch. A <strong>$29 one-time purchase</strong> unlocks unlimited tracks and unlimited saved recipes on your devices.</p><p class="fine-print">No subscription. Checkout and refunds are handled by Sociobot / Dodo, the merchant of record.</p></div>
       <div class="license-actions">
-        <a class="button primary" id="buy-link" href="${checkoutUrl}">Buy studio license · $29</a>
+        <a class="button primary" id="buy-link"${studioCheckoutAvailable ? ` href="${checkoutUrl}"` : ' aria-disabled="true"'}>${studioCheckoutAvailable ? 'Buy studio license · $29' : 'Studio checkout is preparing'}</a>
+        ${studioCheckoutAvailable ? '' : '<p class="fine-print">Already have a Studio license? Paste it below to restore it on this device.</p>'}
         <form id="license-form"><label for="license-token">Already bought? Paste license</label><div><input id="license-token" autocomplete="off" spellcheck="false" /><button class="button quiet" type="submit">Verify</button></div></form>
         <p id="license-message" class="form-message" aria-live="polite"></p>
       </div>
@@ -270,9 +271,10 @@ function updateLicenseUi(note?: string): void {
   unlocked = state.unlocked;
   $('#unlock').classList.toggle('is-unlocked', unlocked);
   const link = $<HTMLAnchorElement>('#buy-link');
-  link.textContent = unlocked ? 'Studio license active' : 'Buy studio license · $29';
-  link.toggleAttribute('aria-disabled', unlocked);
-  if (unlocked) link.removeAttribute('href'); else link.href = checkoutUrl;
+  link.textContent = unlocked ? 'Studio license active' : studioCheckoutAvailable ? 'Buy studio license · $29' : 'Studio checkout is preparing';
+  link.toggleAttribute('aria-disabled', unlocked || !studioCheckoutAvailable);
+  if (!unlocked && studioCheckoutAvailable) link.href = checkoutUrl;
+  else link.removeAttribute('href');
   message('#license-message', note ?? (unlocked ? 'Unlimited batches and recipes are unlocked on this device.' : state.reason ? 'License no longer active. You can restore another license below.' : ''));
   renderQueue();
 }

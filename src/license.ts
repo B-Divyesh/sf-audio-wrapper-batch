@@ -2,8 +2,11 @@ const SLUG = 'audio-wrapper-batch';
 const LICENSE_KEY = `sb_license:${SLUG}`;
 const VERDICT_KEY = `sb_license_verdict:${SLUG}`;
 const DAY = 24 * 60 * 60 * 1000;
-export const billingBase = (import.meta.env.VITE_BILLING_BASE as string | undefined) ?? 'https://pilot-api.sociobot.in';
+/** Production is the safe default; a staging build must explicitly use pilot. */
+export const billingBase = (import.meta.env.VITE_BILLING_BASE as string | undefined) ?? 'https://api.sociobot.in';
 export const checkoutUrl = `${billingBase}/api/v1/products/${SLUG}/checkout`;
+/** Keep an unregistered checkout from becoming a dead public purchase link. */
+export const studioCheckoutAvailable = import.meta.env.VITE_STUDIO_CHECKOUT_ENABLED === 'true';
 
 interface CachedVerdict {
   valid: boolean;

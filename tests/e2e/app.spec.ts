@@ -49,9 +49,35 @@ test('keeps a saved recipe and wrapper audio across reloads', async ({ page }) =
 test('installed shell reloads while offline', async ({ page, context }) => {
   await page.goto('/');
   await page.evaluate(() => navigator.serviceWorker.ready);
-  await page.reload();
+  await expect.poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
+  const expectedShellAssets = await page.evaluate(() =>
+    Array.from(document.querySelectorAll<HTMLScriptElement | HTMLLinkElement>('script[src], link[rel="stylesheet"][href]'))
+      .map((element) => new URL(element instanceof HTMLScriptElement ? element.src : element.href).pathname),
+  );
+  const cachedAssets = await page.evaluate(async () => {
+    const assets: Array<{ path: string; bytes: number }> = [];
+    for (const cacheName of await caches.keys()) {
+      const cache = await caches.open(cacheName);
+      for (const request of await cache.keys()) {
+        const response = await cache.match(request);
+        assets.push({ path: new URL(request.url).pathname, bytes: (await response?.arrayBuffer())?.byteLength ?? 0 });
+      }
+    }
+    return assets;
+  });
+  expect(expectedShellAssets).not.toEqual([]);
+  expect(expectedShellAssets.every((asset) => cachedAssets.some((cached) => cached.path === asset && cached.bytes > 0))).toBe(true);
+  // A new install must survive without relying on the browser's HTTP cache.
   await context.setOffline(true);
   await page.reload();
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Batch the wrapper');
   await expect(page.getByText(/offline/i).first()).toBeVisible();
+});
+
+test('does not expose an unregistered Studio checkout in a release build', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('#buy-link')).toHaveText('Studio checkout is preparing');
+  await expect(page.locator('#buy-link')).toHaveAttribute('aria-disabled', 'true');
+  await expect(page.locator('#buy-link')).not.toHaveAttribute('href');
+  await expect(page.getByText(/Already have a Studio license/)).toBeVisible();
 });

@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "tsc --noEmit && vite build",
+    "lint": "tsc --noEmit",
+    "build": "npm run lint && vite build",
     "preview": "vite preview --host 0.0.0.0",
-    "test": "vitest run && playwright test",
+    "test": "npm run test:unit && npm run build && npm run test:e2e",
     "test:unit": "vitest run",
     "test:e2e": "playwright test"
   },
