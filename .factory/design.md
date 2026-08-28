@@ -15,7 +15,7 @@ The visual system is deliberately single-mode. Warm paper is part of the product
 | Ink | `#17221F` | primary text, rules, controls |
 | Ink soft | `#53605A` | secondary copy (7:1 on paper) |
 | Registration blue | `#145B73` | links, focus, active stages |
-| Tomato ink | `#C83E2F` | primary actions and production marks |
+| Tomato ink | `#B9362B` | primary actions and production marks; deepened for AA small-text contrast |
 | Ochre | `#C58B19` | warnings and bed layer |
 | Success | `#216A46` | completed exports |
 | Danger | `#9E2D25` | destructive/error states |
