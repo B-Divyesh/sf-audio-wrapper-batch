@@ -4,7 +4,7 @@
 - **Repaired verifier candidate:** `b5f43e3fd5c2c437605b72c9acdde2a516c504dc`
 - **Repair commit:** `06279748a2ac3258c7ac27c8ac42dcf08b2310bb`
 - **Artifact:** static offline PWA; `dist/index.html` is the deployment root
-- **Deployment:** static push to `main`; live URL is <https://audio-wrapper-batch.sociobot.in>
+- **Deployment:** `swa deploy dist --app-name sf-audio-wrapper-batch --resource-group sociobot --env production`; live URL is <https://audio-wrapper-batch.sociobot.in>
 - **Verified:** 2026-08-30 UTC
 
 ## What changed
@@ -38,6 +38,7 @@ npm audit --omit=dev           passed; 0 vulnerabilities
 - Offline and update: `@claim:offline-demo` uses a dedicated browser context, verifies byte-bearing JS/CSS cache entries, sets the context offline, and reloads `/demo` with its H1, offline banner, and three queued tracks. A separate controlled test against a temporary copy of `dist/` changed only `sw.js`; the update toast appeared, **Update now** activated the waiting worker, reloaded, and ended with `{ waiting: false, active: "activated", toastHidden: true }`.
 - Response policy: source tests confirm the Static Web Apps CSP, frame protection, permissions policy, no-cache worker policy, immutable fingerprinted assets, crawl metadata, and 404 rewrite. Local production preview returned 200 for `/demo`, `/privacy/`, `/terms/`, `/robots.txt`, `/sitemap.xml`, and `/404.html`.
 - Live identity: `https://api.sociobot.in/api/v1/products` returned the registered `Wrapline Studio`, USD **29.00**, with the expected production checkout URL. A safe HEAD request to `/api/v1/products/audio-wrapper-batch/checkout` returned **303** to hosted Dodo checkout.
+- Live deployment: Azure Static Web Apps accepted the production deployment and returned `https://kind-dune-07185b90f.7.azurestaticapps.net`. The custom-domain shell now references `assets/index-D50TPNPT.js`, and `/demo`, `/privacy/`, `/terms/`, `/robots.txt`, `/sitemap.xml`, and `/404.html` each return 200. The deployed root retains no-cache HTML, restrictive CSP, Permissions-Policy, X-Frame-Options, nosniff, and strict referrer policy. A fresh live 390 × 844 Playwright/Axe smoke found one H1, the demo banner, three sample tracks, no console errors, zero serious/critical violations, and no horizontal overflow.
 
 ## Known gap
 
