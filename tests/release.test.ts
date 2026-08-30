@@ -1,5 +1,10 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
+
+const repositoryRoot = fileURLToPath(new URL('..', import.meta.url));
+const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 
 describe('release response policy', () => {
   const headers = readFileSync(new URL('../public/_headers', import.meta.url), 'utf8');
@@ -23,6 +28,20 @@ describe('release response policy', () => {
     expect(packageJson.scripts.build).not.toContain('verify:checkout');
     expect(packageJson.scripts['verify:release']).toContain('verify:checkout');
     expect(packageJson.scripts.build).toContain('VITE_STUDIO_CHECKOUT_ENABLED=true vite build');
+  });
+
+  it('runs the exact production build during a checkout-catalog outage', () => {
+    const result = spawnSync(npmCommand, ['run', 'build'], {
+      cwd: repositoryRoot,
+      encoding: 'utf8',
+      timeout: 30_000,
+      env: { ...process.env, VITE_BILLING_BASE: 'http://127.0.0.1:9' },
+    });
+    expect(result.error, `${result.stdout}\n${result.stderr}`).toBeUndefined();
+    expect(result.status, `${result.stdout}\n${result.stderr}`).toBe(0);
+    expect(existsSync(new URL('../dist/index.html', import.meta.url))).toBe(true);
+    expect(existsSync(new URL('../dist/sw.js', import.meta.url))).toBe(true);
+    expect(existsSync(new URL('../dist/staticwebapp.config.json', import.meta.url))).toBe(true);
   });
 
   it('uses an explicit demo rewrite so unknown routes reach the real 404 response', () => {
