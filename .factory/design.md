@@ -50,6 +50,7 @@ UI state changes last 160–220 ms and animate only transform or opacity. New qu
 ## Asset plan and provenance
 
 - `public/art/wrapline-bench.webp`: original generated hero illustration, a top-down risograph collage of labeled-by-shape audio strips passing through a mechanical wrapping jig. It communicates intro + voice + outro + bed without UI screenshots or capability claims. The source PNG and prompt sidecar live in `assets/src/`.
+- `public/art/wrapline-social.jpg`: 1200 × 630 social-preview crop composed from the same original bench artwork. It keeps the waveform strips and finishing jig visible in social cards without adding text to the art.
 - PWA icons are original hand-authored SVG-derived artwork: four misregistered waveform strips held by crop marks. They are rendered locally to PNG at 192 and 512 px; the same mark is used for the maskable icon.
 - Small waveform and status marks are CSS/SVG authored for this repository.
 

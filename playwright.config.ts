@@ -8,7 +8,10 @@ export default defineConfig({
   workers: 1,
   timeout: 30_000,
   use: { baseURL: 'http://127.0.0.1:4173', trace: 'retain-on-failure' },
-  webServer: { command: 'npm run preview -- --port 4173', url: 'http://127.0.0.1:4173', reuseExistingServer: true },
+  // Exercise the emitted artifact through the same explicit-route/404 policy
+  // that Static Web Apps receives in dist/staticwebapp.config.json. Vite's
+  // development fallback would incorrectly turn unknown release URLs into 200.
+  webServer: { command: 'node scripts/static-server.mjs --port 4173', url: 'http://127.0.0.1:4173', reuseExistingServer: true },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'mobile', use: { ...devices['Pixel 5'], viewport: { width: 390, height: 844 } } },

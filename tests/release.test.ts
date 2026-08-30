@@ -25,14 +25,32 @@ describe('release response policy', () => {
     expect(packageJson.scripts.build).toContain('VITE_STUDIO_CHECKOUT_ENABLED=true vite build');
   });
 
-  it('ships crawl metadata and a dedicated static-web-app 404 recovery page', () => {
-    const config = JSON.parse(staticConfig) as { responseOverrides?: { '404'?: { rewrite?: string } } };
+  it('uses an explicit demo rewrite so unknown routes reach the real 404 response', () => {
+    const config = JSON.parse(staticConfig) as {
+      navigationFallback?: unknown;
+      responseOverrides?: { '404'?: { rewrite?: string } };
+      routes?: Array<{ route?: string; rewrite?: string }>;
+    };
     const robots = readFileSync(new URL('../public/robots.txt', import.meta.url), 'utf8');
     const sitemap = readFileSync(new URL('../public/sitemap.xml', import.meta.url), 'utf8');
     const notFound = readFileSync(new URL('../public/404.html', import.meta.url), 'utf8');
+    expect(config.navigationFallback).toBeUndefined();
+    expect(config.routes).toEqual(expect.arrayContaining([
+      { route: '/demo', rewrite: '/index.html' },
+      { route: '/demo/', rewrite: '/index.html' },
+    ]));
     expect(config.responseOverrides?.['404']?.rewrite).toBe('/404.html');
     expect(robots).toContain('Sitemap: https://audio-wrapper-batch.sociobot.in/sitemap.xml');
     expect(sitemap).toContain('https://audio-wrapper-batch.sociobot.in/demo');
     expect(notFound).toContain('<h1>This page is not on the finishing bench.</h1>');
+  });
+
+  it('declares product-specific social metadata and local icon assets', () => {
+    const document = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+    expect(document).toContain('<meta property="og:title" content="Wrapline — batch audio finishing" />');
+    expect(document).toContain('<meta name="twitter:card" content="summary_large_image" />');
+    expect(document).toContain('https://audio-wrapper-batch.sociobot.in/art/wrapline-social.jpg');
+    expect(document).toContain('<link rel="icon" href="/favicon.svg" type="image/svg+xml" />');
+    expect(document).toContain('<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />');
   });
 });

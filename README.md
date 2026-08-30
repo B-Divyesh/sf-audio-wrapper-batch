@@ -48,7 +48,7 @@ npm run preview          # serve ./dist locally
 
 `npm run build` is deliberately independent of a temporary catalog outage, so a reproducible static artifact can always be built. Run `npm run verify:release` immediately before a release; it confirms the registered `audio-wrapper-batch` checkout is `Wrapline Studio`, USD 29.00, and points to the hosted production checkout.
 
-Deploy `dist/` as a static site with `dist/index.html` at its root. The included `staticwebapp.config.json` configures SPA fallback, a dedicated 404 page, security headers, and cache policy. Serve `sw.js` without immutable caching so updates can be discovered.
+Deploy `dist/` as a static site with `dist/index.html` at its root. The included `staticwebapp.config.json` rewrites the known `/demo` app route and returns the dedicated 404 page for unknown URLs, alongside security headers and cache policy. Serve `sw.js` without immutable caching so updates can be discovered.
 
 ## Audio behavior
 

@@ -28,6 +28,30 @@ test('loads a clear, accessible empty bench', async ({ page }) => {
   expect(consoleErrors).toEqual([]);
 });
 
+test('release artifact returns the designed 404 document for an unknown URL', async ({ page }) => {
+  const response = await page.goto('/missing-qa-404-repair-6');
+  expect(response?.status()).toBe(404);
+  await expect(page).toHaveTitle('Page not found — Wrapline');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('This page is not on the finishing bench.');
+  await expect(page.getByRole('link', { name: 'Return to Wrapline' })).toHaveAttribute('href', '/');
+});
+
+test('release artifact publishes the required social preview and app icons', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', 'Wrapline — batch audio finishing');
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', 'https://audio-wrapper-batch.sociobot.in/art/wrapline-social.jpg');
+  await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image');
+  await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toHaveAttribute('href', '/favicon.svg');
+  await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveAttribute('href', '/apple-touch-icon.png');
+  const dimensions = await page.evaluate(async () => new Promise<{ width: number; height: number }>((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve({ width: image.naturalWidth, height: image.naturalHeight });
+    image.onerror = () => reject(new Error('The Open Graph image did not load.'));
+    image.src = '/art/wrapline-social.jpg';
+  }));
+  expect(dimensions).toEqual({ width: 1200, height: 630 });
+});
+
 test('desktop header navigation has 44px targets without changing the mobile header', async ({ page }, testInfo) => {
   await page.goto('/');
   const links = page.locator('header nav a');
