@@ -3,6 +3,7 @@
     "0": [
       "src_db_getreceipts",
       "src_db_getrecipes",
+      "src_db_resetdemostorage",
       "src_main",
       "src_main_addfiles",
       "src_main_app",
@@ -70,7 +71,6 @@
       "src_db_deleterecipe",
       "src_db_opendb",
       "src_db_put",
-      "src_db_resetdemostorage",
       "src_db_savereceipt",
       "src_db_saverecipe",
       "src_db_setstoragescope",
@@ -185,30 +185,34 @@
       "vite_config_workertemplatepath"
     ],
     "11": [
+      "public_route_shell",
+      "public_route_shell_skiplink"
+    ],
+    "12": [
       "scripts_verify_checkout",
       "scripts_verify_checkout_product"
     ],
-    "12": [
+    "13": [
       "tests_e2e_app_spec",
       "tests_e2e_app_spec_wavbuffer"
     ],
-    "13": [
+    "14": [
       "playwright_config"
     ],
-    "14": [
+    "15": [
       "src_vite_env_d"
     ],
-    "15": [
+    "16": [
       "tests_release_test"
     ],
-    "16": [
+    "17": [
       "vitest_config"
     ]
   },
   "cohesion": {
-    "0": 0.14761904761904762,
+    "0": 0.14264264264264265,
     "1": 0.08333333333333333,
-    "2": 0.15789473684210525,
+    "2": 0.1695906432748538,
     "3": 0.2426470588235294,
     "4": 0.13333333333333333,
     "5": 0.15384615384615385,
@@ -222,7 +226,8 @@
     "13": 1.0,
     "14": 1.0,
     "15": 1.0,
-    "16": 1.0
+    "16": 1.0,
+    "17": 1.0
   },
   "gods": [
     {
@@ -251,13 +256,13 @@
       "degree": 11
     },
     {
-      "id": "src_main_importrecipe",
-      "label": "importRecipe()",
+      "id": "package_scripts",
+      "label": "scripts",
       "degree": 10
     },
     {
-      "id": "package_scripts",
-      "label": "scripts",
+      "id": "src_main_importrecipe",
+      "label": "importRecipe()",
       "degree": 10
     },
     {
@@ -271,34 +276,12 @@
       "degree": 7
     },
     {
-      "id": "src_main_addfiles",
-      "label": "addFiles()",
+      "id": "src_main_message",
+      "label": "message()",
       "degree": 7
     }
   ],
   "surprises": [
-    {
-      "source": "updateLicenseUi()",
-      "target": "LicenseState",
-      "source_files": [
-        "src/main.ts",
-        "src/license.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "bindEvents()",
-      "target": "sanitizeFilename()",
-      "source_files": [
-        "src/main.ts",
-        "src/audio.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
     {
       "source": "bindEvents()",
       "target": "deleteRecipe()",
@@ -311,8 +294,8 @@
       "why": "bridges separate communities"
     },
     {
-      "source": "bindEvents()",
-      "target": "resetDemoStorage()",
+      "source": "renderBatch()",
+      "target": "saveReceipt()",
       "source_files": [
         "src/main.ts",
         "src/db.ts"
@@ -327,6 +310,28 @@
       "source_files": [
         "src/main.ts",
         "src/db.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "importRecipe()",
+      "target": "saveRecipe()",
+      "source_files": [
+        "src/main.ts",
+        "src/db.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "init()",
+      "target": "createDemoSeed()",
+      "source_files": [
+        "src/main.ts",
+        "src/demo.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
