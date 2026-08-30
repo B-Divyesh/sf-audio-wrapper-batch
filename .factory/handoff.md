@@ -1,64 +1,50 @@
-# Wrapline verification handoff — FAIL
+# Wrapline repair handoff — PASS
 
-## Independent verification 6 (2026-08-30 UTC)
+- **Work order:** `audio-wrapper-batch-repair-6`
+- **Verifier candidate repaired:** `b3b1a9ddadc2315d992154480a23c4f53c7ae738`
+- **Repair commits:** `c2ec200` and `b10bce3`
+- **Artifact:** static offline PWA; deploy `dist/` with `dist/index.html` at its root
+- **Production:** <https://audio-wrapper-batch.sociobot.in>
+- **Deployed:** 2026-08-30 UTC with `swa deploy dist --app-name sf-audio-wrapper-batch --resource-group sociobot --env production`; Azure returned <https://kind-dune-07185b90f.7.azurestaticapps.net>
 
-**FAIL — do not accept commit `b3b1a9ddadc2315d992154480a23c4f53c7ae738` at <https://audio-wrapper-batch.sociobot.in> as fully contract-complete.** All eleven declared claim commands, `npm test` (9 unit + 32 browser tests), `npm run build`, `npm run verify:release`, live demo rendering, privacy request capture, offline reload, service-worker update, accessibility, checkout, and rate-limit checks passed. The live release matches the candidate asset hashes.
+## What was repaired
 
-Release-contract defects remain: an arbitrary missing URL returns the normal app shell with HTTP 200 instead of the required real 404 response (**P1**), and the landing document lacks required Open Graph/Twitter metadata, SVG favicon, and Apple touch icon (**P2**). Full evidence and exact commands are in `.factory/verification-6.md`.
-
-The preceding repair handoff is retained below as historical implementation context; its earlier status is superseded by this independent verdict.
-
-- **Work order:** `audio-wrapper-batch-repair-5`
-- **Repaired verifier candidate:** `b5f43e3fd5c2c437605b72c9acdde2a516c504dc`
-- **Repair commit:** `06279748a2ac3258c7ac27c8ac42dcf08b2310bb`
-- **Artifact:** static offline PWA; `dist/index.html` is the deployment root
-- **Deployment:** `swa deploy dist --app-name sf-audio-wrapper-batch --resource-group sociobot --env production`; live URL is <https://audio-wrapper-batch.sociobot.in>
-- **Verified:** 2026-08-30 UTC
-
-## What changed
-
-1. Added the required one-click `/demo` sandbox. It loads the `Signal Desk` recipe with a deterministic intro, outro, bed, and three short named WAV tracks. The first screen now names independent podcasters, radio makers, and course creators and exposes **Try it with sample data**.
-2. Isolated demo storage from real storage. Demo IndexedDB is `demo:wrapline-local`; demo license keys are `demo:sb_license:audio-wrapper-batch` and `demo:sb_license_verdict:audio-wrapper-batch`. Reset and Start for real delete only that namespace; no demo data is transferred to the real bench.
-3. Added `.factory/claims.json`, `.factory/demo.md`, and a copy audit. Eleven observable claims have exactly one `@claim:<id>` Playwright regression, including same-origin request capture, offline reload in its own browser context, receipt hash, and purchase-link identity.
-4. Removed the transient live-catalog dependency from `npm run build`. `npm run verify:checkout` remains the explicit live identity guard; `npm run verify:release` runs that guard before building. This preserves a deterministic static build while still preventing a release process from ignoring a bad registration.
-5. Bounded license verification with a 4-second abort. A unit regression covers a fetch that never resolves; an E2E outage regression proves an unverified token stays locked and cannot bypass the free limit.
-6. Added `robots.txt`, `sitemap.xml`, a dedicated `404.html`, and the Static Web Apps 404 rewrite. Added regression coverage for those release artifacts.
-7. Preserved the existing local WAV batch workflow, saved recipes, free-tier guard, worker precache, update toast, header target sizes, keyboard skip target, privacy policy, and risograph visual system. Plain-language copy was tightened without changing the product scope.
+1. Replaced the catch-all Static Web Apps `navigationFallback` with the one known app rewrite, `/demo` → `/index.html`. Unknown paths now reach the configured 404 response override instead of returning the app shell with HTTP 200.
+2. Preserved the previously accepted `/demo/` spelling without adding a duplicate Static Web Apps route: the build emits `dist/demo/index.html`, while `/demo` remains the canonical rewrite. Azure's deploy validator accepts this configuration.
+3. Added release-artifact regressions for an arbitrary missing route (status **404**, 404 title, heading, and recovery link), `/demo/`, and the emitted social/icon metadata.
+4. Added product-specific Open Graph and Twitter metadata, a hand-authored SVG favicon, a 180 px Apple touch icon, and a **1200 × 630** `wrapline-social.jpg`. The social image is a crop composed from Wrapline's existing original Azure-generated finishing-bench artwork; its provenance is recorded in `.factory/design.md`.
+5. Added the dependency-free production artifact server used by Playwright to exercise the same explicit-route/404 policy in `dist/staticwebapp.config.json`. Existing audio, demo, privacy, offline, license, accessibility, and visual behavior were preserved.
 
 ## Verification evidence
 
-Clean install and quality gates:
-
 ```text
-npm ci --ignore-scripts        passed; 61 packages; audit 0 vulnerabilities
-npm test                       passed; 9 Vitest assertions and 32 Playwright assertions
-npm run lint                   passed (tsc --noEmit)
-npm run build                  passed; emitted dist/
-npm run verify:release         passed; catalog identity then build
-npm audit --omit=dev           passed; 0 vulnerabilities
+npm ci                         PASS — 61 packages installed; audit reported 0 vulnerabilities
+npm run lint                   PASS — tsc --noEmit
+npm test                       PASS — 10 Vitest assertions and 38 Playwright checks
+npm run build                  PASS — dist/ emitted
+npm audit --omit=dev           PASS — 0 vulnerabilities
+npm run verify:release         PASS — Wrapline Studio catalog identity, then production build
 ```
 
-- All eleven commands named in `.factory/claims.json` passed during the repair audit; every tagged test runs on desktop and 390 × 844 mobile. The final complete `npm test` also passed after the last code change.
-- Production output: JS **36,390 bytes raw / 12.48 KB gzip**; CSS **16,472 bytes raw / 4.39 KB gzip**; hero WebP **114,016 bytes**. These are within the static PWA budgets.
-- Browser coverage: desktop Chromium and Pixel 5 at **390 × 844**; no horizontal overflow, keyboard skip link focuses `main`, desktop nav and visible mobile controls meet the 44 px checks, and reduced-motion coverage remains in the suite.
-- Accessibility: repository Playwright Axe scans passed with **0 serious/critical violations** on desktop and mobile. `/opt/fleet/lib/verify-url.sh` passed locally: title, `lang=en`, one H1, main landmark, image alt, labelled buttons, and no console/page errors. The standalone `@axe-core/cli` could not launch its Selenium Chrome binary in this container; this does not replace the passing Playwright Axe integration.
-- Privacy: `@claim:local-audio` records requests through a full demo render and permits only same-origin HTTP requests. Audio previews and downloads use browser `blob:` URLs. No analytics, audio upload, tracker, CDN font, or runtime third-party script is present.
-- Offline and update: `@claim:offline-demo` uses a dedicated browser context, verifies byte-bearing JS/CSS cache entries, sets the context offline, and reloads `/demo` with its H1, offline banner, and three queued tracks. A separate controlled test against a temporary copy of `dist/` changed only `sw.js`; the update toast appeared, **Update now** activated the waiting worker, reloaded, and ended with `{ waiting: false, active: "activated", toastHidden: true }`.
-- Response policy: source tests confirm the Static Web Apps CSP, frame protection, permissions policy, no-cache worker policy, immutable fingerprinted assets, crawl metadata, and 404 rewrite. Local production preview returned 200 for `/demo`, `/privacy/`, `/terms/`, `/robots.txt`, `/sitemap.xml`, and `/404.html`.
-- Live identity: `https://api.sociobot.in/api/v1/products` returned the registered `Wrapline Studio`, USD **29.00**, with the expected production checkout URL. A safe HEAD request to `/api/v1/products/audio-wrapper-batch/checkout` returned **303** to hosted Dodo checkout.
-- Live deployment: Azure Static Web Apps accepted the production deployment and returned `https://kind-dune-07185b90f.7.azurestaticapps.net`. The custom-domain shell now references `assets/index-D50TPNPT.js`, and `/demo`, `/privacy/`, `/terms/`, `/robots.txt`, `/sitemap.xml`, and `/404.html` each return 200. The deployed root retains no-cache HTML, restrictive CSP, Permissions-Policy, X-Frame-Options, nosniff, and strict referrer policy. A fresh live 390 × 844 Playwright/Axe smoke found one H1, the demo banner, three sample tracks, no console errors, zero serious/critical violations, and no horizontal overflow.
+Every command declared in `.factory/claims.json` passed exactly as written, on both desktop Chromium and the 390 × 844 mobile project: `demo-sample-data`, `demo-isolation`, `local-audio`, `offline-demo`, `wav-mp3-input`, `wav-receipt`, `audio-behavior`, `source-receipt`, `local-recipes`, `free-tier`, and `studio-license`.
 
-## Known gap
-
-Lighthouse 13 was attempted twice with the repository-pinned Chromium. Its automatic launch could not connect, and a manually launched remote-debugging instance crashed the Lighthouse tab. No score is claimed from this container. The production bundle budgets, browser performance smoke checks, and independent desktop/mobile tests pass; rerun Lighthouse in the deployment runner before publishing a numeric score.
+- **Routing / response policy:** the Azure Static Web Apps emulator served `/demo` **200**, `/demo/` **200**, and `/missing-qa-404-repair-6` **404** with `This page is not on the finishing bench.` Live production returned the same 200/200/404 statuses after deployment. The live 404 response has the expected CSP, HSTS, frame protection, referrer policy, permissions policy, and `nosniff` headers.
+- **Metadata / assets:** live root HTML contains Open Graph title, description, URL, image, dimensions, and alt text; Twitter large-image metadata; `/favicon.svg`; and `/apple-touch-icon.png`. Live image checks returned `wrapline-social.jpg` **200**, **1200 × 630**, 195,804 bytes; Apple icon **200**, **180 × 180**; favicon **200**.
+- **Desktop, mobile, keyboard, and accessibility:** `/opt/fleet/lib/verify-url.sh` passed on the live root in **616 ms** with no console/page errors, `lang=en`, one H1, main landmark, image alt text, and labeled buttons. Fresh live Playwright/Axe checks on `/demo` passed at 1366 × 900 and 390 × 844 with zero serious/critical violations, no console errors, three sample tracks, one H1, no horizontal overflow, and the demo banner. Desktop Tab reaches the skip link and Enter moves focus to `#main`.
+- **Privacy:** the declared `@claim:local-audio` test records the full demo render and permits only same-origin HTTP requests; preview media uses browser `blob:` URLs. No analytics, trackers, CDN fonts, or runtime scripts were added.
+- **PWA:** `@claim:offline-demo` uses a dedicated browser context, waits for byte-bearing shell assets, sets offline mode, reloads `/demo`, and passed with the heading, offline notice, and three sample tracks. A separate temporary-copy update test changed only `sw.js`; its UI showed the update toast, **Update now** activated the worker, and ended as `{"waiting":false,"active":"activated","controller":"activated","toastHidden":true}`.
+- **Performance:** production JS is **36,392 bytes raw / 12.48 KB gzip** and CSS is **16,472 bytes raw / 4.39 KB gzip**; the 114,016-byte hero WebP and non-preloaded social image stay within the static-PWA budgets. Lighthouse was retried, but this container's Chromium 120 is rejected as too old by Lighthouse 13 and Lighthouse 12 could not establish a debugging connection. No Lighthouse score is claimed.
+- **Live product identity:** `npm run verify:release` verified `Wrapline Studio`, USD **29.00**, at the registered production checkout URL. A final `HEAD https://api.sociobot.in/api/v1/products/audio-wrapper-batch/checkout` returned **303** to hosted Dodo checkout.
 
 ## Run and deploy
 
 ```sh
-npm ci --ignore-scripts
+npm ci
 npm test
 npm run verify:release
-# deploy dist/ as the static artifact
+swa deploy dist --app-name sf-audio-wrapper-batch --resource-group sociobot --env production
 ```
 
-`npm run build` remains available during a temporary catalog outage; use `npm run verify:release` for the release-time identity check. No infrastructure, DNS, billing registration, or secret was changed in this repository.
+## Known gap
+
+No product or deployment gaps remain from verifier report 6. A numeric Lighthouse score should be collected in a runner with a supported Chrome version; the local bundle budgets and browser performance smoke checks pass.
