@@ -12,8 +12,15 @@ const demoMode = route.pathname.replace(/\/+$/, '') === '/demo' || route.searchP
 setStorageScope(demoMode);
 setLicenseStorageScope(demoMode);
 if (demoMode) {
+  const demoDescription = 'Try Wrapline with three sample voice tracks, wrapper audio, and a ready-to-render batch. Demo data stays separate.';
   document.title = 'Demo — Wrapline';
-  document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.setAttribute('href', `${location.origin}/demo`);
+  document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.setAttribute('href', 'https://audio-wrapper-batch.sociobot.in/demo');
+  document.querySelector<HTMLMetaElement>('meta[name="description"]')?.setAttribute('content', demoDescription);
+  document.querySelector<HTMLMetaElement>('meta[property="og:url"]')?.setAttribute('content', 'https://audio-wrapper-batch.sociobot.in/demo');
+  document.querySelector<HTMLMetaElement>('meta[property="og:title"]')?.setAttribute('content', 'Demo — Wrapline');
+  document.querySelector<HTMLMetaElement>('meta[property="og:description"]')?.setAttribute('content', demoDescription);
+  document.querySelector<HTMLMetaElement>('meta[name="twitter:title"]')?.setAttribute('content', 'Demo — Wrapline');
+  document.querySelector<HTMLMetaElement>('meta[name="twitter:description"]')?.setAttribute('content', demoDescription);
 }
 
 const app = document.querySelector<HTMLDivElement>('#app');
@@ -23,7 +30,7 @@ app.innerHTML = `
   <header class="site-header">
     <a class="brand" href="/" aria-label="Wrapline home"><span class="brand-mark" aria-hidden="true">≋</span> Wrapline</a>
     <nav aria-label="Main navigation">
-      <a href="#bench">Finishing bench</a><a href="#method">How it works</a><a href="#unlock">License</a>
+      <a href="/#bench">Finishing bench</a><a href="/#method">How it works</a><a href="/#unlock">License</a>
     </nav>
     <span class="connection" id="connection"><span aria-hidden="true">●</span> <span>On device</span></span>
   </header>
@@ -129,7 +136,7 @@ app.innerHTML = `
       </div>
     </section>
   </main>
-  <footer><div><a class="brand" href="/">Wrapline</a><p>Local batch finishing for independent audio makers.</p></div><div><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://sociobot.in">A Param Factory product</a></div><p class="generated-note">Bench artwork generated for Wrapline with Azure AI Foundry.</p></footer>
+  <footer><div><a class="brand" href="/" aria-label="Wrapline home">Wrapline</a><p>Local batch finishing for independent audio makers.</p></div><div><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://sociobot.in">Built by Param Factory (external site)</a></div><p class="generated-note">Bench artwork generated for Wrapline with Azure AI Foundry. <span data-build-id>Build 1.0.0-r7</span></p></footer>
   <div class="update-toast" id="update-toast" role="status" hidden><span>A fresh version is ready.</span><button class="button quiet" id="update-button" type="button">Update now</button></div>
 `;
 

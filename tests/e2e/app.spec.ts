@@ -32,8 +32,82 @@ test('release artifact returns the designed 404 document for an unknown URL', as
   const response = await page.goto('/missing-qa-404-repair-6');
   expect(response?.status()).toBe(404);
   await expect(page).toHaveTitle('Page not found — Wrapline');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('This page is not on the finishing bench.');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('This Wrapline page was not found.');
   await expect(page.getByRole('link', { name: 'Return to Wrapline' })).toHaveAttribute('href', '/');
+});
+
+test('every public route has the shared keyboard shell and route metadata', async ({ page }) => {
+  const consoleErrors: string[] = [];
+  const pageErrors: string[] = [];
+  page.on('console', (message) => { if (message.type() === 'error') consoleErrors.push(message.text()); });
+  page.on('pageerror', (error) => pageErrors.push(error.message));
+  const routes = [
+    {
+      path: '/', status: 200, title: 'Wrapline — repeatable batch audio finishing',
+      canonical: 'https://audio-wrapper-batch.sociobot.in/', ogTitle: 'Wrapline — batch audio finishing',
+    },
+    {
+      path: '/demo', status: 200, title: 'Demo — Wrapline',
+      canonical: 'https://audio-wrapper-batch.sociobot.in/demo', ogTitle: 'Demo — Wrapline',
+    },
+    {
+      path: '/privacy/', status: 200, title: 'Privacy — Wrapline',
+      canonical: 'https://audio-wrapper-batch.sociobot.in/privacy/', ogTitle: 'Privacy — Wrapline',
+    },
+    {
+      path: '/terms/', status: 200, title: 'Terms — Wrapline',
+      canonical: 'https://audio-wrapper-batch.sociobot.in/terms/', ogTitle: 'Terms — Wrapline',
+    },
+    {
+      path: '/missing-qa-wrapline-7', status: 404, title: 'Page not found — Wrapline',
+      canonical: 'https://audio-wrapper-batch.sociobot.in/404.html', ogTitle: 'Page not found — Wrapline',
+    },
+  ];
+
+  for (const route of routes) {
+    const response = await page.goto(route.path);
+    expect(response?.status(), route.path).toBe(route.status);
+    await expect(page, route.path).toHaveTitle(route.title);
+    await expect(page.locator('link[rel="canonical"]'), route.path).toHaveAttribute('href', route.canonical);
+    await expect(page.locator('meta[name="description"]'), route.path).toHaveAttribute('content', /\S/);
+    await expect(page.locator('meta[property="og:url"]'), route.path).toHaveAttribute('content', route.canonical);
+    await expect(page.locator('meta[property="og:title"]'), route.path).toHaveAttribute('content', route.ogTitle);
+    await expect(page.locator('meta[property="og:description"]'), route.path).toHaveAttribute('content', /\S/);
+    await expect(page.locator('meta[property="og:image"]'), route.path).toHaveAttribute('content', 'https://audio-wrapper-batch.sociobot.in/art/wrapline-social.jpg');
+    await expect(page.locator('meta[name="twitter:card"]'), route.path).toHaveAttribute('content', 'summary_large_image');
+    await expect(page.locator('meta[name="twitter:title"]'), route.path).toHaveAttribute('content', route.ogTitle);
+    await expect(page.locator('meta[name="twitter:description"]'), route.path).toHaveAttribute('content', /\S/);
+    const descriptions = await page.locator('meta[name="description"], meta[property="og:description"], meta[name="twitter:description"]').evaluateAll(
+      (elements) => elements.map((element) => element.getAttribute('content')?.length ?? 0),
+    );
+    expect(descriptions.every((length) => length >= 20 && length <= 155), `${route.path}: ${descriptions.join(', ')}`).toBe(true);
+
+    await expect(page.getByRole('heading', { level: 1 }), route.path).toHaveCount(1);
+    await expect(page.locator('main#main'), route.path).toHaveCount(1);
+    await expect(page.locator('header.site-header'), route.path).toHaveCount(1);
+    await expect(page.locator('header').getByRole('link', { name: 'Wrapline home' }), route.path).toHaveAttribute('href', '/');
+    await expect(page.locator('header nav a'), route.path).toHaveText(['Finishing bench', 'How it works', 'License']);
+    expect(await page.locator('header nav a').evaluateAll((links) => links.map((link) => link.getAttribute('href'))), route.path)
+      .toEqual(['/#bench', '/#method', '/#unlock']);
+    await expect(page.locator('footer'), route.path).toContainText('Local batch finishing for independent audio makers.');
+    await expect(page.locator('footer'), route.path).toContainText('Built by Param Factory');
+    await expect(page.locator('footer [data-build-id]'), route.path).toHaveText('Build 1.0.0-r7');
+
+    await page.keyboard.press('Tab');
+    await expect(page.getByRole('link', { name: 'Skip to main content' }), route.path).toBeFocused();
+    expect(await page.getByRole('link', { name: 'Skip to main content' }).evaluate((link) => getComputedStyle(link).outlineStyle), route.path).not.toBe('none');
+    await page.keyboard.press('Enter');
+    await expect.poll(() => page.evaluate(() => document.activeElement?.id), { message: route.path }).toBe('main');
+
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations.filter((violation) => ['serious', 'critical'].includes(violation.impact ?? '')), route.path).toEqual([]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), route.path).toBe(true);
+  }
+  // Chromium reports the intentionally missing top-level document as a
+  // console resource error even though its designed 404 shell loads fully.
+  expect(consoleErrors.filter((message) => message !== 'Failed to load resource: the server responded with a status of 404 (Not Found)')).toEqual([]);
+  expect(consoleErrors.length).toBeLessThanOrEqual(1);
+  expect(pageErrors).toEqual([]);
 });
 
 test('release artifact keeps the trailing demo URL in the sample sandbox', async ({ page }) => {

@@ -34,6 +34,8 @@ An 8 px base grid with 4 px optical adjustments. The page maxes at 1180 px. Work
 
 Desktop layout resembles a two-station bench: recipe controls at left and the batch queue at right. At 760 px, stations stack and secondary explanations collapse before controls shrink. At 390 px, the hero illustration becomes a shallow strip, table rows become labeled blocks, and the action rail follows document flow so it cannot cover content or a device safe area.
 
+Privacy, terms, and not-found routes use the same ink-block wordmark, compact production navigation, paper footer, and visible skip path as the working bench. The not-found page keeps the recovery action literal and uses an oversized, misregistered waveform mark for product-specific character without turning the message into a metaphor.
+
 ## Interaction grammar
 
 - Adding a source creates a numbered job ticket immediately.

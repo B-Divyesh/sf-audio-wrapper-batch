@@ -185,7 +185,8 @@ footer { display: grid; grid-template-columns: 1fr auto; gap: 24px 50px; padding
 footer p { margin: 6px 0; color: var(--ink-soft); }
 footer > div:nth-child(2) { display: flex; gap: 8px 20px; }
 footer > div:nth-child(2) a { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
-.generated-note { grid-column: 1/-1; font-size: 13px; }
+.generated-note { grid-column: 1/-1; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; font-size: 13px; }
+.generated-note [data-build-id] { color: var(--ink); font-family: var(--display); font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
 .update-toast { position: fixed; z-index: 40; right: 20px; bottom: calc(20px + env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 16px; padding: 12px 14px; border: var(--line); background: var(--stock); box-shadow: var(--shadow); }
 
 @media (max-width: 900px) {

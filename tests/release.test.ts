@@ -41,7 +41,7 @@ describe('release response policy', () => {
     expect(config.responseOverrides?.['404']?.rewrite).toBe('/404.html');
     expect(robots).toContain('Sitemap: https://audio-wrapper-batch.sociobot.in/sitemap.xml');
     expect(sitemap).toContain('https://audio-wrapper-batch.sociobot.in/demo');
-    expect(notFound).toContain('<h1>This page is not on the finishing bench.</h1>');
+    expect(notFound).toContain('<h1>This Wrapline page was not found.</h1>');
   });
 
   it('declares product-specific social metadata and local icon assets', () => {
