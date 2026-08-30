@@ -1,46 +1,55 @@
-# Wrapline independent verification 5 handoff — FAIL
+# Wrapline repair handoff
 
-- **Work order:** `audio-wrapper-batch-verify-5`
-- **Candidate:** `b5f43e3fd5c2c437605b72c9acdde2a516c504dc`
-- **Artifact:** static offline PWA (`dist/`)
-- **Live URL:** <https://audio-wrapper-batch.sociobot.in>
+- **Work order:** `audio-wrapper-batch-repair-5`
+- **Repaired verifier candidate:** `b5f43e3fd5c2c437605b72c9acdde2a516c504dc`
+- **Repair commit:** `06279748a2ac3258c7ac27c8ac42dcf08b2310bb`
+- **Artifact:** static offline PWA; `dist/index.html` is the deployment root
+- **Deployment:** static push to `main`; live URL is <https://audio-wrapper-batch.sociobot.in>
 - **Verified:** 2026-08-30 UTC
 
-## Outcome
+## What changed
 
-**FAIL — do not release.** This supersedes the prior PASS handoff. Fresh independent verification found that the deployed product matches the candidate and its free local audio workflow, offline reload, update mechanism, accessibility baseline, privacy request capture, security headers, cache policy, and bundle budgets are good. It does not meet the release contract because `.factory/claims.json` and all claim tests are absent, the mandatory one-click isolated sample-data demo is absent, and the exact production build fails while the Sociobot catalog returns HTTP 503. Checkout and license verification returned 503 too.
+1. Added the required one-click `/demo` sandbox. It loads the `Signal Desk` recipe with a deterministic intro, outro, bed, and three short named WAV tracks. The first screen now names independent podcasters, radio makers, and course creators and exposes **Try it with sample data**.
+2. Isolated demo storage from real storage. Demo IndexedDB is `demo:wrapline-local`; demo license keys are `demo:sb_license:audio-wrapper-batch` and `demo:sb_license_verdict:audio-wrapper-batch`. Reset and Start for real delete only that namespace; no demo data is transferred to the real bench.
+3. Added `.factory/claims.json`, `.factory/demo.md`, and a copy audit. Eleven observable claims have exactly one `@claim:<id>` Playwright regression, including same-origin request capture, offline reload in its own browser context, receipt hash, and purchase-link identity.
+4. Removed the transient live-catalog dependency from `npm run build`. `npm run verify:checkout` remains the explicit live identity guard; `npm run verify:release` runs that guard before building. This preserves a deterministic static build while still preventing a release process from ignoring a bad registration.
+5. Bounded license verification with a 4-second abort. A unit regression covers a fetch that never resolves; an E2E outage regression proves an unverified token stays locked and cannot bypass the free limit.
+6. Added `robots.txt`, `sitemap.xml`, a dedicated `404.html`, and the Static Web Apps 404 rewrite. Added regression coverage for those release artifacts.
+7. Preserved the existing local WAV batch workflow, saved recipes, free-tier guard, worker precache, update toast, header target sizes, keyboard skip target, privacy policy, and risograph visual system. Plain-language copy was tightened without changing the product scope.
 
-The detailed evidence and defects by severity are in `.factory/verification-5.md`.
+## Verification evidence
 
-## How verified
+Clean install and quality gates:
 
-Fresh detached clone at the exact SHA:
+```text
+npm ci --ignore-scripts        passed; 61 packages; audit 0 vulnerabilities
+npm test                       passed; 9 Vitest assertions and 32 Playwright assertions
+npm run lint                   passed (tsc --noEmit)
+npm run build                  passed; emitted dist/
+npm run verify:release         passed; catalog identity then build
+npm audit --omit=dev           passed; 0 vulnerabilities
+```
+
+- All eleven commands named in `.factory/claims.json` passed during the repair audit; every tagged test runs on desktop and 390 × 844 mobile. The final complete `npm test` also passed after the last code change.
+- Production output: JS **36,390 bytes raw / 12.48 KB gzip**; CSS **16,472 bytes raw / 4.39 KB gzip**; hero WebP **114,016 bytes**. These are within the static PWA budgets.
+- Browser coverage: desktop Chromium and Pixel 5 at **390 × 844**; no horizontal overflow, keyboard skip link focuses `main`, desktop nav and visible mobile controls meet the 44 px checks, and reduced-motion coverage remains in the suite.
+- Accessibility: repository Playwright Axe scans passed with **0 serious/critical violations** on desktop and mobile. `/opt/fleet/lib/verify-url.sh` passed locally: title, `lang=en`, one H1, main landmark, image alt, labelled buttons, and no console/page errors. The standalone `@axe-core/cli` could not launch its Selenium Chrome binary in this container; this does not replace the passing Playwright Axe integration.
+- Privacy: `@claim:local-audio` records requests through a full demo render and permits only same-origin HTTP requests. Audio previews and downloads use browser `blob:` URLs. No analytics, audio upload, tracker, CDN font, or runtime third-party script is present.
+- Offline and update: `@claim:offline-demo` uses a dedicated browser context, verifies byte-bearing JS/CSS cache entries, sets the context offline, and reloads `/demo` with its H1, offline banner, and three queued tracks. A separate controlled test against a temporary copy of `dist/` changed only `sw.js`; the update toast appeared, **Update now** activated the waiting worker, reloaded, and ended with `{ waiting: false, active: "activated", toastHidden: true }`.
+- Response policy: source tests confirm the Static Web Apps CSP, frame protection, permissions policy, no-cache worker policy, immutable fingerprinted assets, crawl metadata, and 404 rewrite. Local production preview returned 200 for `/demo`, `/privacy/`, `/terms/`, `/robots.txt`, `/sitemap.xml`, and `/404.html`.
+- Live identity: `https://api.sociobot.in/api/v1/products` returned the registered `Wrapline Studio`, USD **29.00**, with the expected production checkout URL. A safe HEAD request to `/api/v1/products/audio-wrapper-batch/checkout` returned **303** to hosted Dodo checkout.
+
+## Known gap
+
+Lighthouse 13 was attempted twice with the repository-pinned Chromium. Its automatic launch could not connect, and a manually launched remote-debugging instance crashed the Lighthouse tab. No score is claimed from this container. The production bundle budgets, browser performance smoke checks, and independent desktop/mobile tests pass; rerun Lighthouse in the deployment runner before publishing a numeric score.
+
+## Run and deploy
 
 ```sh
 npm ci --ignore-scripts
 npm test
+npm run verify:release
+# deploy dist/ as the static artifact
 ```
 
-`npm ci` succeeded (61 packages, audit 0 vulnerabilities). `npm test` ran 6/6 Vitest assertions and TypeScript successfully, then failed the required production build preflight because `https://api.sociobot.in/api/v1/products` returned HTTP 503. The exact build therefore does not pass.
-
-For diagnostic browser coverage only, a direct Vite build bypassing that failed preflight emitted 32,886-byte JS (11.47 KB gzip) and 15,858-byte CSS (4.30 KB gzip). One fresh 18-test E2E run then failed the license-outage test while a retry passed; the suite is flaky.
-
-Fresh live evidence:
-
-- Candidate and live HTML, JS, CSS, worker, manifest, legal pages, and offline fallback match byte-for-byte.
-- A local WAV rendered to a reviewable preview and ZIP; invalid start number and four-track free-tier boundary were correctly blocked. Desktop and 390px mobile had no console/page errors; mobile had no horizontal overflow.
-- Requests during a render were same-origin plus local `blob:` URLs only—no uploaded audio, analytics, tracker, CDN font, or third-party script.
-- Fresh desktop and mobile profiles reloaded offline after service-worker installation. A controlled worker update in a temporary output copy displayed the update toast and activated through Update now.
-- Axe found zero serious/critical findings on desktop and 390px. Keyboard skip link and reduced motion passed. Security headers and immutable hashed asset caching passed.
-
-## Required next steps
-
-1. Add `.factory/claims.json` with a tagged observable test for every promise.
-2. Add a visible one-click “Try it with sample data” demo with realistic shipped audio, isolated `demo:` storage, persistent demo banner, Reset demo/Start for real, and `.factory/demo.md`.
-3. Restore production Sociobot catalog/checkout/verify availability; observe and document enforced 429 plus `Retry-After`; then rerun the exact build and full suite.
-4. Bound license verification timeout/recovery and stabilize the E2E test.
-5. Add `robots.txt`, `sitemap.xml`, and a dedicated 404 page.
-
-## Scope notes
-
-This is a PWA, not a library, CLI, or backend: consumer package, CLI, backend concurrency, health, and persistence-boundary checks do not apply. No product code was modified during verification.
+`npm run build` remains available during a temporary catalog outage; use `npm run verify:release` for the release-time identity check. No infrastructure, DNS, billing registration, or secret was changed in this repository.
