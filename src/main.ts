@@ -1,10 +1,20 @@
 import './styles.css';
 import { createZip, outputName, renderWrappedFile, sanitizeFilename } from './audio';
-import { deleteRecipe, getReceipts, getRecipes, saveReceipt, saveRecipe } from './db';
-import { captureReturnedLicense, checkoutUrl, licenseState, storeLicense, studioCheckoutAvailable, verifyLicense } from './license';
+import { createDemoSeed } from './demo';
+import { deleteRecipe, getReceipts, getRecipes, resetDemoStorage, saveReceipt, saveRecipe, setStorageScope } from './db';
+import { captureReturnedLicense, checkoutUrl, licenseState, setLicenseStorageScope, storeLicense, studioCheckoutAvailable, verifyLicense } from './license';
 import type { AudioAsset, Receipt, Recipe, RenderedFile } from './types';
 
 type Job = { id: string; file: File; output?: RenderedFile; url?: string; error?: string };
+
+const route = new URL(location.href);
+const demoMode = route.pathname.replace(/\/+$/, '') === '/demo' || route.searchParams.get('demo') === '1';
+setStorageScope(demoMode);
+setLicenseStorageScope(demoMode);
+if (demoMode) {
+  document.title = 'Demo — Wrapline';
+  document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.setAttribute('href', `${location.origin}/demo`);
+}
 
 const app = document.querySelector<HTMLDivElement>('#app');
 if (!app) throw new Error('App root is missing.');
@@ -17,27 +27,28 @@ app.innerHTML = `
     </nav>
     <span class="connection" id="connection"><span aria-hidden="true">●</span> <span>On device</span></span>
   </header>
-  <div class="offline-banner" id="offline-banner" role="status" hidden>You’re offline. The bench still works; license checks will resume later.</div>
+  <div class="offline-banner" id="offline-banner" role="status" hidden>You’re offline. Local audio processing still works; license checks will resume later.</div>
+  ${demoMode ? '<aside class="demo-banner" role="status"><span><strong>Demo — sample data, nothing is saved to your real data.</strong> Three short sample tracks are ready to render.</span><span class="demo-actions"><button class="text-button" id="reset-demo" type="button">Reset demo</button><button class="button quiet" id="start-real" type="button">Start for real</button></span></aside>' : ''}
   <main id="main" tabindex="-1">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <p class="eyebrow">A local finishing line for spoken audio</p>
-        <h1 id="hero-title">Batch the wrapper.<br><em>Keep the voice.</em></h1>
-        <p class="lede">Add your intro, outro, and music bed once. Drop in finished voice tracks. Wrapline renders a consistently named batch and a production receipt—without uploading a byte.</p>
-        <div class="hero-actions"><a class="button primary" href="#bench">Set up a batch</a><button class="button secondary" id="install-button" type="button" hidden>Install app</button></div>
-        <ul class="proof-list" aria-label="Product qualities"><li>WAV + MP3 in</li><li>WAV out</li><li>Works offline</li></ul>
+        <p class="eyebrow">Batch audio finishing</p>
+        <h1 id="hero-title">Wrap finished voice tracks in batches</h1>
+        <p class="lede">For independent podcasters, radio makers, and course creators who need one branded export setup for every finished voice track.</p>
+        <div class="hero-actions"><a class="button primary" href="${demoMode ? '#bench' : '/demo'}">${demoMode ? 'Open the sample batch' : 'Try it with sample data'}</a><a class="button secondary" href="#bench">Set up a real batch</a><button class="button secondary" id="install-button" type="button" hidden>Install app</button></div>
+        <ul class="proof-list" aria-label="Product facts"><li>WAV + MP3 in</li><li>WAV + receipt out</li><li>Audio stays on device</li></ul>
       </div>
       <figure class="hero-art">
         <img src="/art/wrapline-bench.webp" width="1280" height="853" fetchpriority="high" decoding="async" alt="Risograph collage of waveform strips passing through a hand-operated printing jig" />
-        <figcaption>One setup. A whole edition.</figcaption>
+        <figcaption>Intro, voice, outro, and bed.</figcaption>
       </figure>
     </section>
 
     <section class="bench" id="bench" aria-labelledby="bench-title">
       <div class="section-heading">
-        <p class="eyebrow">Your finishing bench</p>
-        <h2 id="bench-title">Build the wrapper, then run the line</h2>
-        <p>Source files are read, never changed. Recipe assets and receipts stay in this browser.</p>
+        <p class="eyebrow">Your batch setup</p>
+        <h2 id="bench-title">Set up one wrapper recipe</h2>
+        <p>Choose wrapper audio once, then review and download each finished batch.</p>
       </div>
       <div class="bench-grid">
         <section class="recipe-sheet" aria-labelledby="recipe-title">
@@ -98,18 +109,18 @@ app.innerHTML = `
     </section>
 
     <section class="receipts-section" aria-labelledby="receipts-title">
-      <div><p class="eyebrow">Local paper trail</p><h2 id="receipts-title">Recent receipts</h2><p>Each receipt records recipe version, source hashes, gain, limiter activity, and output names.</p></div>
+      <div><p class="eyebrow">Saved batch records</p><h2 id="receipts-title">Recent receipts</h2><p>Each receipt records recipe version, source hashes, gain, limiter activity, and output names.</p></div>
       <div id="receipt-list" class="receipt-list"><p class="muted">No batches rendered on this device yet.</p></div>
     </section>
 
     <section class="method" id="method" aria-labelledby="method-title">
-      <p class="eyebrow">No editor required</p><h2 id="method-title">A plain folder-in, batch-out contract</h2>
-      <ol><li><span>1</span><div><strong>Set it once</strong><p>Keep intro, outro, bed, loudness, and naming together as a portable recipe.</p></div></li><li><span>2</span><div><strong>Review the line</strong><p>Every source gets a predictable output name and an audio player after rendering.</p></div></li><li><span>3</span><div><strong>Take the edition</strong><p>Download one ZIP containing WAV files and a JSON receipt. Originals never change.</p></div></li></ol>
+      <p class="eyebrow">How it works</p><h2 id="method-title">Create a finished batch in three steps</h2>
+      <ol><li><span>1</span><div><strong>Add the wrapper</strong><p>Keep intro, outro, bed, loudness, and naming together as a portable recipe.</p></div></li><li><span>2</span><div><strong>Review each output</strong><p>Every source gets a predictable output name and an audio player after rendering.</p></div></li><li><span>3</span><div><strong>Download the batch</strong><p>Download one ZIP containing WAV files and a JSON receipt.</p></div></li></ol>
     </section>
 
     <section class="unlock" id="unlock" aria-labelledby="unlock-title">
       <div class="unlock-mark" aria-hidden="true">∞</div>
-      <div><p class="eyebrow">One-time studio license</p><h2 id="unlock-title">Run the whole season in one pass.</h2><p>Wrapline is useful for free: save one recipe and render three tracks per batch. A <strong>$29 one-time purchase</strong> unlocks unlimited tracks and unlimited saved recipes on your devices.</p><p class="fine-print">No subscription. Checkout and refunds are handled by Sociobot / Dodo, the merchant of record.</p></div>
+      <div><p class="eyebrow">One-time studio license</p><h2 id="unlock-title">Remove batch and recipe limits</h2><p>Wrapline is useful for free: save one recipe and render three tracks per batch. A <strong>$29 one-time purchase</strong> unlocks unlimited tracks and unlimited saved recipes on your devices.</p><p class="fine-print">Checkout and refunds are handled by Sociobot / Dodo, the merchant of record.</p></div>
       <div class="license-actions">
         <a class="button primary" id="buy-link"${studioCheckoutAvailable ? ` href="${checkoutUrl}"` : ' aria-disabled="true"'}>${studioCheckoutAvailable ? 'Buy studio license · $29' : 'Studio checkout is preparing'}</a>
         ${studioCheckoutAvailable ? '' : '<p class="fine-print">Already have a Studio license? Paste it below to restore it on this device.</p>'}
@@ -399,6 +410,28 @@ function bindEvents(): void {
   });
   window.addEventListener('online', syncConnection);
   window.addEventListener('offline', syncConnection);
+  if (demoMode) {
+    $('#reset-demo').addEventListener('click', async () => {
+      try {
+        await resetDemoStorage();
+        localStorage.removeItem('demo:sb_license:audio-wrapper-batch');
+        localStorage.removeItem('demo:sb_license_verdict:audio-wrapper-batch');
+        location.assign('/demo');
+      } catch (error) {
+        message('#render-message', error instanceof Error ? error.message : 'Could not reset the demo. Try closing another demo tab.', true);
+      }
+    });
+    $('#start-real').addEventListener('click', async () => {
+      try {
+        await resetDemoStorage();
+        localStorage.removeItem('demo:sb_license:audio-wrapper-batch');
+        localStorage.removeItem('demo:sb_license_verdict:audio-wrapper-batch');
+        location.assign('/');
+      } catch (error) {
+        message('#render-message', error instanceof Error ? error.message : 'Could not leave the demo. Try closing another demo tab.', true);
+      }
+    });
+  }
   window.addEventListener('beforeinstallprompt', (event) => { event.preventDefault(); deferredInstall = event; $<HTMLButtonElement>('#install-button').hidden = false; });
   $('#install-button').addEventListener('click', async () => {
     if (!deferredInstall) return;
@@ -508,15 +541,25 @@ async function registerServiceWorker(): Promise<void> {
 }
 
 async function init(): Promise<void> {
-  captureReturnedLicense();
+  if (!demoMode) captureReturnedLicense();
   syncConnection();
   bindEvents();
   try {
     [recipes, receipts] = await Promise.all([getRecipes(), getReceipts()]);
-    if (recipes[0]) current = recipes.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0] ?? current;
+    if (demoMode) {
+      const sample = createDemoSeed(current.id, current.createdAt);
+      current = sample.recipe;
+      jobs = sample.tracks.map((file) => ({ id: uid(), file }));
+      // The visible demo always begins with the same useful queue. Existing
+      // demo-only storage is ignored until it is reset or the visitor starts
+      // for real, so it cannot leak into the real bench.
+      recipes = [];
+      receipts = [];
+    } else if (recipes[0]) current = recipes.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0] ?? current;
   } catch { message('#recipe-message', 'Local storage could not open. Private browsing settings may prevent saved recipes.', true); }
   renderRecipeOptions(); fillRecipeForm(); renderQueue(); renderReceipts(); updateLicenseUi();
-  void verifyLicense().then((result) => updateLicenseUi(result.unlocked ? undefined : result.reason ? 'License no longer active. Restore a current license to unlock Studio.' : undefined));
+  if (demoMode) message('#render-message', 'Sample batch ready: three short voice tracks with an intro, outro, and music bed.');
+  else void verifyLicense().then((result) => updateLicenseUi(result.unlocked ? undefined : result.reason ? 'License no longer active. Restore a current license to unlock Studio.' : undefined));
   void registerServiceWorker();
 }
 

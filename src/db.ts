@@ -1,11 +1,18 @@
 import type { Receipt, Recipe } from './types';
 
-const DB_NAME = 'wrapline-local';
+const REAL_DB_NAME = 'wrapline-local';
+const DEMO_DB_NAME = 'demo:wrapline-local';
 const DB_VERSION = 1;
+let dbName = REAL_DB_NAME;
+
+/** Demo data is physically separate so the real bench is never opened in demo mode. */
+export function setStorageScope(demo: boolean): void {
+  dbName = demo ? DEMO_DB_NAME : REAL_DB_NAME;
+}
 
 function openDb(): Promise<IDBDatabase> {
   return new Promise<IDBDatabase>((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, DB_VERSION);
+    const request = indexedDB.open(dbName, DB_VERSION);
     request.onupgradeneeded = () => {
       const db = request.result;
       if (!db.objectStoreNames.contains('recipes')) db.createObjectStore('recipes', { keyPath: 'id' });
@@ -48,4 +55,13 @@ export async function deleteRecipe(id: string): Promise<void> {
     transaction.oncomplete = () => resolve();
     transaction.onerror = () => reject(transaction.error);
   }).finally(() => db.close());
+}
+
+export function resetDemoStorage(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.deleteDatabase(DEMO_DB_NAME);
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error ?? new Error('Could not reset demo storage.'));
+    request.onblocked = () => reject(new Error('Close other Wrapline demo tabs, then reset the demo again.'));
+  });
 }

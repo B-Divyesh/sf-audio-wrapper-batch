@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://audio-wrapper-batch.sociobot.in/sitemap.xml

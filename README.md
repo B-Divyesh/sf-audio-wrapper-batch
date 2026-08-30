@@ -1,64 +1,64 @@
 # Wrapline
 
-Wrapline is a local-first batch audio finishing PWA for independent podcasters, radio makers, and course creators. Save an intro, outro, music bed, loudness target, and filename pattern as a reusable recipe; then turn a queue of finished WAV/MP3 voice tracks into a reviewable WAV batch and production receipt.
+Wrapline batches finished voice tracks for independent podcasters, radio makers, and course creators. Add an intro, outro, music bed, loudness target, and filename recipe once; then render a reviewable WAV batch locally.
 
-Live product: <https://audio-wrapper-batch.sociobot.in>
+Live product: <https://audio-wrapper-batch.sociobot.in> · [Try the sample batch](https://audio-wrapper-batch.sociobot.in/demo)
+
+## Try it safely
+
+**Try it with sample data** opens a three-track `Signal Desk` batch at `/demo`. Demo recipes, receipts, and license state use `demo:` storage names, so the real bench is never read or changed. **Reset demo** and **Start for real** discard that demo namespace.
+
+See [`.factory/demo.md`](.factory/demo.md) for the exact sample, URL, reset behavior, and storage boundary.
 
 ## What it does
 
-- Reads WAV and MP3 voice tracks without uploading or modifying the originals.
-- Persists versioned recipes—including their intro, outro, and bed audio—in IndexedDB.
-- Applies a disclosed RMS-based loudness adjustment, automatic bed ducking, and sample-peak protection.
-- Renders 48 kHz, 16-bit PCM WAV files with in-browser previews.
-- Downloads the whole batch as a ZIP with a JSON receipt containing names, gain decisions, limiter state, and SHA-256 source hashes.
-- Exports/imports portable recipe JSON so users own their setup.
-- Installs as a PWA and renders while offline immediately after its first installation.
-- Includes a useful free tier (one saved recipe, three tracks per batch) and an optional $29 one-time Studio unlock.
+- Offers WAV and MP3 voice input, then creates reviewable WAV outputs and a ZIP receipt.
+- Records each supplied source SHA-256 in the receipt.
+- Saves wrapper recipes and wrapper audio on the device.
+- Keeps demo rendering requests on the device; it has no analytics, trackers, third-party fonts, or runtime CDN scripts.
+- Lets an installed demo reload offline after its first visit.
+- Includes a free tier of one saved recipe and three tracks per batch.
+- Offers a $29 one-time Studio license through Sociobot / Dodo for unlimited recipes and tracks.
+
+Every visitor-facing promise is declared in [`.factory/claims.json`](.factory/claims.json) with an observable tagged browser test.
 
 ## Run locally
 
 Requires Node.js 20 or newer.
 
 ```sh
-npm install
+npm ci
 npm run dev
 ```
 
-Open the printed local URL. All audio work happens in the browser.
+Open the printed local URL. Visit `/demo` for an immediate sample batch or `/` to work with your own audio.
 
-## Test and build
+## Test, verify, and build
 
-Playwright 1.58.2 is pinned. If its Chromium binary is not already present, run `npx playwright install chromium` once.
-
-```sh
-npm test          # unit + desktop/mobile browser, Axe, render, offline tests
-npm run build     # reproducible static build in ./dist
-npm run preview   # serve the production build locally
-```
-
-Deploy the contents of `dist/` as a static site; `dist/index.html` is the root entry point. Serve `/sw.js` without an immutable cache so updates can be discovered. The manifest, offline fallback, `/privacy/`, and `/terms/` are emitted with the build.
-
-## Audio behavior and limits
-
-Wrapline uses Web Audio APIs supplied by the browser. Codec decoding therefore varies by browser and operating system; conventional PCM WAV and MP3 are the supported inputs. Output is intentionally WAV only so the product does not ship or remotely call an encumbered encoder.
-
-The loudness target is an RMS-derived integrated estimate, capped at ±12 dB. The final mix is scaled if sample peaks exceed −0.18 dBFS. It is not a broadcast-certified EBU R128 meter or true-peak limiter; this is stated next to the controls and in every receipt. Large batches are constrained by available device memory.
-
-## Billing configuration
-
-The app follows the Sociobot license-unlock contract and never embeds a payment provider. Production builds use the production API and verify the registered hosted checkout before emitting the enabled purchase CTA. This release guard prevents a deploy that advertises a dead purchase path. The product slug is registered as `audio-wrapper-batch` with a USD 29 one-time Studio license and return URL `https://audio-wrapper-batch.sociobot.in/`.
+Playwright 1.58.2 is pinned. If Chromium is missing, run `npx playwright install chromium` once.
 
 ```sh
-npm run build
+npm test                 # unit + production build + desktop/mobile Playwright + Axe
+npm run lint             # TypeScript check
+npm run build            # emit static production artifact to ./dist
+npm run verify:checkout  # live Sociobot product identity and price check
+npm run verify:release   # live checkout identity check, then production build
+npm run preview          # serve ./dist locally
 ```
 
-For pilot/staging, explicitly set `VITE_BILLING_BASE=https://pilot-api.sociobot.in` before running `npm run build`; its checkout must be registered and return the same hosted redirect. No provider product ID or secret is stored in this repository. Returned tokens live under `sb_license:audio-wrapper-batch` in localStorage and are verified at most once per day. Audio and recipes are never sent during verification.
+`npm run build` is deliberately independent of a temporary catalog outage, so a reproducible static artifact can always be built. Run `npm run verify:release` immediately before a release; it confirms the registered `audio-wrapper-batch` checkout is `Wrapline Studio`, USD 29.00, and points to the hosted production checkout.
 
-## Project notes
+Deploy `dist/` as a static site with `dist/index.html` at its root. The included `staticwebapp.config.json` configures SPA fallback, a dedicated 404 page, security headers, and cache policy. Serve `sw.js` without immutable caching so updates can be discovered.
 
-- Visual system and generated-art provenance: [`.factory/design.md`](.factory/design.md)
-- Build/verification handoff: [`.factory/handoff.md`](.factory/handoff.md)
-- Privacy policy: [`public/privacy/index.html`](public/privacy/index.html)
-- Terms: [`public/terms/index.html`](public/terms/index.html)
+## Audio behavior
 
-Licensed under the MIT License. See [`LICENSE`](LICENSE).
+Wrapline uses Web Audio APIs supplied by the browser. WAV and MP3 decoding can therefore vary by browser and operating system. Output is 48 kHz, 16-bit PCM WAV. Loudness is an RMS-derived estimate capped at ±12 dB; peak protection is sample-based rather than a broadcast-certified EBU R128 meter or true-peak limiter. The same disclosure is shown beside the controls and written into every receipt.
+
+## Privacy and legal
+
+- [Privacy policy](public/privacy/index.html)
+- [Terms](public/terms/index.html)
+- [Visual thesis and art provenance](.factory/design.md)
+- [Release handoff](.factory/handoff.md)
+
+Licensed under the MIT License. See [LICENSE](LICENSE).

@@ -20,7 +20,7 @@ function offlineShell(): Plugin {
       const shell = [
         '/', '/index.html', '/offline.html', '/manifest.webmanifest',
         '/icon-192.png', '/icon-512.png', '/art/wrapline-bench.webp',
-        '/privacy/', '/terms/', ...generatedFiles,
+        '/privacy/', '/terms/', '/404.html', '/robots.txt', '/sitemap.xml', ...generatedFiles,
       ];
       const version = `wrapline-${generatedFiles.join('|').replace(/[^a-z0-9]/gi, '').slice(-20) || 'shell'}`;
       const template = readFileSync(workerTemplatePath, 'utf8');

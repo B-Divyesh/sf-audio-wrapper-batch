@@ -39,4 +39,18 @@ describe('license verification', () => {
 
     await expect(license.verifyLicense(true)).resolves.toEqual({ token: 'previously-verified-token', unlocked: true });
   });
+
+  it('recovers from a verification request that never resolves', async () => {
+    vi.useFakeTimers();
+    const license = await import('../src/license');
+    vi.stubGlobal('fetch', vi.fn((_url: string, init?: RequestInit) => new Promise<Response>((_resolve, reject) => {
+      init?.signal?.addEventListener('abort', () => reject(new DOMException('Timed out', 'AbortError')));
+    })));
+    license.storeLicense('hung-token');
+
+    const verification = license.verifyLicense(true);
+    await vi.advanceTimersByTimeAsync(4_000);
+    await expect(verification).resolves.toEqual({ token: 'hung-token', unlocked: false, reason: 'unverified' });
+    vi.useRealTimers();
+  });
 });

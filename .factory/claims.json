@@ -1,0 +1,79 @@
+[
+  {
+    "id": "demo-sample-data",
+    "claim": "Try a useful three-track sample batch in one click.",
+    "where": "Landing primary action, demo banner, README",
+    "test": "npm run build && npm run test:e2e -- --grep @claim:demo-sample-data",
+    "sandbox": "Fresh browser context at /demo; assert the banner, wrapper audio, three named tracks, and both demo controls."
+  },
+  {
+    "id": "demo-isolation",
+    "claim": "Demo data is separate from real Wrapline data.",
+    "where": "Demo banner, .factory/demo.md, README",
+    "test": "npm run build && npm run test:e2e -- --grep @claim:demo-isolation",
+    "sandbox": "Save a real recipe, enter /demo, assert the Signal Desk sample and demo:wrapline-local namespace, then return to the original recipe."
+  },
+  {
+    "id": "local-audio",
+    "claim": "Rendering a batch keeps audio and analytics requests on the device.",
+    "where": "Landing facts, privacy policy, README",
+    "test": "npm run build && npm run test:e2e -- --grep @claim:local-audio",
+    "sandbox": "Record every request during a fresh /demo render and assert every HTTP request is same-origin."
+  },
+  {
+    "id": "offline-demo",
+    "claim": "The demo works offline after the first visit.",
+    "where": "README, privacy policy",
+    "test": "npm run build && npm run test:e2e -- --grep @claim:offline-demo",
+    "sandbox": "Own browser context: install the worker at /demo, verify byte-bearing shell cache entries, go offline, reload, and assert the heading, offline notice, and sample queue."
+  },
+  {
+    "id": "wav-mp3-input",
+    "claim": "Wrapline offers WAV and MP3 voice input.",
+    "where": "Landing facts, queue picker, README",
+    "test": "npm run build && npm run test:e2e -- --grep @claim:wav-mp3-input",
+    "sandbox": "Fresh bench; assert the file picker advertises WAV and MP3, add a real WAV, and render a reviewable output."
+  },
+  {
+    "id": "wav-receipt",
+    "claim": "A sample batch produces reviewable WAV files and a receipt download.",
+    "where": "Landing facts, method section, README",
+    "test": "npm run build && npm run test:e2e -- --grep @claim:wav-receipt",
+    "sandbox": "Fresh /demo render; assert three audio previews and the ZIP summary naming three WAV files plus a receipt."
+  },
+  {
+    "id": "audio-behavior",
+    "claim": "Output is 48 kHz, 16-bit PCM WAV with the disclosed browser loudness behavior.",
+    "where": "Loudness disclosure, terms, README",
+    "test": "npm run build && npm run test:e2e -- --grep @claim:audio-behavior",
+    "sandbox": "Fresh /demo render; assert the disclosed RMS copy and inspect the generated WAV header for RIFF, 48 kHz, and 16-bit PCM."
+  },
+  {
+    "id": "source-receipt",
+    "claim": "Each receipt records the supplied source SHA-256.",
+    "where": "Recent receipts section, README",
+    "test": "npm run build && npm run test:e2e -- --grep @claim:source-receipt",
+    "sandbox": "Use /demo, render a known WAV, download the ZIP, and compare its receipt hash to the original byte hash."
+  },
+  {
+    "id": "local-recipes",
+    "claim": "Saved wrapper recipes and wrapper audio persist on this device.",
+    "where": "README, privacy policy",
+    "test": "npm run build && npm run test:e2e -- --grep @claim:local-recipes",
+    "sandbox": "Save a recipe and intro WAV in a fresh browser profile, reload, and assert both remain available."
+  },
+  {
+    "id": "free-tier",
+    "claim": "The free tier renders up to three tracks per batch.",
+    "where": "Queue panel, pricing section, terms",
+    "test": "npm run build && npm run test:e2e -- --grep @claim:free-tier",
+    "sandbox": "Block license verification, add four WAV files, and assert the fourth track is blocked with no rendered audio."
+  },
+  {
+    "id": "studio-license",
+    "claim": "Studio is a $29 one-time license through the registered Sociobot checkout.",
+    "where": "Pricing section, terms, README",
+    "test": "npm run build && npm run test:e2e -- --grep @claim:studio-license",
+    "sandbox": "Fresh /demo; assert the visible $29 one-time copy and exact registered production checkout URL."
+  }
+]

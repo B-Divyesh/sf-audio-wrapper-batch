@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 
 function wavBuffer(duration = 0.08): Buffer {
   const sampleRate = 8_000;
@@ -19,6 +21,7 @@ test('loads a clear, accessible empty bench', async ({ page }) => {
   await page.goto('/');
   await expect(page).toHaveTitle(/Wrapline/);
   await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
+  await expect(page.getByRole('link', { name: 'Try it with sample data' })).toHaveAttribute('href', '/demo');
   await expect(page.getByText('Your numbered job tickets will appear here.')).toBeVisible();
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations.filter((violation) => ['serious', 'critical'].includes(violation.impact ?? ''))).toEqual([]);
@@ -52,8 +55,9 @@ test('desktop header navigation has 44px targets without changing the mobile hea
   expect(await links.first().evaluate((element) => getComputedStyle(element).outlineStyle)).not.toBe('none');
 });
 
-test('renders a real local WAV into a reviewable batch', async ({ page }) => {
+test('@claim:wav-mp3-input Wrapline offers WAV and MP3 voice input', async ({ page }) => {
   await page.goto('/');
+  await expect(page.locator('#voice-files')).toHaveAttribute('accept', /audio\/wav.*audio\/mpeg/);
   await page.locator('#voice-files').setInputFiles({ name: 'episode-one.wav', mimeType: 'audio/wav', buffer: wavBuffer() });
   await expect(page.getByText('episode-one.wav', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Render batch' }).click();
@@ -62,7 +66,7 @@ test('renders a real local WAV into a reviewable batch', async ({ page }) => {
   await expect(page.locator('audio')).toHaveCount(1);
 });
 
-test('keeps a saved recipe and wrapper audio across reloads', async ({ page }) => {
+test('@claim:local-recipes Saved recipes and wrapper audio persist on this device', async ({ page }) => {
   await page.goto('/');
   await page.locator('#recipe-name').fill('Field notes');
   await page.locator('#intro-file').setInputFiles({ name: 'theme.wav', mimeType: 'audio/wav', buffer: wavBuffer() });
@@ -73,48 +77,135 @@ test('keeps a saved recipe and wrapper audio across reloads', async ({ page }) =
   await expect(page.locator('#intro-status')).toHaveText('theme.wav');
 });
 
-test('installed shell reloads while offline', async ({ page, context }) => {
-  await page.goto('/');
-  await page.evaluate(() => navigator.serviceWorker.ready);
-  await expect.poll(() => page.evaluate(() => navigator.serviceWorker.controller?.state)).toBe('activated');
-  const expectedShellAssets = await page.evaluate(() =>
-    Array.from(document.querySelectorAll<HTMLScriptElement | HTMLLinkElement>('script[src], link[rel="stylesheet"][href]'))
-      .map((element) => new URL(element instanceof HTMLScriptElement ? element.src : element.href).pathname),
-  );
-  await expect.poll(() => page.evaluate(async (expectedAssets) => {
-    const assets: Array<{ path: string; bytes: number }> = [];
-    for (const cacheName of await caches.keys()) {
-      const cache = await caches.open(cacheName);
-      for (const request of await cache.keys()) {
-        const response = await cache.match(request);
-        assets.push({ path: new URL(request.url).pathname, bytes: (await response?.arrayBuffer())?.byteLength ?? 0 });
+test('@claim:offline-demo The demo works offline after its first visit', async ({ browser }) => {
+  // This claim owns a context. It must not reuse or close Playwright's shared
+  // page/context because service-worker state is part of the assertion.
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  try {
+    await page.goto('/demo');
+    await page.evaluate(() => navigator.serviceWorker.ready);
+    await expect.poll(() => page.evaluate(() => navigator.serviceWorker.controller?.state)).toBe('activated');
+    const expectedShellAssets = await page.evaluate(() =>
+      Array.from(document.querySelectorAll<HTMLScriptElement | HTMLLinkElement>('script[src], link[rel="stylesheet"][href]'))
+        .map((element) => new URL(element instanceof HTMLScriptElement ? element.src : element.href).pathname),
+    );
+    await expect.poll(() => page.evaluate(async (expectedAssets) => {
+      const assets: Array<{ path: string; bytes: number }> = [];
+      for (const cacheName of await caches.keys()) {
+        const cache = await caches.open(cacheName);
+        for (const request of await cache.keys()) {
+          const response = await cache.match(request);
+          assets.push({ path: new URL(request.url).pathname, bytes: (await response?.arrayBuffer())?.byteLength ?? 0 });
+        }
       }
-    }
-    return expectedAssets.filter((asset) => assets.some((cached) => cached.path === asset && cached.bytes > 0)).length;
-  }, expectedShellAssets)).toBe(expectedShellAssets.length);
-  const cachedAssets = await page.evaluate(async () => {
-    const assets: Array<{ path: string; bytes: number }> = [];
-    for (const cacheName of await caches.keys()) {
-      const cache = await caches.open(cacheName);
-      for (const request of await cache.keys()) {
-        const response = await cache.match(request);
-        assets.push({ path: new URL(request.url).pathname, bytes: (await response?.arrayBuffer())?.byteLength ?? 0 });
-      }
-    }
-    return assets;
-  });
-  expect(expectedShellAssets).not.toEqual([]);
-  expect(expectedShellAssets.every((asset) => cachedAssets.some((cached) => cached.path === asset && cached.bytes > 0))).toBe(true);
-  // A new install must survive without relying on the browser's HTTP cache.
-  await context.setOffline(true);
-  await page.reload();
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Batch the wrapper');
-  await expect(page.getByText(/offline/i).first()).toBeVisible();
+      return expectedAssets.filter((asset) => assets.some((cached) => cached.path === asset && cached.bytes > 0)).length;
+    }, expectedShellAssets)).toBe(expectedShellAssets.length);
+    expect(expectedShellAssets).not.toEqual([]);
+    // A new install must survive without relying on the browser's HTTP cache.
+    await context.setOffline(true);
+    await page.reload();
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Wrap finished voice tracks');
+    await expect(page.getByText(/You’re offline/)).toBeVisible();
+    await expect(page.locator('#queue-list .job-ticket')).toHaveCount(3);
+  } finally {
+    await context.close();
+  }
 });
 
-test('keeps an unverified license locked during a verification outage', async ({ page }) => {
+test('@claim:demo-sample-data One click opens a useful three-track sample batch', async ({ page }) => {
+  await page.goto('/demo');
+  await expect(page).toHaveTitle('Demo — Wrapline');
+  await expect(page.getByText(/Demo — sample data, nothing is saved to your real data/)).toBeVisible();
+  await expect(page.locator('#queue-list .job-ticket')).toHaveCount(3);
+  await expect(page.locator('#queue-list')).toContainText('harbour-forecast.wav');
+  await expect(page.locator('#intro-status')).toHaveText('signal-desk-intro.wav');
+  await expect(page.getByRole('button', { name: 'Reset demo' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Start for real' })).toBeVisible();
+});
+
+test('@claim:demo-isolation Demo storage never reads the real bench', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('#recipe-name').fill('Private production recipe');
+  await page.getByRole('button', { name: 'Save recipe' }).click();
+  await expect(page.locator('#recipe-message')).toContainText('Private production recipe');
+
+  await page.goto('/demo');
+  await expect(page.locator('#recipe-name')).toHaveValue('Signal Desk');
+  const databaseNames = await page.evaluate(async () => (await indexedDB.databases()).map((database) => database.name));
+  expect(databaseNames).toContain('wrapline-local');
+  expect(databaseNames).toContain('demo:wrapline-local');
+  await page.getByRole('button', { name: 'Start for real' }).click();
+  await page.waitForURL('/');
+  await expect(page.locator('#recipe-name')).toHaveValue('Private production recipe');
+});
+
+test('@claim:local-audio Demo rendering sends no audio or analytics off-device', async ({ page }) => {
+  const requests: string[] = [];
+  page.on('request', (request) => requests.push(request.url()));
+  await page.goto('/demo');
+  await page.getByRole('button', { name: 'Render batch' }).click();
+  await expect(page.getByRole('link', { name: 'Download batch ZIP' })).toBeVisible({ timeout: 20_000 });
+  const origin = new URL(page.url()).origin;
+  expect(requests.length).toBeGreaterThan(0);
+  expect(requests.every((url) => ['http:', 'https:'].includes(new URL(url).protocol) ? new URL(url).origin === origin : true)).toBe(true);
+});
+
+test('@claim:wav-receipt Demo output provides reviewable WAV files and a receipt', async ({ page }) => {
+  await page.goto('/demo');
+  await page.getByRole('button', { name: 'Render batch' }).click();
+  await expect(page.getByRole('link', { name: 'Download batch ZIP' })).toBeVisible({ timeout: 20_000 });
+  await expect(page.locator('audio')).toHaveCount(3);
+  await expect(page.locator('#batch-download')).toContainText('3 WAV files + receipt');
+});
+
+test('@claim:audio-behavior Output is disclosed as 48 kHz, 16-bit PCM WAV', async ({ page }) => {
+  await page.goto('/demo');
+  await expect(page.locator('.disclosure')).toContainText('RMS');
+  await page.getByRole('button', { name: 'Render batch' }).click();
+  await expect(page.locator('audio').first()).toBeVisible({ timeout: 20_000 });
+  const header = await page.locator('audio').first().evaluate(async (audio) => {
+    const bytes = await fetch(audio.src).then((response) => response.arrayBuffer());
+    const view = new DataView(bytes);
+    return { riff: String.fromCharCode(...new Uint8Array(bytes.slice(0, 4))), rate: view.getUint32(24, true), bits: view.getUint16(34, true) };
+  });
+  expect(header).toEqual({ riff: 'RIFF', rate: 48_000, bits: 16 });
+});
+
+test('@claim:source-receipt A receipt records the supplied source hash', async ({ page }) => {
+  const input = wavBuffer();
+  const expectedHash = createHash('sha256').update(input).digest('hex');
+  await page.goto('/demo');
+  while (await page.locator('[data-remove-job]').count()) await page.locator('[data-remove-job]').first().click();
+  await page.locator('#voice-files').setInputFiles({ name: 'untouched-source.wav', mimeType: 'audio/wav', buffer: input });
+  await page.getByRole('button', { name: 'Render batch' }).click();
+  await expect(page.getByRole('link', { name: 'Download batch ZIP' })).toBeVisible({ timeout: 20_000 });
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('link', { name: 'Download batch ZIP' }).click();
+  const download = await downloadPromise;
+  const path = await download.path();
+  expect(path).not.toBeNull();
+  expect(readFileSync(path as string).toString('utf8')).toContain(expectedHash);
+});
+
+test('@claim:studio-license The Studio call to action names the registered $29 one-time license', async ({ page }) => {
+  await page.goto('/demo');
+  const link = page.locator('#buy-link');
+  await expect(link).toHaveText('Buy studio license · $29');
+  await expect(link).toHaveAttribute('href', 'https://api.sociobot.in/api/v1/products/audio-wrapper-batch/checkout');
+  await expect(page.locator('#unlock')).toContainText('one-time purchase');
+});
+
+test('@claim:free-tier An unverified license keeps the three-track free limit', async ({ page }) => {
   await page.route('**/api/v1/products/audio-wrapper-batch/verify?license=*', (route) => route.abort('failed'));
   await page.goto('/');
+  await page.locator('#recipe-name').fill('First free recipe');
+  await page.getByRole('button', { name: 'Save recipe' }).click();
+  await expect(page.locator('#recipe-message')).toContainText('First free recipe');
+  await page.getByRole('button', { name: 'Start fresh' }).click();
+  await page.locator('#recipe-name').fill('Second free recipe');
+  await page.getByRole('button', { name: 'Save recipe' }).click();
+  await expect(page.locator('#recipe-message')).toContainText('The free bench holds one recipe');
   await page.locator('#license-token').fill('arbitrary-unverified-token');
   await page.getByRole('button', { name: 'Verify' }).click();
   await expect(page.getByText(/could not be verified/)).toBeVisible();

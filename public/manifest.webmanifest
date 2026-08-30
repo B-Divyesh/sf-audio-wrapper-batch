@@ -3,7 +3,7 @@
   "name": "Wrapline — Batch Audio Finishing",
   "short_name": "Wrapline",
   "description": "Wrap voice tracks with a repeatable intro, outro, bed, loudness target, and naming recipe—locally.",
-  "start_url": "/?v=1",
+  "start_url": "/?v=2",
   "scope": "/",
   "display": "standalone",
   "background_color": "#F2EBDD",
@@ -13,5 +13,5 @@
     { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ],
   "categories": ["music", "productivity", "utilities"],
-  "shortcuts": [{ "name": "New batch", "url": "/?v=1#bench", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }]
+  "shortcuts": [{ "name": "New batch", "url": "/?v=2#bench", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }]
 }
