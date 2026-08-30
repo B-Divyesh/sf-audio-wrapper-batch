@@ -39,36 +39,6 @@
       "src_main_validaudio"
     ],
     "1": [
-      "axe_core_playwright",
-      "package",
-      "package_devdependencies",
-      "package_devdependencies_axe_core_playwright",
-      "package_devdependencies_playwright_test",
-      "package_devdependencies_types_node",
-      "package_devdependencies_typescript",
-      "package_devdependencies_vite",
-      "package_devdependencies_vitest",
-      "package_name",
-      "package_private",
-      "package_scripts",
-      "package_scripts_build",
-      "package_scripts_dev",
-      "package_scripts_lint",
-      "package_scripts_preview",
-      "package_scripts_test",
-      "package_scripts_test_e2e",
-      "package_scripts_test_unit",
-      "package_scripts_verify_checkout",
-      "package_scripts_verify_release",
-      "package_type",
-      "package_version",
-      "playwright_test",
-      "types_node",
-      "typescript",
-      "vite",
-      "vitest"
-    ],
-    "2": [
       "ref_dom",
       "ref_dom_iterable",
       "ref_es2022",
@@ -94,6 +64,28 @@
       "tsconfig_compileroptions_usedefineforclassfields",
       "tsconfig_include"
     ],
+    "2": [
+      "src_db",
+      "src_db_all",
+      "src_db_deleterecipe",
+      "src_db_opendb",
+      "src_db_put",
+      "src_db_resetdemostorage",
+      "src_db_savereceipt",
+      "src_db_saverecipe",
+      "src_db_setstoragescope",
+      "src_demo",
+      "src_demo_asset",
+      "src_demo_createdemoseed",
+      "src_demo_demoseed",
+      "src_demo_makesamplewav",
+      "src_types",
+      "src_types_audioasset",
+      "src_types_receipt",
+      "src_types_receiptitem",
+      "src_types_recipe",
+      "src_types_renderedfile"
+    ],
     "3": [
       "src_audio",
       "src_audio_clamp",
@@ -114,6 +106,51 @@
       "tests_audio_test"
     ],
     "4": [
+      "package",
+      "package_name",
+      "package_private",
+      "package_scripts",
+      "package_scripts_build",
+      "package_scripts_dev",
+      "package_scripts_lint",
+      "package_scripts_preview",
+      "package_scripts_test",
+      "package_scripts_test_e2e",
+      "package_scripts_test_unit",
+      "package_scripts_verify_checkout",
+      "package_scripts_verify_release",
+      "package_type",
+      "package_version"
+    ],
+    "5": [
+      "axe_core_playwright",
+      "package_devdependencies",
+      "package_devdependencies_axe_core_playwright",
+      "package_devdependencies_playwright_test",
+      "package_devdependencies_types_node",
+      "package_devdependencies_typescript",
+      "package_devdependencies_vite",
+      "package_devdependencies_vitest",
+      "playwright_test",
+      "types_node",
+      "typescript",
+      "vite",
+      "vitest"
+    ],
+    "6": [
+      "scripts_static_server",
+      "scripts_static_server_argument",
+      "scripts_static_server_config",
+      "scripts_static_server_fileat",
+      "scripts_static_server_localpath",
+      "scripts_static_server_port",
+      "scripts_static_server_root",
+      "scripts_static_server_routerewrite",
+      "scripts_static_server_sendfile",
+      "scripts_static_server_server",
+      "scripts_static_server_types"
+    ],
+    "7": [
       "src_license",
       "src_license_billingbase",
       "src_license_cachedverdict",
@@ -126,31 +163,7 @@
       "src_license_studiocheckoutavailable",
       "src_license_verifylicense"
     ],
-    "5": [
-      "src_db",
-      "src_db_all",
-      "src_db_deleterecipe",
-      "src_db_opendb",
-      "src_db_put",
-      "src_db_resetdemostorage",
-      "src_db_savereceipt",
-      "src_db_saverecipe",
-      "src_db_setstoragescope",
-      "src_types_receipt"
-    ],
-    "6": [
-      "src_demo",
-      "src_demo_asset",
-      "src_demo_createdemoseed",
-      "src_demo_demoseed",
-      "src_demo_makesamplewav",
-      "src_types",
-      "src_types_audioasset",
-      "src_types_receiptitem",
-      "src_types_recipe",
-      "src_types_renderedfile"
-    ],
-    "7": [
+    "8": [
       "tests_license_test",
       "tests_license_test_memorystorage",
       "tests_license_test_memorystorage_clear",
@@ -160,55 +173,56 @@
       "tests_license_test_memorystorage_removeitem",
       "tests_license_test_memorystorage_setitem"
     ],
-    "8": [
+    "9": [
       "src_sw_template",
       "src_sw_template_cachefirst",
       "src_sw_template_networkfirst",
       "src_sw_template_precacheshell"
     ],
-    "9": [
+    "10": [
       "vite_config",
       "vite_config_offlineshell",
       "vite_config_workertemplatepath"
     ],
-    "10": [
+    "11": [
       "scripts_verify_checkout",
       "scripts_verify_checkout_product"
     ],
-    "11": [
+    "12": [
       "tests_e2e_app_spec",
       "tests_e2e_app_spec_wavbuffer"
     ],
-    "12": [
+    "13": [
       "playwright_config"
     ],
-    "13": [
+    "14": [
       "src_vite_env_d"
     ],
-    "14": [
+    "15": [
       "tests_release_test"
     ],
-    "15": [
+    "16": [
       "vitest_config"
     ]
   },
   "cohesion": {
     "0": 0.14761904761904762,
-    "1": 0.07142857142857142,
-    "2": 0.08333333333333333,
+    "1": 0.08333333333333333,
+    "2": 0.15789473684210525,
     "3": 0.2426470588235294,
-    "4": 0.2727272727272727,
-    "5": 0.3111111111111111,
-    "6": 0.28888888888888886,
-    "7": 0.25,
-    "8": 0.5,
-    "9": 0.6666666666666666,
-    "10": 1.0,
+    "4": 0.13333333333333333,
+    "5": 0.15384615384615385,
+    "6": 0.2545454545454545,
+    "7": 0.2727272727272727,
+    "8": 0.25,
+    "9": 0.5,
+    "10": 0.6666666666666666,
     "11": 1.0,
     "12": 1.0,
     "13": 1.0,
     "14": 1.0,
-    "15": 1.0
+    "15": 1.0,
+    "16": 1.0
   },
   "gods": [
     {
