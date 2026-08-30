@@ -1,6 +1,6 @@
 {
   "url": "https://audio-wrapper-batch.sociobot.in",
-  "loadMs": 767,
+  "loadMs": 726,
   "errors": [],
   "a11y": {
     "title": "Wrapline — repeatable batch audio finishing",
@@ -9,6 +9,6 @@
     "main": true,
     "imgsMissingAlt": 0,
     "buttonsUnlabeled": 0,
-    "textLength": 2299
+    "textLength": 2255
   }
 }
