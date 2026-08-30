@@ -1,4 +1,5 @@
-import { readFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig, type Plugin } from 'vite';
 
@@ -31,6 +32,16 @@ function offlineShell(): Plugin {
           .replace('__WRAPLINE_VERSION__', version)
           .replace('__WRAPLINE_SHELL__', JSON.stringify([...new Set(shell)])),
       });
+    },
+    writeBundle(options) {
+      // Static Web Apps treats /demo and /demo/ as the same route when
+      // validating rules. Keep the configured rewrite for /demo and emit a
+      // real directory document for the trailing-slash URL instead of adding
+      // a duplicate route that the deploy validator rejects.
+      const outputDir = options.dir ?? 'dist';
+      const demoDirectory = join(outputDir, 'demo');
+      mkdirSync(demoDirectory, { recursive: true });
+      copyFileSync(join(outputDir, 'index.html'), join(demoDirectory, 'index.html'));
     },
   };
 }

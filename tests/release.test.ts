@@ -37,7 +37,6 @@ describe('release response policy', () => {
     expect(config.navigationFallback).toBeUndefined();
     expect(config.routes).toEqual(expect.arrayContaining([
       { route: '/demo', rewrite: '/index.html' },
-      { route: '/demo/', rewrite: '/index.html' },
     ]));
     expect(config.responseOverrides?.['404']?.rewrite).toBe('/404.html');
     expect(robots).toContain('Sitemap: https://audio-wrapper-batch.sociobot.in/sitemap.xml');

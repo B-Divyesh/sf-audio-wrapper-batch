@@ -36,6 +36,13 @@ test('release artifact returns the designed 404 document for an unknown URL', as
   await expect(page.getByRole('link', { name: 'Return to Wrapline' })).toHaveAttribute('href', '/');
 });
 
+test('release artifact keeps the trailing demo URL in the sample sandbox', async ({ page }) => {
+  const response = await page.goto('/demo/');
+  expect(response?.status()).toBe(200);
+  await expect(page).toHaveTitle('Demo — Wrapline');
+  await expect(page.getByText(/Demo — sample data, nothing is saved to your real data/)).toBeVisible();
+});
+
 test('release artifact publishes the required social preview and app icons', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', 'Wrapline — batch audio finishing');
