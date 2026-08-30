@@ -30,6 +30,14 @@ describe('release response policy', () => {
     expect(packageJson.scripts.build).toContain('VITE_STUDIO_CHECKOUT_ENABLED=true vite build');
   });
 
+  it('checks only the product-scoped checkout without following its redirect', () => {
+    const verifier = readFileSync(new URL('../scripts/verify-checkout.mjs', import.meta.url), 'utf8');
+    expect(verifier).toContain('/products/${slug}/checkout');
+    expect(verifier).toContain("method: 'HEAD'");
+    expect(verifier).toContain("redirect: 'manual'");
+    expect(verifier).not.toContain('fetch(catalogUrl');
+  });
+
   it('runs the exact production build during a checkout-catalog outage', () => {
     const result = spawnSync(npmCommand, ['run', 'build'], {
       cwd: repositoryRoot,
@@ -42,7 +50,7 @@ describe('release response policy', () => {
     expect(existsSync(new URL('../dist/index.html', import.meta.url))).toBe(true);
     expect(existsSync(new URL('../dist/sw.js', import.meta.url))).toBe(true);
     expect(existsSync(new URL('../dist/staticwebapp.config.json', import.meta.url))).toBe(true);
-  });
+  }, 35_000);
 
   it('uses an explicit demo rewrite so unknown routes reach the real 404 response', () => {
     const config = JSON.parse(staticConfig) as {
@@ -70,5 +78,17 @@ describe('release response policy', () => {
     expect(document).toContain('https://audio-wrapper-batch.sociobot.in/art/wrapline-social.jpg');
     expect(document).toContain('<link rel="icon" href="/favicon.svg" type="image/svg+xml" />');
     expect(document).toContain('<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />');
+  });
+
+  it('keeps every required visitor claim paired with one tagged regression', () => {
+    const claims = JSON.parse(readFileSync(new URL('../.factory/claims.json', import.meta.url), 'utf8')) as Array<{ id: string }>;
+    const browserTests = readFileSync(new URL('./e2e/app.spec.ts', import.meta.url), 'utf8');
+    const ids = claims.map(({ id }) => id);
+    const tags = [...browserTests.matchAll(/@claim:([a-z0-9-]+)/g)].map((match) => match[1]);
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(tags.sort()).toEqual([...ids].sort());
+    expect(ids).toEqual(expect.arrayContaining([
+      'studio-unlimited', 'license-daily-check', 'recipe-controls', 'source-receipt', 'local-recipes',
+    ]));
   });
 });

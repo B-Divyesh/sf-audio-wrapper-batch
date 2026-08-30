@@ -44,8 +44,7 @@ export function captureReturnedLicense(): void {
   const url = new URL(location.href);
   const token = url.searchParams.get('license')?.trim();
   if (!token) return;
-  localStorage.setItem(scopedKey(LICENSE_KEY), token);
-  localStorage.removeItem(scopedKey(VERDICT_KEY));
+  storeLicense(token);
   url.searchParams.delete('license');
   history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
 }
@@ -62,8 +61,13 @@ export function licenseState(): LicenseState {
 }
 
 export function storeLicense(token: string): void {
-  localStorage.setItem(scopedKey(LICENSE_KEY), token.trim());
-  localStorage.removeItem(scopedKey(VERDICT_KEY));
+  const normalized = token.trim();
+  const licenseKey = scopedKey(LICENSE_KEY);
+  const tokenChanged = localStorage.getItem(licenseKey) !== normalized;
+  localStorage.setItem(licenseKey, normalized);
+  // Re-entering the same token must retain its fresh verdict. This keeps the
+  // visible Verify action inside the documented one-check-per-day policy.
+  if (tokenChanged) localStorage.removeItem(scopedKey(VERDICT_KEY));
 }
 
 export async function verifyLicense(force = false): Promise<LicenseState> {

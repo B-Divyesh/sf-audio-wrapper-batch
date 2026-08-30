@@ -83,7 +83,7 @@ app.innerHTML = `
               <div class="field"><label for="bed-volume">Bed level <output id="bed-output" for="bed-volume">−24 dB</output></label><input id="bed-volume" type="range" min="-40" max="-8" value="-24" step="1" /></div>
               <div class="field"><label for="target-loudness">Voice target</label><select id="target-loudness"><option value="-16">−16 LUFS · podcast</option><option value="-19">−19 LUFS · mono voice</option><option value="-14">−14 LUFS · course/video</option></select></div>
             </div>
-            <details class="disclosure"><summary>How loudness and mixing work</summary><p>Wrapline estimates integrated voice loudness from RMS, applies at most ±12 dB, mixes wrapper audio at unity, ducks the bed by 7 dB under voice, then prevents sample peaks above −0.18 dBFS. This is a practical browser normalization—not broadcast-certified EBU R128 or true-peak limiting. Output is 48 kHz, 16-bit PCM WAV.</p></details>
+            <details class="disclosure"><summary>How loudness and mixing work</summary><p>Wrapline estimates voice loudness from RMS and applies no more than ±12 dB. Wrapper audio keeps its original level. The bed drops by 7 dB under voice. Sample peaks stay below −0.18 dBFS. This browser normalization is not broadcast-certified EBU R128 or true-peak limiting. Output is 48 kHz, 16-bit PCM WAV.</p></details>
             <div class="field full"><label for="naming-template">Filename recipe</label><input id="naming-template" value="{recipe}-{number}-{source}" required aria-describedby="naming-help" /><small id="naming-help">Tokens: {recipe}, {number}, {source}</small></div>
             <div class="field number-field"><label for="start-number">Start number</label><input id="start-number" type="number" min="0" max="9999" value="1" inputmode="numeric" /></div>
             <div class="form-actions">
@@ -136,7 +136,7 @@ app.innerHTML = `
       </div>
     </section>
   </main>
-  <footer><div><a class="brand" href="/" aria-label="Wrapline home">Wrapline</a><p>Local batch finishing for independent audio makers.</p></div><div><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://sociobot.in">Built by Param Factory (external site)</a></div><p class="generated-note">Bench artwork generated for Wrapline with Azure AI Foundry. <span data-build-id>Build 1.0.0-r7</span></p></footer>
+  <footer><div><a class="brand" href="/" aria-label="Wrapline home">Wrapline</a><p>Local batch finishing for independent audio makers.</p></div><div><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://sociobot.in">Built by Param Factory (external site)</a></div><p class="generated-note">Bench artwork generated for Wrapline with Azure AI Foundry. <span data-build-id>Build 1.0.0-r9</span></p></footer>
   <div class="update-toast" id="update-toast" role="status" hidden><span>A fresh version is ready.</span><button class="button quiet" id="update-button" type="button">Update now</button></div>
 `;
 
@@ -526,7 +526,7 @@ function bindEvents(): void {
     const token = $<HTMLInputElement>('#license-token').value.trim();
     if (!token) return message('#license-message', 'Paste the license token from your purchase email.', true);
     storeLicense(token); message('#license-message', 'Checking license…');
-    const result = await verifyLicense(true); updateLicenseUi(result.unlocked ? 'License verified. Unlimited batches and recipes are active.' : 'That license could not be verified. Check the token and try again.');
+    const result = await verifyLicense(); updateLicenseUi(result.unlocked ? 'License verified. Unlimited batches and recipes are active.' : 'That license could not be verified. Check the token and try again.');
   });
 }
 

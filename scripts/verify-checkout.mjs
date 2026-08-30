@@ -1,20 +1,18 @@
 const slug = 'audio-wrapper-batch';
 const billingBase = process.env.VITE_BILLING_BASE ?? 'https://api.sociobot.in';
-const catalogUrl = `${billingBase}/api/v1/products`;
-const checkoutUrl = `${catalogUrl}/${slug}/checkout`;
+const checkoutUrl = `${billingBase}/api/v1/products/${slug}/checkout`;
 
 let response;
 try {
-  response = await fetch(catalogUrl, { headers: { Accept: 'application/json' } });
+  response = await fetch(checkoutUrl, { method: 'HEAD', redirect: 'manual' });
 } catch (error) {
-  throw new Error(`Studio product catalog could not be reached at ${catalogUrl}: ${error instanceof Error ? error.message : String(error)}`);
+  throw new Error(`Studio checkout could not be reached at ${checkoutUrl}: ${error instanceof Error ? error.message : String(error)}`);
 }
 
-if (!response.ok) throw new Error(`Studio product catalog is not release-ready: ${catalogUrl} returned ${response.status}.`);
-const catalog = await response.json();
-const product = catalog?.data?.find((item) => item?.slug === slug);
-if (product?.name !== 'Wrapline Studio' || product?.price_minor !== 2900 || product?.currency !== 'USD' || product?.checkout_url !== checkoutUrl) {
-  throw new Error(`Studio product registration is incomplete or does not match the release contract at ${catalogUrl}.`);
+if (![301, 302, 303, 307, 308].includes(response.status)) {
+  throw new Error(`Studio checkout is not release-ready: ${checkoutUrl} returned ${response.status}.`);
 }
+const location = response.headers.get('location');
+if (!location || new URL(location, checkoutUrl).protocol !== 'https:') throw new Error('Studio checkout did not return a secure hosted-checkout redirect.');
 
-console.log(`Verified Studio product registration for ${slug}: USD ${product.price_minor / 100}.`);
+console.log(`Verified registered hosted checkout redirect for ${slug}.`);

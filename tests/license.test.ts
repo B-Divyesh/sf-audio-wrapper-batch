@@ -40,6 +40,21 @@ describe('license verification', () => {
     await expect(license.verifyLicense(true)).resolves.toEqual({ token: 'previously-verified-token', unlocked: true });
   });
 
+  it('reuses a completed verdict when the same token is submitted again', async () => {
+    const license = await import('../src/license');
+    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify({ valid: false, reason: 'invalid' }), {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+    }));
+    vi.stubGlobal('fetch', fetchMock);
+    license.storeLicense('same-token');
+    await license.verifyLicense();
+    license.storeLicense('same-token');
+    await license.verifyLicense();
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
   it('recovers from a verification request that never resolves', async () => {
     vi.useFakeTimers();
     const license = await import('../src/license');

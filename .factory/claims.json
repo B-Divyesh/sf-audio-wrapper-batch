@@ -36,10 +36,10 @@
   },
   {
     "id": "wav-receipt",
-    "claim": "A sample batch produces reviewable WAV files and a receipt download.",
+    "claim": "A sample batch produces recipe-named, reviewable WAV files and a receipt download.",
     "where": "Landing facts, method section, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:wav-receipt",
-    "sandbox": "Fresh /demo render; assert three audio previews and the ZIP summary naming three WAV files plus a receipt."
+    "sandbox": "Fresh /demo render; assert three audio previews, recipe-derived output names, and the ZIP summary naming three WAV files plus a receipt."
   },
   {
     "id": "audio-behavior",
@@ -50,17 +50,17 @@
   },
   {
     "id": "source-receipt",
-    "claim": "Each receipt records the supplied source SHA-256.",
-    "where": "Recent receipts section, README",
+    "claim": "Each receipt records recipe version, source SHA-256, output name, duration, gain, limiter state, codec, and measurement method.",
+    "where": "Recent receipts section, README, privacy policy",
     "test": "npm run build && npm run test:e2e -- --grep @claim:source-receipt",
-    "sandbox": "Use /demo, render a known WAV, download the ZIP, and compare its receipt hash to the original byte hash."
+    "sandbox": "Use /demo, render a known WAV, download its receipt JSON, compare the source hash, and assert every named production field."
   },
   {
     "id": "local-recipes",
-    "claim": "Saved wrapper recipes and wrapper audio persist on this device.",
+    "claim": "Saved wrapper recipes, wrapper audio, and production receipts persist on this device.",
     "where": "README, privacy policy",
     "test": "npm run build && npm run test:e2e -- --grep @claim:local-recipes",
-    "sandbox": "Save a recipe and intro WAV in a fresh browser profile, reload, and assert both remain available."
+    "sandbox": "Save a recipe and intro WAV, render a receipt, reload a fresh bench, and assert all three remain available."
   },
   {
     "id": "free-tier",
@@ -75,5 +75,26 @@
     "where": "Pricing section, terms, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:studio-license",
     "sandbox": "Fresh /demo; assert the visible $29 one-time copy and exact registered production checkout URL."
+  },
+  {
+    "id": "studio-unlimited",
+    "claim": "A valid Studio license permits unlimited saved recipes and tracks per batch.",
+    "where": "Pricing section, terms, README",
+    "test": "npm run build && npm run test:e2e -- --grep @claim:studio-unlimited",
+    "sandbox": "Mock one valid product-scoped verification response, save two recipes, render four WAV tracks, and assert all four outputs."
+  },
+  {
+    "id": "license-daily-check",
+    "claim": "A completed license check for the same token is reused for one day.",
+    "where": "Privacy policy",
+    "test": "npm run build && npm run test:e2e -- --grep @claim:license-daily-check",
+    "sandbox": "Submit the same invalid token twice against a recorded product-scoped response and assert exactly one verification request."
+  },
+  {
+    "id": "recipe-controls",
+    "claim": "A saved recipe can be exported with its wrapper audio and deleted from the device.",
+    "where": "Recipe controls, privacy policy, README",
+    "test": "npm run build && npm run test:e2e -- --grep @claim:recipe-controls",
+    "sandbox": "Save a recipe with a WAV intro, inspect the downloaded JSON and embedded audio, confirm deletion, reload, and assert it is gone."
   }
 ]

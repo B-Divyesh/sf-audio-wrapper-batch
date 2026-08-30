@@ -91,7 +91,7 @@ test('every public route has the shared keyboard shell and route metadata', asyn
       .toEqual(['/#bench', '/#method', '/#unlock']);
     await expect(page.locator('footer'), route.path).toContainText('Local batch finishing for independent audio makers.');
     await expect(page.locator('footer'), route.path).toContainText('Built by Param Factory');
-    await expect(page.locator('footer [data-build-id]'), route.path).toHaveText('Build 1.0.0-r7');
+    await expect(page.locator('footer [data-build-id]'), route.path).toHaveText('Build 1.0.0-r9');
 
     await page.keyboard.press('Tab');
     await expect(page.getByRole('link', { name: 'Skip to main content' }), route.path).toBeFocused();
@@ -171,15 +171,19 @@ test('@claim:wav-mp3-input Wrapline offers WAV and MP3 voice input', async ({ pa
   await expect(page.locator('audio')).toHaveCount(1);
 });
 
-test('@claim:local-recipes Saved recipes and wrapper audio persist on this device', async ({ page }) => {
+test('@claim:local-recipes Saved recipes, wrapper audio, and receipts persist on this device', async ({ page }) => {
   await page.goto('/');
   await page.locator('#recipe-name').fill('Field notes');
   await page.locator('#intro-file').setInputFiles({ name: 'theme.wav', mimeType: 'audio/wav', buffer: wavBuffer() });
   await page.getByRole('button', { name: 'Save recipe' }).click();
   await expect(page.getByText(/Saved “Field notes” as version 1/)).toBeVisible();
+  await page.locator('#voice-files').setInputFiles({ name: 'field-take.wav', mimeType: 'audio/wav', buffer: wavBuffer() });
+  await page.getByRole('button', { name: 'Render batch' }).click();
+  await expect(page.getByRole('link', { name: 'Download batch ZIP' })).toBeVisible({ timeout: 20_000 });
   await page.reload();
   await expect(page.locator('#recipe-name')).toHaveValue('Field notes');
   await expect(page.locator('#intro-status')).toHaveText('theme.wav');
+  await expect(page.locator('#receipt-list .receipt')).toHaveCount(1);
 });
 
 test('@claim:offline-demo The demo works offline after its first visit', async ({ browser }) => {
@@ -261,6 +265,11 @@ test('@claim:wav-receipt Demo output provides reviewable WAV files and a receipt
   await page.getByRole('button', { name: 'Render batch' }).click();
   await expect(page.getByRole('link', { name: 'Download batch ZIP' })).toBeVisible({ timeout: 20_000 });
   await expect(page.locator('audio')).toHaveCount(3);
+  expect(await page.locator('.job-output a[download]').evaluateAll((links) => links.map((link) => link.getAttribute('download')))).toEqual([
+    'Signal Desk-12-harbour-forecast.wav',
+    'Signal Desk-13-library-after-dark.wav',
+    'Signal Desk-14-maker-class-three.wav',
+  ]);
   await expect(page.locator('#batch-download')).toContainText('3 WAV files + receipt');
 });
 
@@ -272,12 +281,21 @@ test('@claim:audio-behavior Output is disclosed as 48 kHz, 16-bit PCM WAV', asyn
   const header = await page.locator('audio').first().evaluate(async (audio) => {
     const bytes = await fetch(audio.src).then((response) => response.arrayBuffer());
     const view = new DataView(bytes);
-    return { riff: String.fromCharCode(...new Uint8Array(bytes.slice(0, 4))), rate: view.getUint32(24, true), bits: view.getUint16(34, true) };
+    const rate = view.getUint32(24, true);
+    const channels = view.getUint16(22, true);
+    const bits = view.getUint16(34, true);
+    const duration = view.getUint32(40, true) / (rate * channels * bits / 8);
+    let peak = 0;
+    for (let offset = 44; offset < bytes.byteLength; offset += 2) peak = Math.max(peak, Math.abs(view.getInt16(offset, true)) / 32768);
+    return { riff: String.fromCharCode(...new Uint8Array(bytes.slice(0, 4))), rate, bits, duration, peak };
   });
-  expect(header).toEqual({ riff: 'RIFF', rate: 48_000, bits: 16 });
+  expect(header).toMatchObject({ riff: 'RIFF', rate: 48_000, bits: 16 });
+  expect(header.duration).toBeGreaterThan(1.8);
+  expect(header.peak).toBeGreaterThan(0);
+  expect(header.peak).toBeLessThanOrEqual(0.981);
 });
 
-test('@claim:source-receipt A receipt records the supplied source hash', async ({ page }) => {
+test('@claim:source-receipt A receipt records the source hash and production fields', async ({ page }) => {
   const input = wavBuffer();
   const expectedHash = createHash('sha256').update(input).digest('hex');
   await page.goto('/demo');
@@ -286,11 +304,28 @@ test('@claim:source-receipt A receipt records the supplied source hash', async (
   await page.getByRole('button', { name: 'Render batch' }).click();
   await expect(page.getByRole('link', { name: 'Download batch ZIP' })).toBeVisible({ timeout: 20_000 });
   const downloadPromise = page.waitForEvent('download');
-  await page.getByRole('link', { name: 'Download batch ZIP' }).click();
+  await page.locator('#receipt-list [data-receipt]').click();
   const download = await downloadPromise;
   const path = await download.path();
   expect(path).not.toBeNull();
-  expect(readFileSync(path as string).toString('utf8')).toContain(expectedHash);
+  const receipt = JSON.parse(readFileSync(path as string, 'utf8')) as {
+    recipeVersion: number;
+    codec: string;
+    measurement: string;
+    items: Array<Record<string, unknown>>;
+  };
+  expect(receipt.recipeVersion).toBe(0);
+  expect(receipt.codec).toBe('WAV PCM 16-bit');
+  expect(receipt.measurement).toContain('RMS-based LUFS estimate');
+  expect(receipt.items).toHaveLength(1);
+  expect(receipt.items[0]).toMatchObject({
+    source: 'untouched-source.wav',
+    sourceSha256: expectedHash,
+    peakLimited: expect.any(Boolean),
+    appliedGainDb: expect.any(Number),
+    durationSeconds: expect.any(Number),
+    output: expect.stringMatching(/\.wav$/),
+  });
 });
 
 test('@claim:studio-license The Studio call to action names the registered $29 one-time license', async ({ page }) => {
@@ -299,6 +334,83 @@ test('@claim:studio-license The Studio call to action names the registered $29 o
   await expect(link).toHaveText('Buy studio license · $29');
   await expect(link).toHaveAttribute('href', 'https://api.sociobot.in/api/v1/products/audio-wrapper-batch/checkout');
   await expect(page.locator('#unlock')).toContainText('one-time purchase');
+});
+
+test('@claim:studio-unlimited A valid Studio license permits more recipes and tracks', async ({ page }) => {
+  await page.addInitScript(() => {
+    const nativeFetch = window.fetch.bind(window);
+    window.fetch = (input, init) => String(input).includes('/api/v1/products/audio-wrapper-batch/verify?license=')
+      ? Promise.resolve(new Response(JSON.stringify({ valid: true, reason: 'ok' }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      }))
+      : nativeFetch(input, init);
+  });
+  await page.goto('/');
+  await page.locator('#license-token').fill('valid-studio-token');
+  await page.getByRole('button', { name: 'Verify' }).click();
+  await expect(page.locator('#license-message')).toContainText('Unlimited batches and recipes are active');
+
+  await page.locator('#recipe-name').fill('Studio recipe one');
+  await page.getByRole('button', { name: 'Save recipe' }).click();
+  await page.getByRole('button', { name: 'Start fresh' }).click();
+  await page.locator('#recipe-name').fill('Studio recipe two');
+  await page.getByRole('button', { name: 'Save recipe' }).click();
+  await expect(page.locator('#saved-recipes option')).toHaveCount(3);
+
+  await page.locator('#voice-files').setInputFiles([1, 2, 3, 4].map((index) => ({
+    name: `studio-${index}.wav`, mimeType: 'audio/wav', buffer: wavBuffer(),
+  })));
+  await page.getByRole('button', { name: 'Render batch' }).click();
+  await expect(page.getByText('4 of 4 tracks wrapped. Review them above or download the batch.')).toBeVisible({ timeout: 20_000 });
+  await expect(page.locator('audio')).toHaveCount(4);
+});
+
+test('@claim:license-daily-check A completed license check is reused for one day', async ({ page }) => {
+  await page.addInitScript(() => {
+    const state = window as typeof window & { __wraplineVerificationRequests?: number };
+    const nativeFetch = window.fetch.bind(window);
+    state.__wraplineVerificationRequests = 0;
+    window.fetch = (input, init) => {
+      if (!String(input).includes('/api/v1/products/audio-wrapper-batch/verify?license=')) return nativeFetch(input, init);
+      state.__wraplineVerificationRequests = (state.__wraplineVerificationRequests ?? 0) + 1;
+      return Promise.resolve(new Response(JSON.stringify({ valid: false, reason: 'invalid' }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      }));
+    };
+  });
+  await page.goto('/');
+  await page.locator('#license-token').fill('same-invalid-token');
+  await page.getByRole('button', { name: 'Verify' }).click();
+  await expect(page.locator('#license-message')).toContainText('could not be verified');
+  await page.getByRole('button', { name: 'Verify' }).click();
+  await expect(page.locator('#license-message')).toContainText('could not be verified');
+  expect(await page.evaluate(() => (window as typeof window & { __wraplineVerificationRequests?: number }).__wraplineVerificationRequests)).toBe(1);
+});
+
+test('@claim:recipe-controls A recipe can be exported with audio and deleted', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('#recipe-name').fill('Portable show');
+  await page.locator('#intro-file').setInputFiles({ name: 'portable-intro.wav', mimeType: 'audio/wav', buffer: wavBuffer() });
+  await page.getByRole('button', { name: 'Save recipe' }).click();
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export JSON' }).click();
+  const download = await downloadPromise;
+  const path = await download.path();
+  expect(path).not.toBeNull();
+  const exported = JSON.parse(readFileSync(path as string, 'utf8')) as { format: string; name: string; intro?: { name: string; blob: string } };
+  expect(exported).toMatchObject({ format: 'wrapline-recipe-v1', name: 'Portable show', intro: { name: 'portable-intro.wav' } });
+  expect(exported.intro?.blob).toMatch(/^data:audio\/wav;base64,/);
+
+  page.once('dialog', (dialog) => dialog.accept());
+  await page.getByRole('button', { name: 'Delete', exact: true }).click();
+  await expect(page.locator('#recipe-message')).toHaveText('Recipe deleted.');
+  await expect(page.locator('#saved-recipes option')).toHaveCount(1);
+  await page.reload();
+  await expect(page.locator('#recipe-name')).toHaveValue('My show');
+  await expect(page.locator('#intro-status')).toHaveText('No intro selected');
 });
 
 test('@claim:free-tier An unverified license keeps the three-track free limit', async ({ page }) => {
