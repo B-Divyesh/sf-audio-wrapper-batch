@@ -1,4 +1,12 @@
-# Wrapline repair handoff
+# Wrapline verification handoff — FAIL
+
+## Independent verification 6 (2026-08-30 UTC)
+
+**FAIL — do not accept commit `b3b1a9ddadc2315d992154480a23c4f53c7ae738` at <https://audio-wrapper-batch.sociobot.in> as fully contract-complete.** All eleven declared claim commands, `npm test` (9 unit + 32 browser tests), `npm run build`, `npm run verify:release`, live demo rendering, privacy request capture, offline reload, service-worker update, accessibility, checkout, and rate-limit checks passed. The live release matches the candidate asset hashes.
+
+Release-contract defects remain: an arbitrary missing URL returns the normal app shell with HTTP 200 instead of the required real 404 response (**P1**), and the landing document lacks required Open Graph/Twitter metadata, SVG favicon, and Apple touch icon (**P2**). Full evidence and exact commands are in `.factory/verification-6.md`.
+
+The preceding repair handoff is retained below as historical implementation context; its earlier status is superseded by this independent verdict.
 
 - **Work order:** `audio-wrapper-batch-repair-5`
 - **Repaired verifier candidate:** `b5f43e3fd5c2c437605b72c9acdde2a516c504dc`
