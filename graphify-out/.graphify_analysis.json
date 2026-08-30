@@ -1,6 +1,74 @@
 {
   "communities": {
     "0": [
+      "src_db_getreceipts",
+      "src_db_getrecipes",
+      "src_main",
+      "src_main_addfiles",
+      "src_main_app",
+      "src_main_assetfrom",
+      "src_main_bindevents",
+      "src_main_blobtodataurl",
+      "src_main_clearbatchdownload",
+      "src_main_current",
+      "src_main_dataurlblob",
+      "src_main_download",
+      "src_main_escapehtml",
+      "src_main_exportedrecipe",
+      "src_main_fillrecipeform",
+      "src_main_freshrecipe",
+      "src_main_importrecipe",
+      "src_main_init",
+      "src_main_job",
+      "src_main_jobs",
+      "src_main_message",
+      "src_main_now",
+      "src_main_preservedraftfields",
+      "src_main_readrecipe",
+      "src_main_receipts",
+      "src_main_recipes",
+      "src_main_registerserviceworker",
+      "src_main_renderbatch",
+      "src_main_renderqueue",
+      "src_main_renderreceipts",
+      "src_main_renderrecipeoptions",
+      "src_main_route",
+      "src_main_syncconnection",
+      "src_main_uid",
+      "src_main_updatelicenseui",
+      "src_main_validaudio"
+    ],
+    "1": [
+      "axe_core_playwright",
+      "package",
+      "package_devdependencies",
+      "package_devdependencies_axe_core_playwright",
+      "package_devdependencies_playwright_test",
+      "package_devdependencies_types_node",
+      "package_devdependencies_typescript",
+      "package_devdependencies_vite",
+      "package_devdependencies_vitest",
+      "package_name",
+      "package_private",
+      "package_scripts",
+      "package_scripts_build",
+      "package_scripts_dev",
+      "package_scripts_lint",
+      "package_scripts_preview",
+      "package_scripts_test",
+      "package_scripts_test_e2e",
+      "package_scripts_test_unit",
+      "package_scripts_verify_checkout",
+      "package_scripts_verify_release",
+      "package_type",
+      "package_version",
+      "playwright_test",
+      "types_node",
+      "typescript",
+      "vite",
+      "vitest"
+    ],
+    "2": [
       "ref_dom",
       "ref_dom_iterable",
       "ref_es2022",
@@ -26,7 +94,7 @@
       "tsconfig_compileroptions_usedefineforclassfields",
       "tsconfig_include"
     ],
-    "1": [
+    "3": [
       "src_audio",
       "src_audio_clamp",
       "src_audio_concat",
@@ -45,87 +113,44 @@
       "src_audio_sha256",
       "tests_audio_test"
     ],
-    "2": [
-      "package",
-      "package_name",
-      "package_private",
-      "package_scripts",
-      "package_scripts_build",
-      "package_scripts_dev",
-      "package_scripts_lint",
-      "package_scripts_preview",
-      "package_scripts_test",
-      "package_scripts_test_e2e",
-      "package_scripts_test_unit",
-      "package_scripts_verify_checkout",
-      "package_type",
-      "package_version"
-    ],
-    "3": [
-      "axe_core_playwright",
-      "package_devdependencies",
-      "package_devdependencies_axe_core_playwright",
-      "package_devdependencies_playwright_test",
-      "package_devdependencies_types_node",
-      "package_devdependencies_typescript",
-      "package_devdependencies_vite",
-      "package_devdependencies_vitest",
-      "playwright_test",
-      "types_node",
-      "typescript",
-      "vite",
-      "vitest"
-    ],
     "4": [
+      "src_license",
+      "src_license_billingbase",
+      "src_license_cachedverdict",
+      "src_license_capturereturnedlicense",
+      "src_license_checkouturl",
+      "src_license_licensestate",
+      "src_license_scopedkey",
+      "src_license_setlicensestoragescope",
+      "src_license_storelicense",
+      "src_license_studiocheckoutavailable",
+      "src_license_verifylicense"
+    ],
+    "5": [
       "src_db",
       "src_db_all",
       "src_db_deleterecipe",
       "src_db_opendb",
       "src_db_put",
+      "src_db_resetdemostorage",
       "src_db_savereceipt",
       "src_db_saverecipe",
+      "src_db_setstoragescope",
+      "src_types_receipt"
+    ],
+    "6": [
+      "src_demo",
+      "src_demo_asset",
+      "src_demo_createdemoseed",
+      "src_demo_demoseed",
+      "src_demo_makesamplewav",
       "src_types",
       "src_types_audioasset",
-      "src_types_receipt",
       "src_types_receiptitem",
       "src_types_recipe",
       "src_types_renderedfile"
     ],
-    "5": [
-      "src_license_licensestate",
-      "src_main_addfiles",
-      "src_main_assetfrom",
-      "src_main_bindevents",
-      "src_main_clearbatchdownload",
-      "src_main_download",
-      "src_main_message",
-      "src_main_preservedraftfields",
-      "src_main_renderqueue",
-      "src_main_updatelicenseui",
-      "src_main_validaudio"
-    ],
-    "6": [
-      "src_main",
-      "src_main_app",
-      "src_main_blobtodataurl",
-      "src_main_current",
-      "src_main_exportedrecipe",
-      "src_main_job",
-      "src_main_jobs",
-      "src_main_receipts",
-      "src_main_recipes"
-    ],
     "7": [
-      "src_db_getreceipts",
-      "src_license_capturereturnedlicense",
-      "src_main_escapehtml",
-      "src_main_init",
-      "src_main_registerserviceworker",
-      "src_main_renderreceipts",
-      "src_main_renderrecipeoptions",
-      "src_main_syncconnection"
-    ],
-    "8": [
       "tests_license_test",
       "tests_license_test_memorystorage",
       "tests_license_test_memorystorage_clear",
@@ -135,92 +160,66 @@
       "tests_license_test_memorystorage_removeitem",
       "tests_license_test_memorystorage_setitem"
     ],
-    "9": [
-      "src_license",
-      "src_license_billingbase",
-      "src_license_cachedverdict",
-      "src_license_checkouturl",
-      "src_license_storelicense",
-      "src_license_studiocheckoutavailable",
-      "src_license_verifylicense"
-    ],
-    "10": [
-      "src_main_freshrecipe",
-      "src_main_now",
-      "src_main_readrecipe",
-      "src_main_renderbatch",
-      "src_main_uid"
-    ],
-    "11": [
-      "src_db_getrecipes",
-      "src_main_dataurlblob",
-      "src_main_fillrecipeform",
-      "src_main_importrecipe"
-    ],
-    "12": [
+    "8": [
       "src_sw_template",
       "src_sw_template_cachefirst",
       "src_sw_template_networkfirst",
       "src_sw_template_precacheshell"
     ],
-    "13": [
+    "9": [
       "vite_config",
       "vite_config_offlineshell",
       "vite_config_workertemplatepath"
     ],
-    "14": [
+    "10": [
       "scripts_verify_checkout",
       "scripts_verify_checkout_product"
     ],
-    "15": [
+    "11": [
       "tests_e2e_app_spec",
       "tests_e2e_app_spec_wavbuffer"
     ],
-    "16": [
+    "12": [
       "playwright_config"
     ],
-    "17": [
+    "13": [
       "src_vite_env_d"
     ],
-    "18": [
+    "14": [
       "tests_release_test"
     ],
-    "19": [
+    "15": [
       "vitest_config"
     ]
   },
   "cohesion": {
-    "0": 0.08333333333333333,
-    "1": 0.2426470588235294,
-    "2": 0.14285714285714285,
-    "3": 0.15384615384615385,
-    "4": 0.24358974358974358,
-    "5": 0.2909090909090909,
-    "6": 0.25,
-    "7": 0.2857142857142857,
-    "8": 0.25,
-    "9": 0.2857142857142857,
-    "10": 0.6,
-    "11": 0.5,
-    "12": 0.5,
-    "13": 0.6666666666666666,
+    "0": 0.14761904761904762,
+    "1": 0.07142857142857142,
+    "2": 0.08333333333333333,
+    "3": 0.2426470588235294,
+    "4": 0.2727272727272727,
+    "5": 0.3111111111111111,
+    "6": 0.28888888888888886,
+    "7": 0.25,
+    "8": 0.5,
+    "9": 0.6666666666666666,
+    "10": 1.0,
+    "11": 1.0,
+    "12": 1.0,
+    "13": 1.0,
     "14": 1.0,
-    "15": 1.0,
-    "16": 1.0,
-    "17": 1.0,
-    "18": 1.0,
-    "19": 1.0
+    "15": 1.0
   },
   "gods": [
     {
       "id": "src_main_bindevents",
       "label": "bindEvents()",
-      "degree": 25
+      "degree": 26
     },
     {
       "id": "src_main_init",
       "label": "init()",
-      "degree": 14
+      "degree": 16
     },
     {
       "id": "tsconfig_compileroptions",
@@ -238,14 +237,14 @@
       "degree": 11
     },
     {
-      "id": "src_main_importrecipe",
-      "label": "importRecipe()",
+      "id": "package_scripts",
+      "label": "scripts",
       "degree": 10
     },
     {
-      "id": "package_scripts",
-      "label": "scripts",
-      "degree": 9
+      "id": "src_main_importrecipe",
+      "label": "importRecipe()",
+      "degree": 10
     },
     {
       "id": "src_main_renderqueue",
@@ -253,8 +252,8 @@
       "degree": 8
     },
     {
-      "id": "tests_license_test_memorystorage",
-      "label": "MemoryStorage",
+      "id": "src_main_message",
+      "label": "message()",
       "degree": 7
     },
     {
