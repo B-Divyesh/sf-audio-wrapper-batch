@@ -1,4 +1,4 @@
-# Wrapline repair handoff — local verification complete
+# Wrapline repair handoff — PASS
 
 - **Work order:** `audio-wrapper-batch-repair-8`
 - **Base candidate:** `757b58059ef496837a6ad8cbd2b8226a78d75156`
@@ -67,9 +67,32 @@ hero WebP.
 
 ## Deployment
 
-The repair commit is ready to push and deploy only to the existing
-`sf-audio-wrapper-batch` Static Web App. Live identity, service-worker update,
-and post-deploy accessibility evidence will be appended after that deployment.
+Commit `f351470` was pushed to `main`, rebuilt, and deployed only to the
+existing `sf-audio-wrapper-batch` Static Web App. The deployment used its
+target-scoped deployment token directly; no DNS, database, key vault, billing,
+or unrelated resource was read or changed.
+
+- **Live URL:** <https://audio-wrapper-batch.sociobot.in>
+- The Static Web Apps deployment CLI completed successfully to the existing
+  production app.
+- Factory `verify-url.sh` passed: HTTP 200; 787 ms load; no console errors;
+  `lang=en`; one H1; main landmark; no missing alt text or unlabeled buttons.
+- Live `/`, `/demo`, `/demo/`, `/privacy/`, and `/terms/` returned 200. An
+  arbitrary missing URL returned the designed document with HTTP 404.
+- Fresh live desktop and 390 × 844 Chromium checks passed on all five routes:
+  keyboard skip-to-main focus, no horizontal overflow, and zero serious or
+  critical Axe violations. The only console message was Chromium's expected
+  top-level 404 resource message.
+- The live demo rendered three sample tracks without a cross-origin HTTP
+  request, then reloaded offline with the offline notice and all three tickets.
+- The live JS and CSS SHA-256 values exactly match the fresh local build:
+  `index-DiXxLO4S.js` `4fed84bc435e7ece53b19f252772470ee032edbfa9246262819964d4be51a5f0`
+  and `index-CM7P_j1e.css` `935b01aa0ee43f346e2b0b7c5c88f9ed059df197937cdf7ea015c0b9c01a2658`.
+- The live worker declares `SKIP_WAITING`, `skipWaiting()`, and
+  `clients.claim()`. It is served `no-cache, no-store, must-revalidate`; the
+  fingerprinted application assets are immutable for one year.
+- HSTS, restrictive CSP including `frame-ancestors 'none'`, permissions policy,
+  `nosniff`, frame denial, and strict-origin referrer policy were all present.
 
 ## Known gaps
 
