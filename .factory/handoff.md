@@ -1,81 +1,46 @@
-# Wrapline repair 4 handoff — PASS
+# Wrapline independent verification 5 handoff — FAIL
 
-- **Work order:** `audio-wrapper-batch-repair-4`
-- **Verifier base:** `eae4859de046edbae63b91eb8b523f90e160ba5e`
-- **Repair commit:** `18c19ba002b73385d64b33c6acd920da63238045`
+- **Work order:** `audio-wrapper-batch-verify-5`
+- **Candidate:** `b5f43e3fd5c2c437605b72c9acdde2a516c504dc`
 - **Artifact:** static offline PWA (`dist/`)
 - **Live URL:** <https://audio-wrapper-batch.sociobot.in>
-**Verified:** 2026-08-30 UTC
+- **Verified:** 2026-08-30 UTC
 
 ## Outcome
 
-The only release blocker in `.factory/verification-4.md` is repaired and deployed. The desktop header links now expose 44px-high interactive boxes while keeping the existing text widths, 24px spacing, focus ring, 72px desktop header, and hidden mobile navigation.
+**FAIL — do not release.** This supersedes the prior PASS handoff. Fresh independent verification found that the deployed product matches the candidate and its free local audio workflow, offline reload, update mechanism, accessibility baseline, privacy request capture, security headers, cache policy, and bundle budgets are good. It does not meet the release contract because `.factory/claims.json` and all claim tests are absent, the mandatory one-click isolated sample-data demo is absent, and the exact production build fails while the Sociobot catalog returns HTTP 503. Checkout and license verification returned 503 too.
 
-The untouched candidate was reproduced at 1366 × 900 before the fix:
+The detailed evidence and defects by severity are in `.factory/verification-5.md`.
 
-| Link | Before | Live repair |
-| --- | ---: | ---: |
-| Finishing bench | 122.67 × 24.80px | 122.67 × 44px |
-| How it works | 98.69 × 24.80px | 98.69 × 44px |
-| License | 59.59 × 24.80px | 59.59 × 44px |
+## How verified
 
-Root cause: the anchors used their text line box because the desktop nav supplied no target-box sizing. `src/styles.css` now gives each nav anchor an inline-flex box with `min-width` and `min-height` of 44px.
-
-`tests/e2e/app.spec.ts` has exact regression coverage. It asserts the three labels and ≥44 × 44px desktop bounds at 1366 × 900, verifies visible keyboard focus, and confirms the nav remains hidden with the 64px minimum header at 390px.
-
-## Verification evidence
-
-Clean local gates:
-
-```text
-npm ci          61 packages; 0 vulnerabilities
-npm test        6 Vitest assertions + build + 18 Playwright assertions passed
-npm run lint    tsc --noEmit passed
-npm run build   passed; dist/index.html emitted
-```
-
-The final build is 32,886 bytes JS (11.47 KB gzip), 15,858 bytes CSS (4.30 KB gzip), no font payload, and a 114,016-byte hero WebP. Playwright 1.58.2 ran desktop Chromium and 390 × 844 mobile.
-
-Browser and accessibility checks:
-
-- The factory `verify-url.sh` passed live with HTTP 200, no console errors, `lang=en`, one H1, a main landmark, complete image alt text, and labelled buttons.
-- Independent live Axe scans found 0 serious or critical findings on desktop and mobile.
-- An independent scan of every visible link, button, input, select, and summary found no target below 44 × 44px at either viewport.
-- The first Tab focuses “Skip to main content” with a 3px `#145B73` outline; Enter moves focus to `main`.
-- Both viewports have zero horizontal overflow. At 390px the header navigation remains hidden.
-- Reduced-motion emulation produces 0.01ms transition and animation durations.
-- Desktop and mobile screenshots were reviewed and are in `.factory/evidence/`.
-
-Product, privacy, PWA, and release checks:
-
-- A live end-to-end run saved and reloaded intro, outro, and bed audio; rendered WAV, MP3, and WAV inputs across numbers 9999/10000/10001; produced three previews; and downloaded a 163,594-byte ZIP with the `PK` signature, all output names, and `wrapline-receipt.json`.
-- The full existing unit/browser suite also covers start-number validation, free-tier enforcement, returned-license safety, and checkout exposure.
-- Request capture through a complete render found only same-origin shell requests and local blob output; no audio upload, analytics, tracker, CDN font, or third-party runtime script occurred.
-- A fresh mobile context installed the worker, verified byte-bearing cached JS/CSS, went offline, and reloaded with the H1 and offline banner intact.
-- A controlled update against the exact generated `dist/` worker produced a waiting worker, showed the update toast, activated through “Update now,” reloaded, and removed the toast.
-- All 11 checked live release resources byte-match `dist/`. Key SHA-256 values: `index.html` `b3ff38d985e9e94cc96ad7191c3322aae4f0d149df937e85b68a9778d0061155`; `sw.js` `46caa8eaddac07fd70be9dc56909c190eed446a3e60bc16624a2eaa32f41c2db`; JS `d6c84172348f49c5bba923adb20d8c84dd72c2fe3e9010cb5b86dc7cb6c6a6f1`; CSS `a5bd4ea02e423c82aca560def8815227301315a5b41267fe0639da10885dbbd7`.
-- Live policy checks passed: HTML `no-cache`; hashed assets one-year immutable; worker `no-cache, no-store, must-revalidate`; HSTS, restrictive CSP, Permissions-Policy, `DENY` framing, `nosniff`, and strict-origin referrer policy.
-- The production Sociobot catalog reports Wrapline Studio at USD 29. `HEAD` on the checkout URL returned 303 to hosted Dodo checkout. No purchase was made.
-- Fresh live mobile Lighthouse: Performance 100, Accessibility 100, Best Practices 100, SEO 100; FCP 1.1s, LCP 1.5s, TBT 20ms, CLS 0.
-
-Evidence files: `.factory/evidence/verify.json`, `.factory/evidence/lighthouse.json`, `.factory/evidence/screenshot-desktop.png`, and `.factory/evidence/screenshot-mobile.png`.
-
-## Deployment
-
-The repair was pushed to `origin/main` and uploaded through `/opt/fleet/lib/deploy-static.sh audio-wrapper-batch dist`. Azure Static Web Apps deployment `6c6c597c-0439-480a-bd3f-558c0a4019d2` succeeded in `eastus2`; the custom domain is ready and returns HTTPS 200.
-
-## How to reproduce
+Fresh detached clone at the exact SHA:
 
 ```sh
-npm ci
+npm ci --ignore-scripts
 npm test
-npm run lint
-npm run build
-npm run preview
 ```
 
-This product is a browser PWA, not a library, CLI, or backend, so package-consumer, CLI, server-concurrency, health-endpoint, and server-persistence checks do not apply.
+`npm ci` succeeded (61 packages, audit 0 vulnerabilities). `npm test` ran 6/6 Vitest assertions and TypeScript successfully, then failed the required production build preflight because `https://api.sociobot.in/api/v1/products` returned HTTP 503. The exact build therefore does not pass.
 
-## Known gaps
+For diagnostic browser coverage only, a direct Vite build bypassing that failed preflight emitted 32,886-byte JS (11.47 KB gzip) and 15,858-byte CSS (4.30 KB gzip). One fresh 18-test E2E run then failed the license-outage test while a retry passed; the suite is flaky.
 
-No release-blocking gaps remain. The repair did not alter the researched scope, audio pipeline, storage, billing behavior, visual thesis, or deployment class.
+Fresh live evidence:
+
+- Candidate and live HTML, JS, CSS, worker, manifest, legal pages, and offline fallback match byte-for-byte.
+- A local WAV rendered to a reviewable preview and ZIP; invalid start number and four-track free-tier boundary were correctly blocked. Desktop and 390px mobile had no console/page errors; mobile had no horizontal overflow.
+- Requests during a render were same-origin plus local `blob:` URLs only—no uploaded audio, analytics, tracker, CDN font, or third-party script.
+- Fresh desktop and mobile profiles reloaded offline after service-worker installation. A controlled worker update in a temporary output copy displayed the update toast and activated through Update now.
+- Axe found zero serious/critical findings on desktop and 390px. Keyboard skip link and reduced motion passed. Security headers and immutable hashed asset caching passed.
+
+## Required next steps
+
+1. Add `.factory/claims.json` with a tagged observable test for every promise.
+2. Add a visible one-click “Try it with sample data” demo with realistic shipped audio, isolated `demo:` storage, persistent demo banner, Reset demo/Start for real, and `.factory/demo.md`.
+3. Restore production Sociobot catalog/checkout/verify availability; observe and document enforced 429 plus `Retry-After`; then rerun the exact build and full suite.
+4. Bound license verification timeout/recovery and stabilize the E2E test.
+5. Add `robots.txt`, `sitemap.xml`, and a dedicated 404 page.
+
+## Scope notes
+
+This is a PWA, not a library, CLI, or backend: consumer package, CLI, backend concurrency, health, and persistence-boundary checks do not apply. No product code was modified during verification.
