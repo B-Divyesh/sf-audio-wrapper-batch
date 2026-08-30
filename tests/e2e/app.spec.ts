@@ -25,6 +25,33 @@ test('loads a clear, accessible empty bench', async ({ page }) => {
   expect(consoleErrors).toEqual([]);
 });
 
+test('desktop header navigation has 44px targets without changing the mobile header', async ({ page }, testInfo) => {
+  await page.goto('/');
+  const links = page.locator('header nav a');
+  await expect(links).toHaveText(['Finishing bench', 'How it works', 'License']);
+
+  if (testInfo.project.name === 'mobile') {
+    await expect(page.locator('header nav')).toBeHidden();
+    await expect(page.locator('.site-header')).toHaveCSS('min-height', '64px');
+    return;
+  }
+
+  await page.setViewportSize({ width: 1366, height: 900 });
+  const targets = await links.evaluateAll((elements) => elements.map((element) => {
+    const box = element.getBoundingClientRect();
+    return { label: element.textContent?.trim(), width: box.width, height: box.height };
+  }));
+  expect(targets).toHaveLength(3);
+  for (const target of targets) {
+    expect(target.width, `${target.label} width`).toBeGreaterThanOrEqual(44);
+    expect(target.height, `${target.label} height`).toBeGreaterThanOrEqual(44);
+  }
+
+  await links.first().focus();
+  await expect(links.first()).toBeFocused();
+  expect(await links.first().evaluate((element) => getComputedStyle(element).outlineStyle)).not.toBe('none');
+});
+
 test('renders a real local WAV into a reviewable batch', async ({ page }) => {
   await page.goto('/');
   await page.locator('#voice-files').setInputFiles({ name: 'episode-one.wav', mimeType: 'audio/wav', buffer: wavBuffer() });
