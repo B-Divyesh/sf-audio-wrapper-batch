@@ -265,44 +265,33 @@
   ],
   "surprises": [
     {
-      "source": "bindEvents()",
-      "target": "getRecipes()",
+      "source": "renderBatch()",
+      "target": "createZip()",
       "source_files": [
         "src/main.ts",
-        "src/db.ts"
+        "src/audio.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
       "why": "bridges separate communities"
     },
     {
-      "source": "init()",
-      "target": "getRecipes()",
+      "source": "renderQueue()",
+      "target": "outputName()",
       "source_files": [
         "src/main.ts",
-        "src/db.ts"
+        "src/audio.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
       "why": "bridges separate communities"
     },
     {
-      "source": "bindEvents()",
-      "target": "verifyLicense()",
+      "source": "renderBatch()",
+      "target": "renderWrappedFile()",
       "source_files": [
         "src/main.ts",
-        "src/license.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "init()",
-      "target": "verifyLicense()",
-      "source_files": [
-        "src/main.ts",
-        "src/license.ts"
+        "src/audio.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
@@ -310,6 +299,17 @@
     },
     {
       "source": "bindEvents()",
+      "target": "sanitizeFilename()",
+      "source_files": [
+        "src/main.ts",
+        "src/audio.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "renderBatch()",
       "target": "sanitizeFilename()",
       "source_files": [
         "src/main.ts",
