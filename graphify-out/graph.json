@@ -1318,10 +1318,30 @@
       "source_location": "L1"
     },
     {
+      "id": "tests_release_test",
+      "label": "release.test.ts",
+      "_origin": "ast",
+      "community": 14,
+      "file_type": "code",
+      "norm_label": "release.test.ts",
+      "source_file": "tests/release.test.ts",
+      "source_location": "L1"
+    },
+    {
+      "id": "tests_release_test_repositoryroot",
+      "label": "repositoryRoot",
+      "_origin": "ast",
+      "community": 14,
+      "file_type": "code",
+      "norm_label": "repositoryroot",
+      "source_file": "tests/release.test.ts",
+      "source_location": "L6"
+    },
+    {
       "id": "playwright_config",
       "label": "playwright.config.ts",
       "_origin": "ast",
-      "community": 14,
+      "community": 15,
       "file_type": "code",
       "norm_label": "playwright.config.ts",
       "source_file": "playwright.config.ts",
@@ -1331,20 +1351,10 @@
       "id": "src_vite_env_d",
       "label": "vite-env.d.ts",
       "_origin": "ast",
-      "community": 15,
+      "community": 16,
       "file_type": "code",
       "norm_label": "vite-env.d.ts",
       "source_file": "src/vite-env.d.ts",
-      "source_location": "L1"
-    },
-    {
-      "id": "tests_release_test",
-      "label": "release.test.ts",
-      "_origin": "ast",
-      "community": 16,
-      "file_type": "code",
-      "norm_label": "release.test.ts",
-      "source_file": "tests/release.test.ts",
       "source_location": "L1"
     },
     {
@@ -4933,6 +4943,17 @@
       "weight": 1.0
     },
     {
+      "source": "tests_release_test",
+      "target": "tests_release_test_repositoryroot",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/release.test.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
       "source": "tsconfig",
       "target": "tsconfig_include",
       "relation": "contains",
@@ -5244,5 +5265,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "757b58059ef496837a6ad8cbd2b8226a78d75156"
+  "built_at_commit": "df27a76efb9ad31c4c913ae62bd02b984ad016bf"
 }
