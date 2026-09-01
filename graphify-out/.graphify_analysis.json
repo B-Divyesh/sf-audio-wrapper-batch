@@ -1,6 +1,7 @@
 {
   "communities": {
     "0": [
+      "src_db_getreceipts",
       "src_db_getrecipes",
       "src_main",
       "src_main_addfiles",
@@ -64,6 +65,28 @@
       "tsconfig_include"
     ],
     "2": [
+      "src_db",
+      "src_db_all",
+      "src_db_deleterecipe",
+      "src_db_opendb",
+      "src_db_put",
+      "src_db_resetdemostorage",
+      "src_db_savereceipt",
+      "src_db_saverecipe",
+      "src_db_setstoragescope",
+      "src_demo",
+      "src_demo_asset",
+      "src_demo_createdemoseed",
+      "src_demo_demoseed",
+      "src_demo_makesamplewav",
+      "src_types",
+      "src_types_audioasset",
+      "src_types_receipt",
+      "src_types_receiptitem",
+      "src_types_recipe",
+      "src_types_renderedfile"
+    ],
+    "3": [
       "audio_encode_mp3",
       "package",
       "package_dependencies",
@@ -84,7 +107,7 @@
       "package_type",
       "package_version"
     ],
-    "3": [
+    "4": [
       "src_license",
       "src_license_billingbase",
       "src_license_cachedverdict",
@@ -105,7 +128,7 @@
       "tests_license_test_memorystorage_removeitem",
       "tests_license_test_memorystorage_setitem"
     ],
-    "4": [
+    "5": [
       "src_audio",
       "src_audio_clamp",
       "src_audio_concat",
@@ -125,7 +148,7 @@
       "src_audio_sha256",
       "tests_audio_test"
     ],
-    "5": [
+    "6": [
       "axe_core_playwright",
       "package_devdependencies",
       "package_devdependencies_axe_core_playwright",
@@ -140,7 +163,7 @@
       "vite",
       "vitest"
     ],
-    "6": [
+    "7": [
       "scripts_static_server",
       "scripts_static_server_argument",
       "scripts_static_server_config",
@@ -153,30 +176,16 @@
       "scripts_static_server_server",
       "scripts_static_server_types"
     ],
-    "7": [
-      "src_demo",
-      "src_demo_asset",
-      "src_demo_createdemoseed",
-      "src_demo_demoseed",
-      "src_demo_makesamplewav",
-      "src_types",
-      "src_types_audioasset",
-      "src_types_receipt",
-      "src_types_receiptitem",
-      "src_types_recipe",
-      "src_types_renderedfile"
-    ],
     "8": [
-      "src_db",
-      "src_db_all",
-      "src_db_deleterecipe",
-      "src_db_getreceipts",
-      "src_db_opendb",
-      "src_db_put",
-      "src_db_resetdemostorage",
-      "src_db_savereceipt",
-      "src_db_saverecipe",
-      "src_db_setstoragescope"
+      "scripts_run_e2e",
+      "scripts_run_e2e_cli",
+      "scripts_run_e2e_forwarded",
+      "scripts_run_e2e_live",
+      "scripts_run_e2e_runshard",
+      "scripts_run_e2e_serverscript",
+      "scripts_run_e2e_stoppreview",
+      "scripts_run_e2e_targeted",
+      "scripts_run_e2e_waitforpreview"
     ],
     "9": [
       "scripts_create_test_mp3",
@@ -192,70 +201,64 @@
       "public_route_shell_skiplink"
     ],
     "11": [
-      "scripts_run_e2e",
-      "scripts_run_e2e_cli",
-      "scripts_run_e2e_forwarded",
-      "scripts_run_e2e_targeted"
-    ],
-    "12": [
       "src_sw_template",
       "src_sw_template_cachefirst",
       "src_sw_template_networkfirst",
       "src_sw_template_precacheshell"
     ],
-    "13": [
+    "12": [
       "tests_e2e_app_spec",
       "tests_e2e_app_spec_mp3fixture",
-      "tests_e2e_app_spec_wavbuffer"
+      "tests_e2e_app_spec_wavbuffer",
+      "tests_e2e_app_spec_withownedcontext"
     ],
-    "14": [
+    "13": [
       "vite_config",
       "vite_config_offlineshell",
       "vite_config_workertemplatepath"
     ],
-    "15": [
+    "14": [
       "scripts_verify_checkout",
       "scripts_verify_checkout_location"
     ],
-    "16": [
+    "15": [
       "tests_release_test",
       "tests_release_test_repositoryroot"
     ],
-    "17": [
+    "16": [
       "playwright_config"
     ],
-    "18": [
+    "17": [
       "playwright_live_config"
     ],
-    "19": [
+    "18": [
       "src_vite_env_d"
     ],
-    "20": [
+    "19": [
       "vitest_config"
     ]
   },
   "cohesion": {
-    "0": 0.15294117647058825,
+    "0": 0.14761904761904762,
     "1": 0.08333333333333333,
-    "2": 0.10526315789473684,
-    "3": 0.13450292397660818,
-    "4": 0.22875816993464052,
-    "5": 0.15384615384615385,
-    "6": 0.2545454545454545,
-    "7": 0.2727272727272727,
-    "8": 0.3111111111111111,
+    "2": 0.1631578947368421,
+    "3": 0.10526315789473684,
+    "4": 0.13450292397660818,
+    "5": 0.22875816993464052,
+    "6": 0.15384615384615385,
+    "7": 0.2545454545454545,
+    "8": 0.2222222222222222,
     "9": 0.4,
     "10": 0.5,
     "11": 0.5,
     "12": 0.5,
     "13": 0.6666666666666666,
-    "14": 0.6666666666666666,
+    "14": 1.0,
     "15": 1.0,
     "16": 1.0,
     "17": 1.0,
     "18": 1.0,
-    "19": 1.0,
-    "20": 1.0
+    "19": 1.0
   },
   "gods": [
     {
