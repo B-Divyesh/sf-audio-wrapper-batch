@@ -2,12 +2,17 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests/e2e',
+  fullyParallel: true,
   // The first-install test exercises a service-worker lifecycle.  Running the
   // two device projects one at a time avoids competing install/cache work on
   // the shared preview origin and makes the release gate deterministic.
   workers: 1,
   timeout: 30_000,
-  use: { baseURL: 'http://127.0.0.1:4173', trace: 'retain-on-failure' },
+  use: {
+    baseURL: 'http://127.0.0.1:4173',
+    trace: 'retain-on-failure',
+    launchOptions: { args: ['--disable-gpu'] },
+  },
   // Exercise the emitted artifact through the same explicit-route/404 policy
   // that Static Web Apps receives in dist/staticwebapp.config.json. Vite's
   // development fallback would incorrectly turn unknown release URLs into 200.
