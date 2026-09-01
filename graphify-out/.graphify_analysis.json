@@ -304,8 +304,8 @@
       "degree": 7
     },
     {
-      "id": "src_main_addfiles",
-      "label": "addFiles()",
+      "id": "src_main_message",
+      "label": "message()",
       "degree": 7
     }
   ],
@@ -322,11 +322,11 @@
       "why": "peripheral node `DemoSeed` unexpectedly reaches hub `Recipe`"
     },
     {
-      "source": "bindEvents()",
-      "target": "sanitizeFilename()",
+      "source": "init()",
+      "target": "captureReturnedLicense()",
       "source_files": [
         "src/main.ts",
-        "src/audio.ts"
+        "src/license.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
@@ -334,10 +334,10 @@
     },
     {
       "source": "bindEvents()",
-      "target": "deleteRecipe()",
+      "target": "storeLicense()",
       "source_files": [
         "src/main.ts",
-        "src/db.ts"
+        "src/license.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
@@ -345,21 +345,21 @@
     },
     {
       "source": "bindEvents()",
-      "target": "resetDemoStorage()",
+      "target": "verifyLicense()",
       "source_files": [
         "src/main.ts",
-        "src/db.ts"
+        "src/license.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
       "why": "bridges separate communities"
     },
     {
-      "source": "bindEvents()",
-      "target": "saveRecipe()",
+      "source": "init()",
+      "target": "verifyLicense()",
       "source_files": [
         "src/main.ts",
-        "src/db.ts"
+        "src/license.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
