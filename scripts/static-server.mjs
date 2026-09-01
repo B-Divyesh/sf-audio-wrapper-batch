@@ -45,6 +45,7 @@ function routeRewrite(pathname) {
 async function sendFile(response, file, statusCode) {
   const body = await readFile(file);
   response.writeHead(statusCode, {
+    ...config.globalHeaders,
     'Content-Length': body.byteLength,
     'Content-Type': types[extname(file)] ?? 'application/octet-stream',
   });
