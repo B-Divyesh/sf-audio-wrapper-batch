@@ -110,7 +110,11 @@ test('@claim:route-shell Every public route has metadata, legal links, and a rea
   }
   // Chromium reports the intentionally missing top-level document as a
   // console resource error even though its designed 404 shell loads fully.
-  expect(consoleErrors.filter((message) => message !== 'Failed to load resource: the server responded with a status of 404 (Not Found)')).toEqual([]);
+  expect(
+    consoleErrors.filter(
+      (message) => !/^Failed to load resource: the server responded with a status of 404 \((?:Not Found)?\)$/.test(message),
+    ),
+  ).toEqual([]);
   expect(consoleErrors.length).toBeLessThanOrEqual(1);
   expect(pageErrors).toEqual([]);
 });
