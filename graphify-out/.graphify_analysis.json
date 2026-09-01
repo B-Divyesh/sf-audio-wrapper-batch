@@ -254,13 +254,13 @@
       "degree": 11
     },
     {
-      "id": "package_scripts",
-      "label": "scripts",
+      "id": "src_main_importrecipe",
+      "label": "importRecipe()",
       "degree": 10
     },
     {
-      "id": "src_main_importrecipe",
-      "label": "importRecipe()",
+      "id": "package_scripts",
+      "label": "scripts",
       "degree": 10
     },
     {
@@ -269,8 +269,8 @@
       "degree": 8
     },
     {
-      "id": "src_main_message",
-      "label": "message()",
+      "id": "tests_license_test_memorystorage",
+      "label": "MemoryStorage",
       "degree": 7
     },
     {
@@ -280,6 +280,28 @@
     }
   ],
   "surprises": [
+    {
+      "source": "updateLicenseUi()",
+      "target": "LicenseState",
+      "source_files": [
+        "src/main.ts",
+        "src/license.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "bindEvents()",
+      "target": "sanitizeFilename()",
+      "source_files": [
+        "src/main.ts",
+        "src/audio.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
     {
       "source": "bindEvents()",
       "target": "deleteRecipe()",
@@ -292,17 +314,6 @@
       "why": "bridges separate communities"
     },
     {
-      "source": "renderBatch()",
-      "target": "saveReceipt()",
-      "source_files": [
-        "src/main.ts",
-        "src/db.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
       "source": "bindEvents()",
       "target": "saveRecipe()",
       "source_files": [
@@ -314,22 +325,11 @@
       "why": "bridges separate communities"
     },
     {
-      "source": "importRecipe()",
-      "target": "saveRecipe()",
+      "source": "bindEvents()",
+      "target": "storeLicense()",
       "source_files": [
         "src/main.ts",
-        "src/db.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "init()",
-      "target": "createDemoSeed()",
-      "source_files": [
-        "src/main.ts",
-        "src/demo.ts"
+        "src/license.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
