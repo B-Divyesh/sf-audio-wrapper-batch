@@ -117,7 +117,8 @@ test('@claim:route-shell Every public route has metadata, legal links, and a rea
       .toEqual(['/#bench', '/#method', '/#unlock']);
     await expect(page.locator('footer'), route.path).toContainText('Add intros, outros, and music to many voice tracks.');
     await expect(page.locator('footer'), route.path).toContainText('Built by Param Factory');
-    await expect(page.locator('footer [data-build-id]'), route.path).toHaveText('Build 1.0.0-r10');
+    await expect(page.locator('footer [data-build-id]'), route.path).toHaveText('Build 1.0.0-r11');
+    await expect(page.locator('footer'), route.path).not.toContainText('Bench artwork generated for Wrapline with Azure AI Foundry.');
     await expect(page.locator('footer a[href="/privacy/"]'), route.path).toHaveCount(1);
     await expect(page.locator('footer a[href="/terms/"]'), route.path).toHaveCount(1);
 
@@ -140,6 +141,12 @@ test('@claim:route-shell Every public route has metadata, legal links, and a rea
   ).toEqual([]);
   expect(consoleErrors.length).toBeLessThanOrEqual(1);
   expect(pageErrors).toEqual([]);
+});
+
+test('footer provenance is kept in repository records, not made as a visitor claim', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('footer')).not.toContainText(/generated for Wrapline|Azure AI Foundry/i);
+  await expect(page.locator('#mp3-bitrate option[value="192"]')).toHaveText('192 kbps');
 });
 
 test('route navigation focuses and announces the page heading', async ({ page }) => {

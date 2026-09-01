@@ -85,7 +85,7 @@ app.innerHTML = `
             </div>
             <div class="two-fields output-fields">
               <div class="field"><label for="output-format">Output format</label><select id="output-format" aria-describedby="output-help"><option value="wav">WAV · 48 kHz, 16-bit</option><option value="mp3">MP3 · 48 kHz</option></select><small id="output-help">Choose WAV for editing or MP3 for publishing.</small></div>
-              <div class="field"><label for="mp3-bitrate">MP3 bitrate</label><select id="mp3-bitrate" disabled><option value="128">128 kbps · smaller</option><option value="192">192 kbps · higher quality</option></select></div>
+              <div class="field"><label for="mp3-bitrate">MP3 bitrate</label><select id="mp3-bitrate" disabled><option value="128">128 kbps</option><option value="192">192 kbps</option></select></div>
             </div>
             <details class="disclosure"><summary>How loudness and mixing work</summary><p>Wrapline estimates voice loudness from RMS and caps gain changes at ±12 dB. Intro and outro files keep their original level. The music bed drops by 7 dB under voice. Sample peaks stay below −0.18 dBFS. This browser normalization is not broadcast-certified EBU R128 or true-peak limiting. WAV output is 48 kHz, 16-bit PCM. MP3 output is 48 kHz at the selected constant bitrate.</p></details>
             <div class="field full"><label for="naming-template">Filename recipe</label><input id="naming-template" value="{recipe}-{number}-{source}" required aria-describedby="naming-help" /><small id="naming-help">Tokens: {recipe}, {number}, {source}</small></div>
@@ -140,7 +140,7 @@ app.innerHTML = `
       </div>
     </section>
   </main>
-  <footer><div><a class="brand" href="/" aria-label="Wrapline home">Wrapline</a><p>Add intros, outros, and music to many voice tracks.</p></div><div><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://sociobot.in">Built by Param Factory (external site)</a></div><p class="generated-note">Bench artwork generated for Wrapline with Azure AI Foundry. <span data-build-id>Build 1.0.0-r10</span></p></footer>
+  <footer><div><a class="brand" href="/" aria-label="Wrapline home">Wrapline</a><p>Add intros, outros, and music to many voice tracks.</p></div><div><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://sociobot.in">Built by Param Factory (external site)</a></div><p><span data-build-id>Build 1.0.0-r11</span></p></footer>
   <div class="update-toast" id="update-toast" role="status" hidden><span>A fresh version is ready.</span><button class="button quiet" id="update-button" type="button">Install update</button></div>
 `;
 

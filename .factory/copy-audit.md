@@ -1,6 +1,6 @@
 # Wrapline copy audit
 
-Audited 2026-09-01 after polish round 1. Scope: every visitor-visible sentence, heading, control label, option, status, and error in `src/main.ts`; every README sentence and heading; and all privacy, terms, offline, and 404 prose. Hyphenated terms count as one word. Every sentence is at most 22 words. No banned marketing word remains. Claim IDs refer to `.factory/claims.json`.
+Audited 2026-09-01 after polish round 2. Scope: every visitor-visible sentence, heading, control label, option, status, and error in `src/main.ts`; every README sentence and heading; and all privacy, terms, offline, and 404 prose. Hyphenated terms count as one word. Every sentence is at most 22 words. No banned marketing word remains. Claim IDs refer to `.factory/claims.json`.
 
 ## Landing and app sentences
 
@@ -37,7 +37,6 @@ Audited 2026-09-01 after polish round 1. Scope: every visitor-visible sentence, 
 | The free tier saves one recipe and renders three tracks per batch. | 12 | `free-tier` |
 | A $29 one-time purchase unlocks unlimited tracks and saved recipes on your devices. | 12 | `studio-license`, `studio-unlimited` |
 | Add intros, outros, and music to many voice tracks. | 9 | core workflow |
-| Bench artwork generated for Wrapline with Azure AI Foundry. | 9 | provenance recorded in `.factory/design.md` |
 | A fresh version is ready. | 5 | clear update state |
 | Sample batch ready: three short voice tracks with an intro, outro, and music bed. | 14 | `demo-sample-data` |
 
@@ -116,7 +115,7 @@ All are sentence-case action labels or short nouns. Counts include visible words
 | License actions | Buy studio license · $29 (4); Verify license (2) | result and price named |
 | File actions | Clear intro (2); Clear outro (2); Clear music bed (3); Remove `{filename}` (2) | accessible names are specific |
 | Field labels | Saved recipe (2); Recipe name (2); Intro optional (2); Outro optional (2); Music bed optional (3); Bed level (2); Voice target (2); Output format (2); MP3 bitrate (2); Filename recipe (2); Start number (2); Already bought? Paste license (4) | every input has a bound label |
-| Options | New recipe (2); −16 LUFS · podcast (3); −19 LUFS · mono voice (4); −14 LUFS · course/video (3); WAV · 48 kHz, 16-bit (4); MP3 · 48 kHz (3); 128 kbps · smaller (3); 192 kbps · higher quality (4) | values and effects are explicit |
+| Options | New recipe (2); −16 LUFS · podcast (3); −19 LUFS · mono voice (4); −14 LUFS · course/video (3); WAV · 48 kHz, 16-bit (4); MP3 · 48 kHz (3); 128 kbps (2); 192 kbps (2) | factual bitrate labels; `mp3-output` checks the selected constant bitrate |
 | Status fragments | On device (2); Offline ready (2); Unsaved (1); Waiting (1); Rendered · `{seconds}` s (2); Rendering… (1); Preparing… (1); Batch complete (2); Studio license active (3) | one term, “render,” is used for processing |
 
 ## README sentences
