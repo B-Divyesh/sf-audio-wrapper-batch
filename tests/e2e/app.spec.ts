@@ -31,6 +31,29 @@ test('loads a clear, accessible empty bench', async ({ page }) => {
   expect(consoleErrors).toEqual([]);
 });
 
+test('keeps the demo usable without a service-worker registration', async ({ browser }) => {
+  // This owns its context because the browser policy intentionally suppresses
+  // registration. It reproduces browsers where register() resolves without a
+  // ServiceWorkerRegistration, which must not reach registration.waiting.
+  const context = await browser.newContext({ serviceWorkers: 'block' });
+  try {
+    const page = await context.newPage();
+    const pageErrors: string[] = [];
+    const consoleErrors: string[] = [];
+    page.on('pageerror', (error) => pageErrors.push(error.message));
+    page.on('console', (message) => { if (message.type() === 'error') consoleErrors.push(message.text()); });
+
+    await page.goto('/demo', { waitUntil: 'networkidle' });
+    await expect(page.locator('[data-remove-job]')).toHaveCount(3);
+    await expect(page.getByRole('button', { name: 'Render batch' })).toBeEnabled();
+    expect(await page.evaluate(() => navigator.serviceWorker.getRegistration())).toBeUndefined();
+    expect(pageErrors).toEqual([]);
+    expect(consoleErrors).toEqual([]);
+  } finally {
+    await context.close();
+  }
+});
+
 test('release artifact returns the designed 404 document for an unknown URL', async ({ page }) => {
   const response = await page.goto('/missing-qa-404-repair-6');
   expect(response?.status()).toBe(404);

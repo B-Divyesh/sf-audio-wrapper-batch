@@ -545,7 +545,16 @@ function bindEvents(): void {
 
 async function registerServiceWorker(): Promise<void> {
   if (!('serviceWorker' in navigator)) return;
-  const registration = await navigator.serviceWorker.register('/sw.js');
+  // A browser policy can expose navigator.serviceWorker while declining the
+  // registration request. In that case there is no update feature to wire up,
+  // but the local audio bench must remain usable.
+  let registration: ServiceWorkerRegistration | undefined;
+  try {
+    registration = await navigator.serviceWorker.register('/sw.js');
+  } catch {
+    return;
+  }
+  if (!registration) return;
   let updateRequested = false;
   const showUpdate = () => { $<HTMLElement>('#update-toast').hidden = false; };
   if (registration.waiting) showUpdate();
