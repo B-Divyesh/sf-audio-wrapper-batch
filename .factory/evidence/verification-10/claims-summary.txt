@@ -1,0 +1,26 @@
+Wrapline independent verification 10
+Candidate: b5a6a64099468acd117c63eb08c3aa8d466451c6
+Date: 2026-09-01 UTC
+
+Each command from .factory/claims.json ran independently from the detached clean worktree.
+Each targeted command ran once in desktop Chromium and once at 390 x 844.
+
+demo-sample-data PASS (2 browser executions)
+demo-isolation PASS (2 browser executions)
+local-audio PASS (2 browser executions)
+offline-demo PASS (2 browser executions)
+wav-mp3-input PASS (2 browser executions)
+wav-receipt PASS (2 browser executions)
+mp3-output PASS (2 browser executions)
+audio-behavior PASS (2 browser executions)
+source-receipt PASS (2 browser executions)
+local-recipes PASS (2 browser executions)
+free-tier PASS (2 browser executions)
+studio-license PASS (2 browser executions)
+studio-unlimited PASS (2 browser executions)
+license-daily-check PASS (2 browser executions)
+license-boundary PASS (2 browser executions)
+recipe-controls PASS (2 browser executions)
+route-shell PASS (2 browser executions)
+
+Result: 17 of 17 declared claims passed; 34 of 34 browser executions passed.
