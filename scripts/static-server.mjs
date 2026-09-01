@@ -89,4 +89,7 @@ const server = createServer(async (request, response) => {
   response.writeHead(404).end();
 });
 
-server.listen(port, '127.0.0.1');
+server.listen(port, '127.0.0.1', () => {
+  const address = server.address();
+  process.send?.({ type: 'ready', port: typeof address === 'object' && address ? address.port : port });
+});

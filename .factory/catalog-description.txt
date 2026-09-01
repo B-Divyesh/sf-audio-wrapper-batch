@@ -1,1 +1,1 @@
-Add intros, outros, and music beds to voice tracks, then export batch WAV or MP3 files on your device.
+Add intros, outros, and music to voice tracks, then export a WAV or MP3 batch without uploading audio.

@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
+import type { Browser, BrowserContext, BrowserContextOptions } from '@playwright/test';
 
 function wavBuffer(duration = 0.08, amplitude = 6000 / 32767, frequency = 1_000, sampleRate = 8_000): Buffer {
   const samples = Math.floor(sampleRate * duration);
@@ -18,6 +19,20 @@ function wavBuffer(duration = 0.08, amplitude = 6000 / 32767, frequency = 1_000,
 
 const mp3Fixture = readFileSync(new URL('../fixtures/synthetic-tone-440hz.mp3', import.meta.url));
 
+async function withOwnedContext<T>(
+  browser: Browser,
+  options: BrowserContextOptions,
+  run: (context: BrowserContext) => Promise<T>,
+): Promise<T> {
+  const ownedContext = await browser.newContext(options);
+  try {
+    return await run(ownedContext);
+  } finally {
+    // Never close the worker browser or a fixture-owned context here.
+    await ownedContext.close().catch(() => undefined);
+  }
+}
+
 test('loads a clear, accessible empty bench', async ({ page }) => {
   const consoleErrors: string[] = [];
   page.on('console', (message) => { if (message.type() === 'error') consoleErrors.push(message.text()); });
@@ -31,27 +46,24 @@ test('loads a clear, accessible empty bench', async ({ page }) => {
   expect(consoleErrors).toEqual([]);
 });
 
-test('keeps the demo usable without a service-worker registration', async ({ browser }) => {
-  // This owns its context because the browser policy intentionally suppresses
-  // registration. It reproduces browsers where register() resolves without a
-  // ServiceWorkerRegistration, which must not reach registration.waiting.
-  const context = await browser.newContext({ serviceWorkers: 'block' });
-  try {
-    const page = await context.newPage();
-    const pageErrors: string[] = [];
-    const consoleErrors: string[] = [];
-    page.on('pageerror', (error) => pageErrors.push(error.message));
-    page.on('console', (message) => { if (message.type() === 'error') consoleErrors.push(message.text()); });
+test('keeps the demo usable without a service-worker registration', async ({ page }) => {
+  // Simulate a browser that exposes the API but cannot return a registration.
+  // Playwright's serviceWorkers:block context can crash its pinned Chromium
+  // build after teardown, so this stays inside the ordinary per-test context.
+  await page.addInitScript(() => {
+    navigator.serviceWorker.register = async () => undefined as unknown as ServiceWorkerRegistration;
+  });
+  const pageErrors: string[] = [];
+  const consoleErrors: string[] = [];
+  page.on('pageerror', (error) => pageErrors.push(error.message));
+  page.on('console', (message) => { if (message.type() === 'error') consoleErrors.push(message.text()); });
 
-    await page.goto('/demo', { waitUntil: 'networkidle' });
-    await expect(page.locator('[data-remove-job]')).toHaveCount(3);
-    await expect(page.getByRole('button', { name: 'Render batch' })).toBeEnabled();
-    expect(await page.evaluate(() => navigator.serviceWorker.getRegistration())).toBeUndefined();
-    expect(pageErrors).toEqual([]);
-    expect(consoleErrors).toEqual([]);
-  } finally {
-    await context.close();
-  }
+  await page.goto('/demo', { waitUntil: 'networkidle' });
+  await expect(page.locator('[data-remove-job]')).toHaveCount(3);
+  await expect(page.getByRole('button', { name: 'Render batch' })).toBeEnabled();
+  expect(await page.evaluate(() => navigator.serviceWorker.getRegistration())).toBeUndefined();
+  expect(pageErrors).toEqual([]);
+  expect(consoleErrors).toEqual([]);
 });
 
 test('release artifact returns the designed 404 document for an unknown URL', async ({ page }) => {
@@ -117,10 +129,15 @@ test('@claim:route-shell Every public route has metadata, legal links, and a rea
       .toEqual(['/#bench', '/#method', '/#unlock']);
     await expect(page.locator('footer'), route.path).toContainText('Add intros, outros, and music to many voice tracks.');
     await expect(page.locator('footer'), route.path).toContainText('Built by Param Factory');
-    await expect(page.locator('footer [data-build-id]'), route.path).toHaveText('Build 1.0.0-r11');
+    await expect(page.locator('footer [data-build-id]'), route.path).toHaveText('Build 1.0.0-r12');
     await expect(page.locator('footer'), route.path).not.toContainText('Bench artwork generated for Wrapline with Azure AI Foundry.');
     await expect(page.locator('footer a[href="/privacy/"]'), route.path).toHaveCount(1);
     await expect(page.locator('footer a[href="/terms/"]'), route.path).toHaveCount(1);
+    if (route.path === '/terms/') {
+      await expect(page.locator('meta[name="description"]')).not.toHaveAttribute('content', /refund/i);
+      await expect(page.locator('meta[property="og:description"]')).not.toHaveAttribute('content', /refund/i);
+      await expect(page.locator('meta[name="twitter:description"]')).not.toHaveAttribute('content', /refund/i);
+    }
 
     await page.keyboard.press('Tab');
     await expect(page.getByRole('link', { name: 'Skip to main content' }), route.path).toBeFocused();
@@ -261,12 +278,11 @@ test('@claim:local-recipes Saved recipes, intro audio, and receipts persist on t
   await expect(page.locator('#receipt-list .receipt')).toHaveCount(1);
 });
 
-test('@claim:offline-demo The demo works offline after its first visit', async ({ browser }) => {
+test('@claim:offline-demo The demo works offline after its first visit', async ({ browser, baseURL }) => {
   // This claim owns a context. It must not reuse or close Playwright's shared
   // page/context because service-worker state is part of the assertion.
-  const context = await browser.newContext();
-  const page = await context.newPage();
-  try {
+  await withOwnedContext(browser, { baseURL }, async (context) => {
+    const page = await context.newPage();
     await page.goto('/demo');
     await page.evaluate(() => navigator.serviceWorker.ready);
     await expect.poll(() => page.evaluate(() => navigator.serviceWorker.controller?.state)).toBe('activated');
@@ -295,9 +311,7 @@ test('@claim:offline-demo The demo works offline after its first visit', async (
     await page.getByRole('button', { name: 'Render batch' }).click();
     await expect(page.getByRole('link', { name: 'Download batch ZIP' })).toBeVisible({ timeout: 20_000 });
     await expect(page.locator('audio')).toHaveCount(3);
-  } finally {
-    await context.close();
-  }
+  });
 });
 
 test('@claim:demo-sample-data One click opens a useful three-track sample batch', async ({ page }) => {

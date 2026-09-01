@@ -2,21 +2,20 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests/e2e',
-  fullyParallel: true,
-  // The first-install test exercises a service-worker lifecycle.  Running the
-  // two device projects one at a time avoids competing install/cache work on
-  // the shared preview origin and makes the release gate deterministic.
+  fullyParallel: false,
+  // Every test gets Playwright's owned context. Tests that need a different
+  // service-worker policy create and close only their additional context.
   workers: 1,
+  retries: 1,
   timeout: 30_000,
   use: {
-    baseURL: 'http://127.0.0.1:4173',
+    baseURL: process.env.WRAPLINE_TEST_BASE_URL ?? 'http://127.0.0.1:4173',
     trace: 'retain-on-failure',
-    launchOptions: { args: ['--disable-gpu'] },
+    launchOptions: { args: ['--disable-dev-shm-usage', '--disable-gpu', '--no-sandbox'] },
   },
-  // Exercise the emitted artifact through the same explicit-route/404 policy
-  // that Static Web Apps receives in dist/staticwebapp.config.json. Vite's
-  // development fallback would incorrectly turn unknown release URLs into 200.
-  webServer: { command: 'node scripts/static-server.mjs --port 4173', url: 'http://127.0.0.1:4173', reuseExistingServer: true },
+  // scripts/run-e2e.mjs owns the single preview lifecycle for every shard.
+  // Keeping it outside Playwright prevents one shard from stopping a server
+  // another shard still needs.
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'mobile', use: { ...devices['Pixel 5'], viewport: { width: 390, height: 844 } } },

@@ -1,6 +1,6 @@
 # Wrapline copy audit
 
-Audited 2026-09-01 after polish round 2. Scope: every visitor-visible sentence, heading, control label, option, status, and error in `src/main.ts`; every README sentence and heading; and all privacy, terms, offline, and 404 prose. Hyphenated terms count as one word. Every sentence is at most 22 words. No banned marketing word remains. Claim IDs refer to `.factory/claims.json`.
+Audited 2026-09-01 after polish round 2 retry 1. Scope: every visitor-visible sentence, heading, control label, option, status, error, and route metadata description; every README sentence and heading; and all privacy, terms, offline, and 404 prose. Hyphenated terms count as one word. Every sentence is at most 22 words. No banned marketing word remains. Claim IDs refer to `.factory/claims.json`.
 
 ## Landing and app sentences
 
@@ -164,7 +164,7 @@ README headings—Wrapline (1), Try it safely (3), What it does (3), Run locally
 
 | Copy | Words | Result |
 | --- | ---: | --- |
-| Add intros, outros, and music beds to voice tracks, then export batch WAV or MP3 files on your device. | 17 | Verb-first, 102 characters, plain wording; `wav-mp3-input`, `mp3-output`, and `local-audio` cover its product claims. |
+| Add intros, outros, and music to voice tracks, then export a WAV or MP3 batch without uploading audio. | 18 | Verb-first, 102 characters, plain wording; `wav-mp3-input`, `mp3-output`, and `local-audio` cover its product claims. |
 
 ## Legal, offline, and not-found routes
 
@@ -183,6 +183,7 @@ README headings—Wrapline (1), Try it safely (3), What it does (3), Run locally
 | Terms conduct | Do not attempt to bypass license verification, misuse the billing service, or use the software unlawfully. (14) | instruction |
 | Offline | Return to Wrapline to use saved recipes and render audio on this device. (12) · First-time visitors must reconnect once to install the app. (9) | `offline-demo`, recovery |
 | Not found | This Wrapline page was not found. (6) · The address may be incomplete, or the page may have moved. (10) | clear error and recovery |
+| Terms metadata | Read Wrapline’s terms for audio processing, output checks, free limits, Studio licensing, and availability. (13) | factual route summary; the stale unproved “refunds” topic was removed |
 
 Legal headings and actions—Privacy for Wrapline, What stays local, Demo mode, License verification, Analytics and network use, Your choices, Contact, Terms for using Wrapline, Using Wrapline, Audio behavior, Studio purchase, Availability, Fair use, Privacy, Open your saved audio setup, Page not found, Return to Wrapline—are literal and under nine words.
 

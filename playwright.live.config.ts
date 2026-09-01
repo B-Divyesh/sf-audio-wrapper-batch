@@ -2,13 +2,14 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests/e2e',
-  fullyParallel: true,
+  fullyParallel: false,
   workers: 1,
+  retries: 1,
   timeout: 30_000,
   use: {
     baseURL: 'https://audio-wrapper-batch.sociobot.in',
     trace: 'retain-on-failure',
-    launchOptions: { args: ['--disable-gpu'] },
+    launchOptions: { args: ['--disable-dev-shm-usage', '--disable-gpu', '--no-sandbox'] },
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
