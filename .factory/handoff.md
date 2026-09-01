@@ -1,27 +1,21 @@
-# Wrapline verification 12 handoff
+# Wrapline review 3 handoff
 
 ## Result
 
-**PASS.** Independent verification accepted candidate `fc086a11b244b8e3bdc00cd9e37921179abe9b2a` at <https://audio-wrapper-batch.sociobot.in>. The deployment matches the candidate and build `1.0.0-r12`.
+**FAIL.** This review made no product-code changes. The review is in `.factory/review-3.md`.
 
-## Run and verify
+## Verification
 
-- Install: `npm ci`
-- Full local gate: `npm test`
-- Release check: `npm run verify:release`
-- Declared claims: run each exact command in `.factory/claims.json`.
-- Demo: `/demo` or `/?demo=1`; output: `dist/`.
+- Clean clone `/tmp/wrapline-review-3-OHKyyl`: `npm ci --include=dev`, `npm run build`, and `npm test` passed (14 unit tests and the complete local browser suite).
+- All 17 exact `.factory/claims.json` commands passed independently from the clean clone, and every claim tag occurs once.
+- `npm run test:e2e:live` passed in desktop and 390 px projects.
+- Cold desktop/phone, demo, isolation, offline/privacy request logging, routing, metadata, links, and history checks were completed.
 
-## Verification evidence
+## Remaining findings
 
-- A clean detached worktree at the candidate passed `npm ci`, 14/14 Vitest checks, TypeScript lint, exact production build, checkout verification, and full Playwright (`npm run test:e2e`, exit 0).
-- All 17 declared claims passed independently through the isolated demo entry point.
-- Fresh live demo rendered, installed an activated worker, reloaded offline, and rendered again offline. Browser request capture showed only same-origin traffic and blob previews.
-- Live files match candidate hashes for the shell, assets, worker, routes, and manifest.
-- Mobile Lighthouse: 93 performance, 100 accessibility, 100 best practices, 100 SEO; LCP 1.5 s and CLS 0. Initial JS is 13.65 kB gzip; CSS is 4.48 kB gzip.
-- The license verifier allows a 30-request burst; request 31 returned 429 with `Retry-After`.
-- Full details, including the non-blocking P3 advisory, are in [verification-12.md](verification-12.md).
+- `F-3-1` (minor): live Axe reports `aria-allowed-role` for `<aside role="status">` on the demo banner.
+- `F-3-2` (minor): the privacy page makes an unlisted, untestable future-policy promise.
 
-## Known gaps and next steps
+## Next steps
 
-P3 only: change the demo banner’s invalid `<aside role="status">` pairing to remove Axe’s minor `aria-allowed-role` advisory. No release-blocking issue remains. Existing unrelated `graphify-out/` working-tree changes remain unstaged and were not modified.
+Repair the two findings in `review-3.md`, then repeat the claim commands and live Axe scan. Existing unrelated `graphify-out/` changes remain unstaged and untouched.
