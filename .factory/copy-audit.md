@@ -164,7 +164,7 @@ README headings—Wrapline (1), Try it safely (3), What it does (3), Run locally
 
 | Copy | Words | Result |
 | --- | ---: | --- |
-| Add intros, outros, and music beds to voice tracks, then export batch WAV or MP3 files on your device. | 17 | Verb-first, 103 characters, plain wording; `wav-mp3-input`, `mp3-output`, and `local-audio` cover its product claims. |
+| Add intros, outros, and music beds to voice tracks, then export batch WAV or MP3 files on your device. | 17 | Verb-first, 102 characters, plain wording; `wav-mp3-input`, `mp3-output`, and `local-audio` cover its product claims. |
 
 ## Legal, offline, and not-found routes
 
