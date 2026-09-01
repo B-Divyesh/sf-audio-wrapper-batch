@@ -57,6 +57,8 @@ export function createDemoSeed(id: string, timestamp: string): DemoSeed {
       bedDb: -28,
       naming: '{recipe}-{number}-{source}',
       startNumber: 12,
+      outputFormat: 'wav',
+      mp3Bitrate: 128,
       intro: asset(intro),
       outro: asset(outro),
       bed: asset(bed),

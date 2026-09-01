@@ -1,100 +1,121 @@
 [
   {
     "id": "demo-sample-data",
-    "claim": "Try a useful three-track sample batch in one click.",
+    "claim": "Try three ready-to-render sample tracks in one click and reset them to the original sample.",
     "where": "Landing primary action, demo banner, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:demo-sample-data",
-    "sandbox": "Fresh browser context at /demo; assert the banner, wrapper audio, three named tracks, and both demo controls."
+    "sandbox": "Fresh browser context at /?demo=1; assert the banner, intro, outro, bed, three tracks, controls, and reset result."
   },
   {
     "id": "demo-isolation",
-    "claim": "Demo data is separate from real Wrapline data.",
-    "where": "Demo banner, .factory/demo.md, README",
+    "claim": "Demo data is separate from real Wrapline data and is discarded when leaving the demo.",
+    "where": "Demo banner, privacy policy, .factory/demo.md, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:demo-isolation",
-    "sandbox": "Save a real recipe, enter /demo, assert the Signal Desk sample and demo:wrapline-local namespace, then return to the original recipe."
+    "sandbox": "Save a real recipe, enter /demo, assert the demo database and sample, leave through Start for real, and assert the real recipe remains."
   },
   {
     "id": "local-audio",
-    "claim": "Rendering a batch keeps audio and analytics requests on the device.",
+    "claim": "Rendering sends no audio, analytics, tracker, font, or runtime CDN request outside Wrapline.",
     "where": "Landing facts, privacy policy, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:local-audio",
     "sandbox": "Record every request during a fresh /demo render and assert every HTTP request is same-origin."
   },
   {
     "id": "offline-demo",
-    "claim": "The demo works offline after the first visit.",
-    "where": "README, privacy policy",
+    "claim": "The installed demo reloads and renders offline after the first visit.",
+    "where": "Offline banner, privacy policy, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:offline-demo",
-    "sandbox": "Own browser context: install the worker at /demo, verify byte-bearing shell cache entries, go offline, reload, and assert the heading, offline notice, and sample queue."
+    "sandbox": "Own browser context; install the worker at /demo, verify cached shell bytes, go offline, reload, assert the sample, and render."
   },
   {
     "id": "wav-mp3-input",
-    "claim": "Wrapline offers WAV and MP3 voice input.",
-    "where": "Landing facts, queue picker, README",
+    "claim": "Wrapline accepts real WAV and MP3 voice input and renders both.",
+    "where": "Landing facts, queue picker, terms, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:wav-mp3-input",
-    "sandbox": "Fresh bench; assert the file picker advertises WAV and MP3, add a real WAV, and render a reviewable output."
+    "sandbox": "Fresh bench; add a generated PCM WAV and the committed synthetic MP3 fixture, render both, and inspect two non-empty WAV outputs."
   },
   {
     "id": "wav-receipt",
-    "claim": "A sample batch produces recipe-named, reviewable WAV files and a receipt download.",
+    "claim": "A sample batch produces recipe-named, playable WAV files and a receipt download.",
     "where": "Landing facts, method section, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:wav-receipt",
-    "sandbox": "Fresh /demo render; assert three audio previews, recipe-derived output names, and the ZIP summary naming three WAV files plus a receipt."
+    "sandbox": "Fresh /demo render; assert three audio previews, exact recipe-derived .wav names, and the ZIP summary."
+  },
+  {
+    "id": "mp3-output",
+    "claim": "Wrapline exports playable 48 kHz MP3 at the selected 128 or 192 kbps constant bitrate.",
+    "where": "Landing facts, output controls, loudness disclosure, terms, README",
+    "test": "npm run build && npm run test:e2e -- --grep @claim:mp3-output",
+    "sandbox": "Render the demo at each offered bitrate; parse the MP3 frame header, decode the output, and inspect codec, bitrate, and filename in the receipt."
   },
   {
     "id": "audio-behavior",
-    "claim": "Output is 48 kHz, 16-bit PCM WAV with the disclosed browser loudness behavior.",
+    "claim": "WAV is 48 kHz 16-bit PCM; voice gain is capped at ±12 dB; intro and outro stay unchanged; the bed ducks 7 dB; peaks stay below −0.18 dBFS.",
     "where": "Loudness disclosure, terms, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:audio-behavior",
-    "sandbox": "Fresh /demo render; assert the disclosed RMS copy and inspect the generated WAV header for RIFF, 48 kHz, and 16-bit PCM."
+    "sandbox": "Render deterministic tone and silence fixtures; inspect PCM regions and receipts for wrapper level, ducking ratio, gain caps, peak ceiling, sample rate, and bit depth."
   },
   {
     "id": "source-receipt",
     "claim": "Each receipt records recipe version, source SHA-256, output name, duration, gain, limiter state, codec, and measurement method.",
-    "where": "Recent receipts section, README, privacy policy",
+    "where": "Recent receipts section, privacy policy, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:source-receipt",
-    "sandbox": "Use /demo, render a known WAV, download its receipt JSON, compare the source hash, and assert every named production field."
+    "sandbox": "Render a known WAV, download its receipt, compare the SHA-256, and assert every named production field."
   },
   {
     "id": "local-recipes",
-    "claim": "Saved wrapper recipes, wrapper audio, and production receipts persist on this device.",
-    "where": "README, privacy policy",
+    "claim": "Saved recipes, intro audio, and receipts persist in local browser storage.",
+    "where": "Privacy policy, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:local-recipes",
-    "sandbox": "Save a recipe and intro WAV, render a receipt, reload a fresh bench, and assert all three remain available."
+    "sandbox": "Save a recipe and intro WAV, render a receipt, reload, and assert the recipe, audio name, and receipt remain."
   },
   {
     "id": "free-tier",
-    "claim": "The free tier renders up to three tracks per batch.",
-    "where": "Queue panel, pricing section, terms",
+    "claim": "The free tier saves one recipe and renders up to three tracks per batch.",
+    "where": "Queue panel, pricing, terms, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:free-tier",
-    "sandbox": "Block license verification, add four WAV files, and assert the fourth track is blocked with no rendered audio."
+    "sandbox": "Block verification, attempt a second recipe and a four-track render, and assert both free limits remain enforced."
   },
   {
     "id": "studio-license",
-    "claim": "Studio is a $29 one-time license through the registered Sociobot checkout.",
-    "where": "Pricing section, terms, README",
+    "claim": "Studio is a $29 one-time license using the product-scoped Sociobot checkout URL.",
+    "where": "Pricing, terms, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:studio-license",
-    "sandbox": "Fresh /demo; assert the visible $29 one-time copy and exact registered production checkout URL."
+    "sandbox": "Fresh /demo; assert the visible $29 one-time copy and exact registered product checkout URL without following it."
   },
   {
     "id": "studio-unlimited",
-    "claim": "A valid Studio license permits unlimited saved recipes and tracks per batch.",
-    "where": "Pricing section, terms, README",
+    "claim": "A valid Studio response permits unlimited saved recipes and tracks per batch.",
+    "where": "Pricing, terms, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:studio-unlimited",
-    "sandbox": "Mock one valid product-scoped verification response, save two recipes, render four WAV tracks, and assert all four outputs."
+    "sandbox": "Use a recorded valid response, save two recipes, render four tracks, and assert all outputs."
   },
   {
     "id": "license-daily-check",
     "claim": "A completed license check for the same token is reused for one day.",
     "where": "Privacy policy",
     "test": "npm run build && npm run test:e2e -- --grep @claim:license-daily-check",
-    "sandbox": "Submit the same invalid token twice against a recorded product-scoped response and assert exactly one verification request."
+    "sandbox": "Submit the same token twice against a recorded invalid response and assert exactly one verification request."
+  },
+  {
+    "id": "license-boundary",
+    "claim": "License verification sends only the token to the product verification URL and an invalid response stays locked.",
+    "where": "Privacy policy, terms",
+    "test": "npm run build && npm run test:e2e -- --grep @claim:license-boundary",
+    "sandbox": "Capture the verification request, assert its exact encoded token URL and local fields, return revoked, and assert free mode remains active."
   },
   {
     "id": "recipe-controls",
-    "claim": "A saved recipe can be exported with its wrapper audio and deleted from the device.",
+    "claim": "A saved recipe can be exported with its audio files and deleted from the device.",
     "where": "Recipe controls, privacy policy, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:recipe-controls",
     "sandbox": "Save a recipe with a WAV intro, inspect the downloaded JSON and embedded audio, confirm deletion, reload, and assert it is gone."
+  },
+  {
+    "id": "route-shell",
+    "claim": "Landing, demo, privacy, terms, and not-found routes have route-specific metadata, shared legal links, and correct HTTP status.",
+    "where": "README and public site structure",
+    "test": "npm run build && npm run test:e2e -- --grep @claim:route-shell",
+    "sandbox": "Visit every public route and an unknown path; assert status, title, metadata, landmarks, legal links, build ID, accessibility, and no unexpected console errors."
   }
 ]

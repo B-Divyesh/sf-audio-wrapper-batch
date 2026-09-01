@@ -19,6 +19,7 @@ a { color: var(--blue); text-underline-offset: 3px; text-decoration-thickness: 1
 :focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
 .skip-link { position: fixed; left: 16px; top: 10px; z-index: 30; padding: 10px 14px; background: var(--ink); color: var(--stock); transform: translateY(-150%); }
 .skip-link:focus { transform: translateY(0); }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
 
 .site-header { min-height: 72px; display: flex; align-items: center; gap: 40px; padding: 12px max(24px, calc((100vw - 1180px) / 2)); border-bottom: var(--line); background: rgba(242,235,221,.96); position: sticky; top: 0; z-index: 20; }
 .brand { min-height: 44px; display: inline-flex; align-items: center; color: var(--ink); text-decoration: none; font: 900 23px/1 var(--display); letter-spacing: -.02em; text-transform: uppercase; white-space: nowrap; }

@@ -13,6 +13,7 @@ describe('release response policy', () => {
   it('ships restrictive browser headers and immutable fingerprinted assets', () => {
     expect(headers).toContain("Content-Security-Policy: default-src 'self'");
     expect(headers).toContain("frame-ancestors 'none'");
+    expect(headers).toContain("script-src 'self' 'wasm-unsafe-eval'");
     expect(headers).toContain('Permissions-Policy:');
     expect(headers).toContain('X-Frame-Options: DENY');
     expect(headers).toContain('/assets/*\n  Cache-Control: public, max-age=31536000, immutable');
@@ -73,7 +74,7 @@ describe('release response policy', () => {
 
   it('declares product-specific social metadata and local icon assets', () => {
     const document = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
-    expect(document).toContain('<meta property="og:title" content="Wrapline — batch audio finishing" />');
+    expect(document).toContain('<meta property="og:title" content="Wrapline — add intros and outros to audio" />');
     expect(document).toContain('<meta name="twitter:card" content="summary_large_image" />');
     expect(document).toContain('https://audio-wrapper-batch.sociobot.in/art/wrapline-social.jpg');
     expect(document).toContain('<link rel="icon" href="/favicon.svg" type="image/svg+xml" />');

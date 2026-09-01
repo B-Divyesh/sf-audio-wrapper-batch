@@ -15,13 +15,19 @@ export function sanitizeFilename(value: string): string {
     .slice(0, 160) || 'wrapped-audio';
 }
 
-export function outputName(template: string, recipe: string, source: string, number: number): string {
+export function outputName(
+  template: string,
+  recipe: string,
+  source: string,
+  number: number,
+  format: 'wav' | 'mp3' = 'wav',
+): string {
   const sourceStem = source.replace(/\.[^.]+$/, '');
   const rendered = template
     .replaceAll('{recipe}', recipe)
     .replaceAll('{source}', sourceStem)
     .replaceAll('{number}', String(number).padStart(2, '0'));
-  return `${sanitizeFilename(rendered)}.wav`;
+  return `${sanitizeFilename(rendered)}.${format}`;
 }
 
 export function estimatedGainDb(rms: number, targetLufs: number): number {
@@ -115,8 +121,9 @@ export async function renderWrappedFile(
       source.loop = true;
       const baseGain = 10 ** (recipe.bedDb / 20);
       gain.gain.setValueAtTime(baseGain, 0);
-      gain.gain.linearRampToValueAtTime(baseGain * 0.45, Math.min(voiceStart + 0.25, duration));
-      gain.gain.setValueAtTime(baseGain * 0.45, Math.max(voiceStart, outroStart - 0.25));
+      const duckedGain = baseGain * 10 ** (-7 / 20);
+      gain.gain.linearRampToValueAtTime(duckedGain, Math.min(voiceStart + 0.25, duration));
+      gain.gain.setValueAtTime(duckedGain, Math.max(voiceStart, outroStart - 0.25));
       gain.gain.linearRampToValueAtTime(baseGain, Math.min(outroStart + 0.15, duration));
       source.connect(gain).connect(offline.destination);
       source.start(0);
@@ -125,14 +132,22 @@ export async function renderWrappedFile(
 
     const rendered = await offline.startRendering();
     const peak = peakOf(rendered);
-    const outputScale = peak > 0.98 ? 0.98 / peak : 1;
+    const peakCeiling = 10 ** (-0.18 / 20);
+    const outputScale = peak > peakCeiling ? peakCeiling / peak : 1;
+    const format = recipe.outputFormat ?? 'wav';
+    const bitrateKbps = recipe.mp3Bitrate ?? 128;
+    const blob = format === 'mp3'
+      ? await encodeMp3(rendered, outputScale, bitrateKbps)
+      : encodeWav(rendered, outputScale);
     return {
-      name: outputName(recipe.naming, recipe.name, input.name, sequence),
-      blob: encodeWav(rendered, outputScale),
+      name: outputName(recipe.naming, recipe.name, input.name, sequence, format),
+      blob,
       durationSeconds: rendered.duration,
       gainDb,
       peakLimited: outputScale < 1,
       sourceHash: await sha256(input),
+      format,
+      ...(format === 'mp3' ? { bitrateKbps } : {}),
     };
   } catch (error) {
     if (error instanceof DOMException) {
@@ -141,6 +156,29 @@ export async function renderWrappedFile(
     throw error;
   } finally {
     await decodeContext.close();
+  }
+}
+
+export async function encodeMp3(buffer: AudioBuffer, scale = 1, bitrate: 128 | 192 = 128): Promise<Blob> {
+  const { default: createEncoder } = await import('@audio/encode-mp3');
+  const channels = Math.min(2, buffer.numberOfChannels);
+  const encoder = await createEncoder({ sampleRate: buffer.sampleRate, channels, bitrate });
+  try {
+    const channelData = Array.from({ length: channels }, (_, channel) => {
+      const source = buffer.getChannelData(channel);
+      if (scale === 1) return source;
+      const scaled = new Float32Array(source.length);
+      for (let index = 0; index < source.length; index += 1) scaled[index] = (source[index] ?? 0) * scale;
+      return scaled;
+    });
+    const body = encoder.encode(channelData);
+    const tail = encoder.flush();
+    const bytes = new Uint8Array(body.length + tail.length);
+    bytes.set(body);
+    bytes.set(tail, body.length);
+    return new Blob([bytes.buffer], { type: 'audio/mpeg' });
+  } finally {
+    encoder.free();
   }
 }
 

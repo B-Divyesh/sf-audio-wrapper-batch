@@ -13,6 +13,8 @@ export interface Recipe {
   bedDb: number;
   naming: string;
   startNumber: number;
+  outputFormat: 'wav' | 'mp3';
+  mp3Bitrate: 128 | 192;
   intro?: AudioAsset;
   outro?: AudioAsset;
   bed?: AudioAsset;
@@ -36,7 +38,8 @@ export interface Receipt {
   recipeName: string;
   recipeVersion: number;
   targetLufs: number;
-  codec: 'WAV PCM 16-bit';
+  codec: 'WAV PCM 16-bit' | 'MP3 CBR';
+  bitrateKbps?: 128 | 192;
   measurement: string;
   items: ReceiptItem[];
 }
@@ -48,4 +51,6 @@ export interface RenderedFile {
   gainDb: number;
   peakLimited: boolean;
   sourceHash: string;
+  format: 'wav' | 'mp3';
+  bitrateKbps?: 128 | 192;
 }

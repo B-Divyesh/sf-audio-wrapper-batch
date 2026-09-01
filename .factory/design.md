@@ -40,6 +40,7 @@ Privacy, terms, and not-found routes use the same ink-block wordmark, compact pr
 
 - Adding a source creates a numbered job ticket immediately.
 - Recipe layers read top-to-bottom in render order: intro, voice, outro, with the bed shown beneath.
+- Output format and MP3 bitrate sit with loudness controls because they define the rendered deliverable.
 - Primary actions are tomato blocks with a small offset shadow; press moves the block onto its shadow.
 - Render progress advances along the ticket edge and is announced through a polite live region.
 - Save, export, and paid state use plain language and show where data lives: “Saved on this device.”
@@ -61,3 +62,5 @@ UI state changes last 160–220 ms and animate only transform or opacity. New qu
 **Use case:** stylized-concept. **Subject:** overhead audio finishing bench where three paper waveform strips—short intro, long voice, short outro—feed through a compact hand-operated registration jig, with a separate ochre music-bed ribbon tucked underneath. **World/materials:** cut paper, coarse uncoated stock, masking tape, ink rollers, registration crosses, subtle paper fibers. **Light/lens:** flat editorial overhead light, no photographic depth of field. **Palette words:** warm cream paper, carbon-black ink, deep registration blue, tomato-red ink, sparing ochre. **Composition:** landscape, machinery centered right, generous calm negative space at left, readable at small sizes. **Style:** sophisticated two-pass 1960s risograph editorial collage, visible halftone and slightly imperfect registration, handmade but precise. **Negative list:** no text, letters, numbers, logos, watermarks, people, faces, hands, microphones, headphones, computers, glossy 3D, gradients, neon, generic SaaS UI.
 
 Generation command: `/opt/fleet/lib/gen-image.sh`, Azure AI Foundry deployment `factory-image`, generated 2026-08-28. Generated imagery is original to Wrapline and used under the product's MIT distribution. Every candidate is visually reviewed for text artifacts, accidental marks, seams, and palette consistency before use.
+
+The MP3 output path uses the bundled `@audio/encode-mp3` 1.2.2 and `wasm-media-encoders` 0.7.0 packages. Both package manifests declare MIT; notices and the synthetic test-fixture provenance are recorded in `THIRD_PARTY_NOTICES.md`.

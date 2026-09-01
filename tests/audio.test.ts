@@ -4,6 +4,7 @@ import { createZip, estimatedGainDb, outputName, sanitizeFilename } from '../src
 describe('audio utilities', () => {
   it('builds stable, safe output names', () => {
     expect(outputName('{recipe}-{number}-{source}', 'Daily / News', 'take:one.mp3', 7)).toBe('Daily - News-07-take-one.wav');
+    expect(outputName('{recipe}-{number}-{source}', 'Daily News', 'take-one.wav', 8, 'mp3')).toBe('Daily News-08-take-one.mp3');
     expect(sanitizeFilename('  <>  ')).toBe('-');
   });
 
