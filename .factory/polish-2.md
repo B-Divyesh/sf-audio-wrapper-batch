@@ -1,25 +1,32 @@
-# Wrapline perfection loop — polish round 2
+# Wrapline perfection loop — polish round 2 retry 1
 
-Completed 2026-09-01. Source reviews: `.factory/review-1.md` and `.factory/review-2.md`; prior repair record: `.factory/polish-1.md`.
+Completed 2026-09-01. Sources read in full: `.factory/review-1.md`, `.factory/polish-1.md`, `.factory/review-2.md`, and the prior `.factory/polish-2.md`. Implementation commit: `81bf403`. Production URL: <https://audio-wrapper-batch.sociobot.in>.
 
 | Finding | Change made | Evidence |
 | --- | --- | --- |
-| F-1-1 | Replaced the vague first-screen copy with the concrete intro/outro job, named the audience, and stated that the sample opens three ready-to-render tracks. | `the 390px first screen states the concrete job and sample result`; live `/` at 390 × 844 passed; `evidence/polish-2/live/screenshot-mobile.png`. |
-| F-1-2 | Added and rendered a committed real MP3 fixture alongside WAV input. | `@claim:wav-mp3-input`; every ledger command passed from clean clone `/tmp/wrapline-polish-2.cors07`. |
-| F-1-3 | Measured gain cap, unchanged wrapper levels, bed ducking, peak ceiling, WAV rate, and bit depth with deterministic fixture regions. | `@claim:audio-behavior`; clean-clone claim command passed. |
-| F-1-4 | Removed unprovable billing and operations copy; retained visitor promises are declared in the 17-entry ledger with one tagged test each. | Every command in `.factory/claims.json` passed serially from the clean clone. |
-| F-1-5 | Set rendered controls to a 44 px minimum and measure result-state controls at phone width. | `moves focus to main and preserves usable mobile-sized controls`; live full browser suite passed. |
-| F-1-6 | Audited app, README, legal, state, error, heading, control, and option copy, then updated the round marker and bitrate entries. | `.factory/copy-audit.md`; clean-clone `npm test` passed. |
-| F-1-7 | Replaced functional metaphor/lore labels and standardized processing language as render/rendered. | `.factory/copy-audit.md` terminology table; live `/` and `/demo` checks passed. |
-| F-1-8 | Added route focus and a polite heading announcement for forward and Back navigation. | `route navigation focuses and announces the page heading`; live full browser suite passed. |
-| F-1-9 | Added local WAV/MP3 output, 128/192 kbps encoding, receipt fields, and playable output checks. | `@claim:mp3-output`; clean-clone claim command passed. |
-| F-1-10 | Renamed generic controls to result-specific actions and retained specific accessible names for removal controls. | `controls use labels that name their result`; live Axe-backed suite passed. |
-| F-2-1 | Removed the footer statement “Bench artwork generated for Wrapline with Azure AI Foundry.” Provenance remains in `.factory/design.md` and original asset sidecars, where it is documentation rather than a visitor claim. Added a browser regression covering every public footer. | `footer provenance is kept in repository records, not made as a visitor claim`; live `/`, `/demo`, `/privacy/`, `/terms/`, and 404 route-shell assertions passed; `evidence/polish-2/live/screenshot-desktop.png`. |
-| F-2-2 | Replaced “192 kbps · higher quality” with the factual label “192 kbps”; 128 kbps is likewise bitrate-only. | Same browser regression checks exact option text; `@claim:mp3-output` proves selected bitrate and playability from the clean clone. |
+| F-1-1 | Kept the concrete H1, audience sentence, three product facts, and adjacent sample outcome inside the 390 × 844 first screen. | `the 390px first screen states the concrete job and sample result`; `.factory/evidence/polish-2-retry1/live/screenshot-mobile.png`; cold live `/`. |
+| F-1-2 | Kept the committed real MP3 fixture in the WAV/MP3 render path. | `@claim:wav-mp3-input`; clean-clone claim command passed in `/tmp/wrapline-polish2-retry1-uyqsEy`; live browser suite passed. |
+| F-1-3 | Kept deterministic PCM checks for ±12 dB gain, unchanged intro/outro, 7 dB bed ducking, −0.18 dBFS ceiling, 48 kHz, and 16-bit WAV. | `@claim:audio-behavior`; independent clean-clone claim command passed. |
+| F-1-4 | Retained 17 ledger entries with one matching tag each, removed the remaining unproved “refunds” topic from Terms metadata, and extended the route regression to reject it. | `.factory/claims.json`; all 17 commands passed independently; `@claim:route-shell`; live `/terms/` contains no refund statement. |
+| F-1-5 | Kept rendered links, audio controls, and all visible phone controls at least 44 px. | `moves focus to main and preserves usable mobile-sized controls`; 62/62 live browser checks passed; `.factory/evidence/polish-2-retry1/live/demo-mobile.png`. |
+| F-1-6 | Re-audited app states, errors, controls, README, catalog, legal copy, and route metadata. | `.factory/copy-audit.md`; banned-word scan returned no matches; catalog is 102 characters. |
+| F-1-7 | Functional copy consistently uses recipe, voice track, music bed, batch, receipt, and render/rendered. | `controls use labels that name their result`; `.factory/copy-audit.md`; cold live `/demo`. |
+| F-1-8 | Kept shared forward/Back focus on the H1 and the polite route announcement. | `route navigation focuses and announces the page heading`; live 12-shard suite passed. |
+| F-1-9 | Kept on-device WAV/MP3 output, factual 128/192 kbps choices, codec receipt fields, and playable-output checks. | `@claim:mp3-output`; independent clean-clone claim command passed; `.factory/evidence/polish-2-retry1/live/demo-desktop.png`. |
+| F-1-10 | Kept result-specific action labels and file-specific accessible names. | `controls use labels that name their result`; Axe-backed route checks and live URL verifier passed. |
+| F-2-1 | Kept artwork provenance in repository records only and checked every public footer for the removed visitor claim. | `footer provenance is kept in repository records, not made as a visitor claim`; `@claim:route-shell`; live screenshots. |
+| F-2-2 | Kept the option text as the factual “192 kbps,” without a subjective quality adjective. | `footer provenance is kept in repository records, not made as a visitor claim`; `@claim:mp3-output`; live `/demo`. |
+| CTRL-2-1 | Rebuilt the browser harness around one worker and one owned preview lifecycle. Each ordinary test uses Playwright’s per-test context; the offline claim alone creates and closes its owned context. The service-worker-unavailable regression now uses an init script instead of Playwright’s Chromium-crashing `serviceWorkers: 'block'` context. Every shard has one automatic browser-crash retry, while the acceptance runs completed without using it. | `scripts/run-e2e.mjs`; `keeps the demo usable without a service-worker registration`; `@claim:offline-demo`; clean-clone and live 12-shard runs both passed 62/62 without retries or SIGSEGV. |
 
-## Release evidence
+## Verification evidence
 
-- Clean clone: `/tmp/wrapline-polish-2.cors07` was made with `git clone --no-local /work/repo`; `npm ci --include=dev`, `npm test`, and all 17 exact `.factory/claims.json` commands passed. The full suite contains 14 unit/integration tests and 58 browser checks across desktop and mobile.
-- Live cold check: `https://audio-wrapper-batch.sociobot.in/` returned 200. `verify-url.sh` found title, `lang=en`, one H1, main landmark, no missing image alt text, no unlabeled buttons, and no console errors. Screenshots and JSON are in `.factory/evidence/polish-2/live/`.
-- Live browser check: `npm run test:e2e:live` passed all 58 checks across desktop and mobile after deployment. Its route-shell test uses Axe and found no serious or critical violations on landing, demo, privacy, terms, and not-found routes.
-- Lighthouse on the live cold page: performance 100, accessibility 100, best practices 100, SEO 100; LCP 1.5 s, CLS 0, TBT 0 ms. Report: `.factory/evidence/polish-2/live/lighthouse.json`.
+- Clean clone: `/tmp/wrapline-polish2-retry1-uyqsEy`, made with `git clone --no-local /work/repo`; `npm ci --include=dev` reported zero vulnerabilities.
+- Full clean gate: `npm test` passed 14 unit/integration tests, built `dist/`, and passed 62 browser checks across all 12 shards with one worker.
+- Claims: all 17 exact commands in `.factory/claims.json` passed independently from the clean clone; summary: `.factory/evidence/polish-2-retry1/claims-summary.txt`.
+- Local verifier: no console errors; title, `lang=en`, one H1, main landmark, image alt text, and button names passed. Local Lighthouse: 99 performance, 100 accessibility, 100 best practices, 100 SEO; LCP 2.0 s, CLS 0, TBT 0 ms.
+- Deployment: `56927a78-8e06-4307-8774-3db60e90e8a5` uploaded the static `dist/` artifact to the existing `sf-audio-wrapper-batch` Static Web App.
+- Cold production verifier: HTTP 200, no console errors, and every accessibility smoke check passed. `/`, `/demo`, `/?demo=1`, `/privacy/`, and `/terms/` return 200; an unknown route returns the designed 404.
+- Full production browser gate: `npm run test:e2e:live` passed all 62 checks across every shard without retry. Its route check runs Axe on landing, demo, privacy, terms, and not-found pages and found no serious or critical violations.
+- Live Lighthouse: 100 performance, 100 accessibility, 100 best practices, 100 SEO; LCP 1.5 s, CLS 0, TBT 20 ms. Evidence lives in `.factory/evidence/polish-2-retry1/live/`.
+
+No review finding, controller finding, or newly discovered claim/copy defect remains open.

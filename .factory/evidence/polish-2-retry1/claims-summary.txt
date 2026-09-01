@@ -1,0 +1,28 @@
+Clean clone: /tmp/wrapline-polish2-retry1-uyqsEy
+Install: npm ci --include=dev — PASS, 0 vulnerabilities
+Full gate: npm test — PASS, 14 unit/integration tests and 62 browser checks
+Browser topology: 12/12 shards, 1 worker, 1 owned preview lifecycle — PASS without retry or SIGSEGV
+
+PASS demo-sample-data
+PASS demo-isolation
+PASS local-audio
+PASS offline-demo
+PASS wav-mp3-input
+PASS wav-receipt
+PASS mp3-output
+PASS audio-behavior
+PASS source-receipt
+PASS local-recipes
+PASS free-tier
+PASS studio-license
+PASS studio-unlimited
+PASS license-daily-check
+PASS license-boundary
+PASS recipe-controls
+PASS route-shell
+
+ALL 17 CLAIM COMMANDS PASSED
+
+Production: https://audio-wrapper-batch.sociobot.in
+Deployment: 56927a78-8e06-4307-8774-3db60e90e8a5
+Live browser gate: 62 checks across 12/12 shards — PASS without retry or SIGSEGV

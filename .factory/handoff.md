@@ -1,27 +1,30 @@
-# Wrapline polish round 2 handoff
+# Wrapline polish round 2 retry 1 handoff
 
 ## Result
 
-**PASS.** Released repair commit `fccdc3b` removes the unlisted footer artwork-provenance claim, makes both MP3 bitrate labels factual, and adds a browser regression for both conditions. The complete finding-to-evidence map is in [polish-2.md](polish-2.md).
+**PASS.** Implementation commit `81bf403` resolves the controller’s Chromium SIGSEGV path, preserves every earlier review repair, removes a stale unproved refund topic from Terms metadata, and ships build `1.0.0-r12`. The finding-by-finding map is in [polish-2.md](polish-2.md).
 
 ## Run and verify
 
 - Install: `npm ci --include=dev`
 - Full local gate: `npm test`
 - Every declared claim: run each exact `test` command in `.factory/claims.json`.
-- Local preview: `npm run dev`, then open `/` for your files or `/demo` for the isolated three-track sample.
-- Production: static output is `dist/`; deploy with `/opt/fleet/lib/deploy-static.sh audio-wrapper-batch dist`.
+- Isolated sample: open `/demo` or `/?demo=1`.
+- Static output: `dist/`
+- Deployment command: `/opt/fleet/lib/deploy-static.sh audio-wrapper-batch dist`
 
-## Exact verification evidence
+## Exact evidence
 
-- Independent clean clone: `/tmp/wrapline-polish-2.cors07`, created with `git clone --no-local /work/repo`; `npm ci --include=dev`, `npm test`, and all 17 ledger commands passed. The full suite ran 14 unit/integration tests and 58 desktop/mobile browser checks.
-- Production deployment: Static Web App deployment `f60a3844-0936-4a2e-b72a-e9a3fbae1869` to <https://audio-wrapper-batch.sociobot.in>.
-- Cold production verifier: HTTP 200; title, `lang`, one H1, main landmark, image alt text, and button labels all passed; no console errors. Evidence: `.factory/evidence/polish-2/live/verify.json`, `screenshot-desktop.png`, and `screenshot-mobile.png`.
-- Post-deploy browser suite: `npm run test:e2e:live` passed all 58 checks. The Axe-backed route test found no serious or critical issues on landing, demo, privacy, terms, and not-found routes.
-- Live Lighthouse: performance 100, accessibility 100, best practices 100, SEO 100; LCP 1.5 s, CLS 0, TBT 0 ms. Evidence: `.factory/evidence/polish-2/live/lighthouse.json`.
+- Clean clone: `/tmp/wrapline-polish2-retry1-uyqsEy`; zero-vulnerability `npm ci`, 14/14 unit/integration tests, and 62/62 browser checks across all 12 shards passed without retries.
+- Claim ledger: all 17 exact claim commands passed independently from that clean clone.
+- Browser lifecycle: one worker, one owned OS-assigned-port preview process, per-test contexts, and owned-context-only teardown. The real offline claim uses its own context and passed on desktop and phone.
+- Production deployment: `56927a78-8e06-4307-8774-3db60e90e8a5` to <https://audio-wrapper-batch.sociobot.in>.
+- Cold live check: HTTP 200, no console errors, correct title/language/H1/main/alt/button labels; `/demo`, `/?demo=1`, Privacy, Terms, and designed 404 routing passed.
+- Post-deploy browser gate: 62/62 checks passed across every shard with no retry; Axe found no serious or critical violation on every public route type.
+- Live Lighthouse: performance 100, accessibility 100, best practices 100, SEO 100; LCP 1.5 s, CLS 0, TBT 20 ms.
+- Screenshots, verifier JSON, and Lighthouse reports: `.factory/evidence/polish-2-retry1/`.
+- Build sizes: initial JS 40.61 kB raw / 13.65 kB gzip; CSS 16.90 kB raw / 4.48 kB gzip; lazy MP3 encoder 183.46 kB raw / 86.49 kB gzip.
 
-## Product notes
+## Known gaps and next steps
 
-- Demo mode is available at `/demo` or `/?demo=1`, uses the `demo:` storage namespace, includes a persistent banner, and has Reset demo / Start for real controls.
-- Artwork provenance remains documented in `.factory/design.md` and the source sidecars; it is not a visitor-facing assertion.
-- No known gaps remain. Existing unrelated `graphify-out/` working-tree changes are intentionally unstaged and are not part of this repair.
+None. Existing unrelated `graphify-out/` working-tree changes remain unstaged and were not modified or committed by this repair.
