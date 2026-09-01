@@ -160,6 +160,12 @@ All are sentence-case action labels or short nouns. Counts include visible words
 
 README headings—Wrapline (1), Try it safely (3), What it does (3), Run locally (2), Test and build (3), Audio behavior (2), Privacy and legal (3)—all name their section. Command lines and link-only lines are not prose sentences.
 
+## Catalog description
+
+| Copy | Words | Result |
+| --- | ---: | --- |
+| Add intros, outros, and music beds to voice tracks, then export batch WAV or MP3 files on your device. | 17 | Verb-first, 103 characters, plain wording; `wav-mp3-input`, `mp3-output`, and `local-audio` cover its product claims. |
+
 ## Legal, offline, and not-found routes
 
 | Route | Sentence inventory | Result |
