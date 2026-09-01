@@ -85,7 +85,27 @@
       "package_version"
     ],
     "3": [
-      "encode_mp3",
+      "src_license",
+      "src_license_billingbase",
+      "src_license_cachedverdict",
+      "src_license_capturereturnedlicense",
+      "src_license_checkouturl",
+      "src_license_licensestate",
+      "src_license_scopedkey",
+      "src_license_setlicensestoragescope",
+      "src_license_storelicense",
+      "src_license_studiocheckoutavailable",
+      "src_license_verifylicense",
+      "tests_license_test",
+      "tests_license_test_memorystorage",
+      "tests_license_test_memorystorage_clear",
+      "tests_license_test_memorystorage_getitem",
+      "tests_license_test_memorystorage_key",
+      "tests_license_test_memorystorage_length",
+      "tests_license_test_memorystorage_removeitem",
+      "tests_license_test_memorystorage_setitem"
+    ],
+    "4": [
       "src_audio",
       "src_audio_clamp",
       "src_audio_concat",
@@ -105,7 +125,7 @@
       "src_audio_sha256",
       "tests_audio_test"
     ],
-    "4": [
+    "5": [
       "axe_core_playwright",
       "package_devdependencies",
       "package_devdependencies_axe_core_playwright",
@@ -120,7 +140,7 @@
       "vite",
       "vitest"
     ],
-    "5": [
+    "6": [
       "scripts_static_server",
       "scripts_static_server_argument",
       "scripts_static_server_config",
@@ -133,7 +153,7 @@
       "scripts_static_server_server",
       "scripts_static_server_types"
     ],
-    "6": [
+    "7": [
       "src_demo",
       "src_demo_asset",
       "src_demo_createdemoseed",
@@ -145,19 +165,6 @@
       "src_types_receiptitem",
       "src_types_recipe",
       "src_types_renderedfile"
-    ],
-    "7": [
-      "src_license",
-      "src_license_billingbase",
-      "src_license_cachedverdict",
-      "src_license_capturereturnedlicense",
-      "src_license_checkouturl",
-      "src_license_licensestate",
-      "src_license_scopedkey",
-      "src_license_setlicensestoragescope",
-      "src_license_storelicense",
-      "src_license_studiocheckoutavailable",
-      "src_license_verifylicense"
     ],
     "8": [
       "src_db",
@@ -172,68 +179,58 @@
       "src_db_setstoragescope"
     ],
     "9": [
-      "tests_license_test",
-      "tests_license_test_memorystorage",
-      "tests_license_test_memorystorage_clear",
-      "tests_license_test_memorystorage_getitem",
-      "tests_license_test_memorystorage_key",
-      "tests_license_test_memorystorage_length",
-      "tests_license_test_memorystorage_removeitem",
-      "tests_license_test_memorystorage_setitem"
-    ],
-    "10": [
       "scripts_create_test_mp3",
       "scripts_create_test_mp3_body",
       "scripts_create_test_mp3_output",
       "scripts_create_test_mp3_samples",
       "scripts_create_test_mp3_tail"
     ],
-    "11": [
+    "10": [
       "public_route_shell",
       "public_route_shell_announcer",
       "public_route_shell_focusrouteheading",
       "public_route_shell_skiplink"
     ],
-    "12": [
+    "11": [
       "scripts_run_e2e",
       "scripts_run_e2e_cli",
       "scripts_run_e2e_forwarded",
       "scripts_run_e2e_targeted"
     ],
-    "13": [
+    "12": [
       "src_sw_template",
       "src_sw_template_cachefirst",
       "src_sw_template_networkfirst",
       "src_sw_template_precacheshell"
     ],
-    "14": [
+    "13": [
       "tests_e2e_app_spec",
       "tests_e2e_app_spec_mp3fixture",
       "tests_e2e_app_spec_wavbuffer"
     ],
-    "15": [
+    "14": [
       "vite_config",
       "vite_config_offlineshell",
       "vite_config_workertemplatepath"
     ],
-    "16": [
+    "15": [
       "scripts_verify_checkout",
       "scripts_verify_checkout_location"
     ],
-    "17": [
+    "16": [
       "tests_release_test",
       "tests_release_test_repositoryroot"
     ],
-    "18": [
+    "17": [
       "playwright_config"
     ],
-    "19": [
+    "18": [
       "playwright_live_config"
     ],
-    "20": [
+    "19": [
       "src_vite_env_d"
     ],
-    "21": [
+    "20": [
       "vitest_config"
     ]
   },
@@ -241,25 +238,24 @@
     "0": 0.15294117647058825,
     "1": 0.08333333333333333,
     "2": 0.10526315789473684,
-    "3": 0.21052631578947367,
-    "4": 0.15384615384615385,
-    "5": 0.2545454545454545,
-    "6": 0.2727272727272727,
+    "3": 0.13450292397660818,
+    "4": 0.22875816993464052,
+    "5": 0.15384615384615385,
+    "6": 0.2545454545454545,
     "7": 0.2727272727272727,
     "8": 0.3111111111111111,
-    "9": 0.25,
-    "10": 0.4,
+    "9": 0.4,
+    "10": 0.5,
     "11": 0.5,
     "12": 0.5,
-    "13": 0.5,
+    "13": 0.6666666666666666,
     "14": 0.6666666666666666,
-    "15": 0.6666666666666666,
+    "15": 1.0,
     "16": 1.0,
     "17": 1.0,
     "18": 1.0,
     "19": 1.0,
-    "20": 1.0,
-    "21": 1.0
+    "20": 1.0
   },
   "gods": [
     {
@@ -308,29 +304,29 @@
       "degree": 7
     },
     {
-      "id": "src_main_message",
-      "label": "message()",
+      "id": "src_main_addfiles",
+      "label": "addFiles()",
       "degree": 7
     }
   ],
   "surprises": [
     {
-      "source": "init()",
-      "target": "getReceipts()",
+      "source": "DemoSeed",
+      "target": "Recipe",
       "source_files": [
-        "src/main.ts",
-        "src/db.ts"
+        "src/demo.ts",
+        "src/types.ts"
       ],
       "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
+      "relation": "references",
+      "why": "peripheral node `DemoSeed` unexpectedly reaches hub `Recipe`"
     },
     {
       "source": "bindEvents()",
-      "target": "resetDemoStorage()",
+      "target": "sanitizeFilename()",
       "source_files": [
         "src/main.ts",
-        "src/db.ts"
+        "src/audio.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
@@ -348,8 +344,8 @@
       "why": "bridges separate communities"
     },
     {
-      "source": "renderBatch()",
-      "target": "saveReceipt()",
+      "source": "bindEvents()",
+      "target": "resetDemoStorage()",
       "source_files": [
         "src/main.ts",
         "src/db.ts"
