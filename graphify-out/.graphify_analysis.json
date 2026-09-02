@@ -307,8 +307,8 @@
       "degree": 7
     },
     {
-      "id": "src_main_addfiles",
-      "label": "addFiles()",
+      "id": "src_main_message",
+      "label": "message()",
       "degree": 7
     }
   ],
@@ -326,17 +326,6 @@
     },
     {
       "source": "bindEvents()",
-      "target": "sanitizeFilename()",
-      "source_files": [
-        "src/main.ts",
-        "src/audio.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "bindEvents()",
       "target": "deleteRecipe()",
       "source_files": [
         "src/main.ts",
@@ -349,6 +338,17 @@
     {
       "source": "bindEvents()",
       "target": "resetDemoStorage()",
+      "source_files": [
+        "src/main.ts",
+        "src/db.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "renderBatch()",
+      "target": "saveReceipt()",
       "source_files": [
         "src/main.ts",
         "src/db.ts"
