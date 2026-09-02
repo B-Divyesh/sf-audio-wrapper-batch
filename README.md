@@ -8,7 +8,7 @@ Live product: <https://audio-wrapper-batch.sociobot.in> · [Try the sample batch
 
 ## Try it safely
 
-**Try it with sample data** opens three ready-to-render voice tracks at `/demo`. The same isolated sample opens at `/?demo=1`.
+**Try it with sample data** opens the Signal Desk workspace with three ready-to-render voice tracks at `/demo`. The same isolated sample opens at `/?demo=1`.
 
 Demo recipes, receipts, and license state use `demo:` storage names. The demo never reads or changes real Wrapline data.
 
@@ -27,7 +27,7 @@ See [`.factory/demo.md`](.factory/demo.md) for the sample contents and storage b
 - Renders without analytics, trackers, runtime CDN scripts, or off-site audio requests.
 - Reloads the installed demo offline after its first visit.
 - Saves one recipe and renders three tracks per batch for free.
-- Offers a $29 one-time Studio license for unlimited recipes and tracks per batch.
+- Offers a $29 one-time Studio license for unlimited recipes and tracks per batch. The purchase link opens the external Sociobot checkout.
 
 ## Run locally
 

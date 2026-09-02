@@ -1,10 +1,10 @@
 [
   {
     "id": "demo-sample-data",
-    "claim": "Try three ready-to-render sample tracks in one click and reset them to the original sample.",
+    "claim": "Open the Signal Desk sample workspace with three ready-to-render tracks in one click and reset it to the original sample.",
     "where": "Landing primary action, demo banner, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:demo-sample-data",
-    "sandbox": "Fresh browser context at /?demo=1; assert the banner, intro, outro, bed, three tracks, controls, and reset result."
+    "sandbox": "Fresh 390 px browser context; click the landing action, assert the banner, Signal Desk workspace, and named first track are in the first viewport; then open /?demo=1 and assert its banner, controls, three tracks, and reset result."
   },
   {
     "id": "demo-isolation",
@@ -50,7 +50,7 @@
   },
   {
     "id": "audio-behavior",
-    "claim": "WAV is 48 kHz 16-bit PCM; voice gain is capped at ±12 dB; intro and outro stay unchanged; the bed ducks 7 dB; peaks stay below −0.18 dBFS.",
+    "claim": "WAV is 48 kHz 16-bit PCM; voice gain is capped at ±12 dB; intro and outro stay unchanged; the music bed ducks 7 dB; peaks stay below −0.18 dBFS.",
     "where": "Loudness disclosure, terms, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:audio-behavior",
     "sandbox": "Render deterministic tone and silence fixtures; inspect PCM regions and receipts for wrapper level, ducking ratio, gain caps, peak ceiling, sample rate, and bit depth."
@@ -78,10 +78,10 @@
   },
   {
     "id": "studio-license",
-    "claim": "Studio is a $29 one-time license using the product-scoped Sociobot checkout URL.",
-    "where": "Pricing, terms, README",
+    "claim": "Studio is a $29 one-time license with a labeled external Sociobot checkout at the product-scoped URL.",
+    "where": "Pricing purchase action and README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:studio-license",
-    "sandbox": "Fresh /demo; assert the visible $29 one-time copy and exact registered product checkout URL without following it."
+    "sandbox": "Fresh /demo; assert the visible $29 one-time external-checkout label and exact registered product checkout URL without following it."
   },
   {
     "id": "studio-unlimited",

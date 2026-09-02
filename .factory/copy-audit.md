@@ -1,6 +1,6 @@
 # Wrapline copy audit
 
-Audited 2026-09-02 after polish round 3. Scope: every visitor-visible sentence, heading, control label, option, status, error, and route metadata description; every README sentence and heading; and all privacy, terms, offline, and 404 prose. Hyphenated terms count as one word. Every sentence is at most 22 words. No banned marketing word remains. Claim IDs refer to `.factory/claims.json`.
+Audited 2026-09-02 after polish round 4. Scope: every visitor-visible sentence, heading, control label, option, status, error, and route metadata description; every README sentence and heading; and all privacy, terms, offline, and 404 prose. Hyphenated terms count as one word. Every sentence is at most 22 words. No banned marketing word remains. Claim IDs refer to `.factory/claims.json`.
 
 ## Landing and app sentences
 
@@ -12,9 +12,9 @@ Audited 2026-09-02 after polish round 3. Scope: every visitor-visible sentence, 
 | Three short sample tracks are ready to render. | 8 | `demo-sample-data` |
 | For podcasters, radio makers, and course creators who need the same music, loudness, and filenames across many tracks. | 18 | `audio-behavior`, audience named |
 | Opens three ready-to-render voice tracks. | 5 | `demo-sample-data` |
-| Jumps to three ready-to-render voice tracks. | 5 | `demo-sample-data` |
+| The saved Signal Desk recipe has an intro, outro, music bed, and three voice tracks. | 14 | `demo-sample-data` |
 | Audio stays on this device. | 6 | `local-audio` |
-| Intro, voice, outro, and bed. | 5 | clear |
+| Intro, voice, outro, and music bed. | 7 | clear |
 | Choose the added audio once, then review and download each rendered batch. | 12 | `wav-receipt`, `mp3-output` |
 | Used in filenames and receipts. | 5 | clear |
 | Added to the queue next. | 6 | clear |
@@ -69,7 +69,7 @@ Audited 2026-09-02 after polish round 3. Scope: every visitor-visible sentence, 
 | Could not reset the demo. | 5 | error |
 | Try closing another demo tab. | 5 | recovery |
 | Could not leave the demo. | 5 | error |
-| Choose a WAV or MP3 intro, outro, or music-bed file. | 10 | recovery |
+| Choose a WAV or MP3 intro, outro, or music bed file. | 11 | recovery |
 | `{file}` added to the recipe. | 5 | success |
 | Save to keep it on this device. | 7 | next action |
 | `{layer}` cleared. | 2 | success |
@@ -80,7 +80,7 @@ Audited 2026-09-02 after polish round 3. Scope: every visitor-visible sentence, 
 | Saved “`{recipe}`” as version `{number}` on this device. | 8 | `local-recipes` |
 | The recipe could not be saved because local storage failed. | 10 | error reason |
 | Check browser storage and try again. | 6 | recovery |
-| Delete “`{recipe}`” and its saved intro, outro, and music-bed files from this device? | 13 | specific confirmation |
+| Delete “`{recipe}`” and its saved intro, outro, and music bed files from this device? | 14 | specific confirmation |
 | Recipe deleted. | 2 | success |
 | Portable recipe exported with its audio assets. | 7 | `recipe-controls` |
 | The recipe could not be exported. | 6 | error |
@@ -107,14 +107,14 @@ All are sentence-case action labels or short nouns. Counts include visible words
 | Group | Exact copy (word count) | Result |
 | --- | --- | --- |
 | Navigation | Audio setup (2); How it works (3); License (1); Privacy (1); Terms (1) | clear destinations |
-| Main headings | Add intros and outros to voice tracks (7); Save intro, outro, bed, and filename (7); Audio recipe (2); Voice queue (2); Recent receipts (2); Create a finished batch in three steps (7); Remove batch and recipe limits (5) | clear, ordered H1→H2→H3 |
+| Main headings | Add intros and outros to voice tracks (7); Signal Desk sample workspace (4); Save intro, outro, music bed, and filename (9); Audio recipe (2); Voice queue (2); Recent receipts (2); Create a finished batch in three steps (7); Remove batch and recipe limits (5) | clear, ordered H1→H2→H3 |
 | Step headings | Add intro, outro, and music (6); Review each rendered track (4); Download the batch (3) | verb-led |
-| Primary actions | Try it with sample data (5); Open the sample batch (4); Set up a real batch (5); Save recipe (2); Render batch (2); Download WAV (2); Download MP3 (2); Download batch ZIP (3) | result named |
+| Primary actions | Try it with sample data (5); Set up a real batch (5); Save recipe (2); Render batch (2); Download WAV (2); Download MP3 (2); Download batch ZIP (3) | result named |
 | Demo and install | Reset demo (2); Start for real (3); Install app (2); Install update (2) | result named |
 | Recipe actions | Create new recipe (3); Export recipe JSON (3); Import recipe JSON (3); Delete recipe (2); Download receipt JSON (3) | result named |
-| License actions | Buy studio license · $29 (4); Verify license (2) | result and price named |
+| License actions | Buy Studio license · $29 (external checkout) (6); Verify license (2) | result, price, and external destination named |
 | File actions | Clear intro (2); Clear outro (2); Clear music bed (3); Remove `{filename}` (2) | accessible names are specific |
-| Field labels | Saved recipe (2); Recipe name (2); Intro optional (2); Outro optional (2); Music bed optional (3); Bed level (2); Voice target (2); Output format (2); MP3 bitrate (2); Filename recipe (2); Start number (2); Already bought? Paste license (4) | every input has a bound label |
+| Field labels | Saved recipe (2); Recipe name (2); Intro optional (2); Outro optional (2); Music bed optional (3); Music bed level (3); Voice target (2); Output format (2); MP3 bitrate (2); Filename recipe (2); Start number (2); Already bought? Paste license (4) | every input has a bound label |
 | Options | New recipe (2); −16 LUFS · podcast (3); −19 LUFS · mono voice (4); −14 LUFS · course/video (3); WAV · 48 kHz, 16-bit (4); MP3 · 48 kHz (3); 128 kbps (2); 192 kbps (2) | factual bitrate labels; `mp3-output` checks the selected constant bitrate |
 | Status fragments | On device (2); Offline ready (2); Unsaved (1); Waiting (1); Rendered · `{seconds}` s (2); Rendering… (1); Preparing… (1); Batch complete (2); Studio license active (3) | one term, “render,” is used for processing |
 
@@ -125,7 +125,7 @@ All are sentence-case action labels or short nouns. Counts include visible words
 | Add intros, outros, and music beds to WAV or MP3 voice tracks. | 11 | core workflow, `wav-mp3-input` |
 | Render each batch as WAV or MP3 without uploading audio. | 10 | `wav-receipt`, `mp3-output`, `local-audio` |
 | Wrapline is for podcasters, radio makers, and course creators who repeat the same audio setup across many tracks. | 18 | audience |
-| Try it with sample data opens three ready-to-render voice tracks at `/demo`. | 11 | `demo-sample-data` |
+| Try it with sample data opens the Signal Desk workspace with three ready-to-render voice tracks at `/demo`. | 15 | `demo-sample-data` |
 | The same isolated sample opens at `/?demo=1`. | 7 | `demo-sample-data` |
 | Demo recipes, receipts, and license state use `demo:` storage names. | 10 | `demo-isolation` |
 | The demo never reads or changes real Wrapline data. | 9 | `demo-isolation` |
@@ -142,6 +142,7 @@ All are sentence-case action labels or short nouns. Counts include visible words
 | Reloads the installed demo offline after its first visit. | 9 | `offline-demo` |
 | Saves one recipe and renders three tracks per batch for free. | 11 | `free-tier` |
 | Offers a $29 one-time Studio license for unlimited recipes and tracks per batch. | 13 | `studio-license`, `studio-unlimited` |
+| The purchase link opens the external Sociobot checkout. | 8 | `studio-license` |
 | Open the printed local URL. | 5 | instruction |
 | Use `/demo` for the isolated sample or `/` for your own audio. | 11 | instruction |
 | Deploy `dist/` as the static output. | 6 | instruction |
@@ -170,7 +171,7 @@ README headings—Wrapline (1), Try it safely (3), What it does (3), Run locally
 
 | Route | Sentence inventory | Result |
 | --- | --- | --- |
-| Privacy | Your audio does not leave your device during a render. (10) · Wrapline decodes, mixes, previews, and packages files inside your browser. (10) · Recipe settings, intro, outro, music-bed files, receipts, and your license token use local browser storage. (15) · Export recipe JSON downloads the current recipe and its audio files. (10) | `local-audio`, `local-recipes`, `recipe-controls` |
+| Privacy | Your audio does not leave your device during a render. (10) · Wrapline decodes, mixes, previews, and packages files inside your browser. (10) · Recipe settings, intro, outro, music bed files, receipts, and your license token use local browser storage. (16) · Export recipe JSON downloads the current recipe and its audio files. (10) | `local-audio`, `local-recipes`, `recipe-controls` |
 | Privacy demo | The sample demo uses separate names beginning with `demo:`. (9) · Reset demo and Start for real delete that demo namespace. (10) · The demo does not open or copy real Wrapline recipes, receipts, or license state. (14) | `demo-isolation` |
 | Privacy license | When you verify a Studio license, Wrapline sends the token—not your audio—to the product verification URL. (16) · A completed check for the same token is reused for one day. (12) | `license-boundary`, `license-daily-check` |
 | Privacy network | This version has no analytics, advertising, tracking pixels, third-party fonts, or runtime CDN scripts. (14) · A render sends no network requests outside Wrapline. (8) · The installed demo can render offline after its first visit. (10) | `local-audio`, `offline-demo` |

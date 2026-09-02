@@ -55,6 +55,7 @@ h1 { max-width: 700px; margin: 0 0 24px; font-size: clamp(42px, 6vw, 72px); text
 h1 em { color: var(--blue); font-style: normal; }
 h2 { margin: 0 0 14px; font-size: clamp(34px, 4vw, 52px); text-transform: uppercase; }
 h3 { margin: 0; font-size: 28px; text-transform: uppercase; }
+.sheet-heading .sheet-title { margin: 0; font-size: 28px; text-transform: uppercase; }
 .lede { max-width: 600px; margin: 0 0 28px; color: var(--ink-soft); font-size: 19px; line-height: 1.55; }
 .hero-actions, .form-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .sample-action { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 7px; }
@@ -77,6 +78,8 @@ h3 { margin: 0; font-size: 28px; text-transform: uppercase; }
 .section-heading { display: grid; grid-template-columns: 1fr minmax(280px, 460px); column-gap: 70px; margin-bottom: 40px; }
 .section-heading .eyebrow { grid-column: 1/-1; }
 .section-heading p:last-child { margin: 4px 0 0; color: var(--ink-soft); }
+.demo-workspace-heading { margin-bottom: 28px; }
+.demo-workspace-heading h1 { max-width: 620px; font-size: clamp(34px, 5vw, 58px); }
 .bench-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; align-items: start; }
 .recipe-sheet, .queue-sheet { min-width: 0; border: var(--line); background: var(--stock); box-shadow: var(--shadow); }
 .sheet-heading { min-height: 76px; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px 20px; border-bottom: 2px solid var(--ink); }
@@ -200,6 +203,7 @@ footer > div:nth-child(2) a { min-width: 44px; min-height: 44px; display: inline
   .section-heading, .bench-grid, .receipts-section { grid-template-columns: 1fr; }
   .section-heading { gap: 4px; }
   .queue-sheet { position: static; }
+  .demo-main .queue-sheet { order: -1; }
   .receipts-section { gap: 30px; }
   .unlock { grid-template-columns: 90px 1fr; }
   .license-actions { grid-column: 1/-1; }
@@ -221,6 +225,11 @@ footer > div:nth-child(2) a { min-width: 44px; min-height: 44px; display: inline
   .hero-art { max-height: 220px; box-shadow: 5px 5px 0 var(--blue), 9px 9px 0 var(--ink); }
   .hero-art img { height: 220px; object-position: 64% center; }
   .bench { padding: 64px 0; }
+  .demo-main .bench { padding-top: 28px; }
+  .demo-main .section-heading { margin-bottom: 20px; }
+  .demo-workspace-heading h1 { font-size: 34px; }
+  .demo-main .queue-sheet .drop-zone { min-height: 92px; margin-block: 12px; padding-block: 10px; }
+  .demo-main .queue-sheet .drop-icon { display: none; }
   .section-heading { margin-bottom: 28px; }
   .bench-grid { gap: 22px; }
   .sheet-heading { padding: 14px; }

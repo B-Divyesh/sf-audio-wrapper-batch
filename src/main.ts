@@ -26,6 +26,25 @@ if (demoMode) {
 const app = document.querySelector<HTMLDivElement>('#app');
 if (!app) throw new Error('App root is missing.');
 
+const landingHero = demoMode ? '' : `
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">Intros and outros for many tracks</p>
+        <h1 id="hero-title" tabindex="-1">Add intros and outros to voice tracks</h1>
+        <p class="lede">For podcasters, radio makers, and course creators who need the same music, loudness, and filenames across many tracks.</p>
+        <div class="hero-actions"><span class="sample-action"><a class="button primary" href="/demo">Try it with sample data</a><small>Opens three ready-to-render voice tracks.</small></span><a class="button secondary" href="#bench">Set up a real batch</a><button class="button secondary" id="install-button" type="button" hidden>Install app</button></div>
+        <ul class="proof-list" aria-label="Product facts"><li>WAV and MP3 input</li><li>WAV or MP3 output</li><li>Audio stays on this device</li></ul>
+      </div>
+      <figure class="hero-art">
+        <img src="/art/wrapline-bench.webp" width="1280" height="853" fetchpriority="high" decoding="async" alt="Risograph collage of waveform strips passing through a hand-operated printing jig" />
+        <figcaption>Intro, voice, outro, and music bed.</figcaption>
+      </figure>
+    </section>`;
+
+const benchHeading = demoMode
+  ? `<div class="section-heading demo-workspace-heading"><p class="eyebrow">Sample batch</p><h1 id="demo-workspace-title" tabindex="-1">Signal Desk sample workspace</h1><p>The saved Signal Desk recipe has an intro, outro, music bed, and three voice tracks.</p></div>`
+  : `<div class="section-heading"><p class="eyebrow">Your batch setup</p><h2 id="bench-title">Save intro, outro, music bed, and filename</h2><p>Choose the added audio once, then review and download each rendered batch.</p></div>`;
+
 app.innerHTML = `
   <header class="site-header">
     <a class="brand" href="/" aria-label="Wrapline home"><span class="brand-mark" aria-hidden="true">≋</span> Wrapline</a>
@@ -36,30 +55,14 @@ app.innerHTML = `
   </header>
   <div class="offline-banner" id="offline-banner" role="status" hidden>You’re offline. Local audio processing still works; license checks will resume later.</div>
   ${demoMode ? '<div class="demo-banner" role="status"><span><strong>Demo — sample data, nothing is saved to your real data.</strong> Three short sample tracks are ready to render.</span><span class="demo-actions"><button class="text-button" id="reset-demo" type="button">Reset demo</button><button class="button quiet" id="start-real" type="button">Start for real</button></span></div>' : ''}
-  <main id="main" tabindex="-1">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <p class="eyebrow">Intros and outros for many tracks</p>
-        <h1 id="hero-title" tabindex="-1">Add intros and outros to voice tracks</h1>
-        <p class="lede">For podcasters, radio makers, and course creators who need the same music, loudness, and filenames across many tracks.</p>
-        <div class="hero-actions"><span class="sample-action"><a class="button primary" href="${demoMode ? '#bench' : '/demo'}">${demoMode ? 'Open the sample batch' : 'Try it with sample data'}</a><small>${demoMode ? 'Jumps to three ready-to-render voice tracks.' : 'Opens three ready-to-render voice tracks.'}</small></span><a class="button secondary" href="#bench">Set up a real batch</a><button class="button secondary" id="install-button" type="button" hidden>Install app</button></div>
-        <ul class="proof-list" aria-label="Product facts"><li>WAV and MP3 input</li><li>WAV or MP3 output</li><li>Audio stays on this device</li></ul>
-      </div>
-      <figure class="hero-art">
-        <img src="/art/wrapline-bench.webp" width="1280" height="853" fetchpriority="high" decoding="async" alt="Risograph collage of waveform strips passing through a hand-operated printing jig" />
-        <figcaption>Intro, voice, outro, and bed.</figcaption>
-      </figure>
-    </section>
+  <main id="main" class="${demoMode ? 'demo-main' : ''}" tabindex="-1">
+    ${landingHero}
 
-    <section class="bench" id="bench" aria-labelledby="bench-title">
-      <div class="section-heading">
-        <p class="eyebrow">Your batch setup</p>
-        <h2 id="bench-title">Save intro, outro, bed, and filename</h2>
-        <p>Choose the added audio once, then review and download each rendered batch.</p>
-      </div>
+    <section class="bench" id="bench" aria-labelledby="${demoMode ? 'demo-workspace-title' : 'bench-title'}">
+      ${benchHeading}
       <div class="bench-grid">
         <section class="recipe-sheet" aria-labelledby="recipe-title">
-          <div class="sheet-heading"><div><span class="step-number">01</span><h3 id="recipe-title">Audio recipe</h3></div><span id="version-stamp" class="stamp">Unsaved</span></div>
+          <div class="sheet-heading"><div><span class="step-number">01</span>${demoMode ? '<h2 class="sheet-title" id="recipe-title">Audio recipe</h2>' : '<h3 id="recipe-title">Audio recipe</h3>'}</div><span id="version-stamp" class="stamp">Unsaved</span></div>
           <div class="saved-row">
             <label for="saved-recipes">Saved recipe</label>
             <select id="saved-recipes"><option value="">New recipe</option></select>
@@ -76,11 +79,11 @@ app.innerHTML = `
                 <span class="layer-index">C</span><div><label for="outro-file">Outro <span>optional</span></label><input id="outro-file" type="file" accept="audio/wav,audio/mpeg,.wav,.mp3" /><small id="outro-status">No outro selected</small></div><button class="icon-button" type="button" data-clear="outro" aria-label="Clear outro">×</button>
               </div>
               <div class="audio-layer bed-layer">
-                <span class="layer-index">↳</span><div><label for="bed-file">Music bed <span>optional</span></label><input id="bed-file" type="file" accept="audio/wav,audio/mpeg,.wav,.mp3" /><small id="bed-status">No bed selected</small></div><button class="icon-button" type="button" data-clear="bed" aria-label="Clear music bed">×</button>
+                <span class="layer-index">↳</span><div><label for="bed-file">Music bed <span>optional</span></label><input id="bed-file" type="file" accept="audio/wav,audio/mpeg,.wav,.mp3" /><small id="bed-status">No music bed selected</small></div><button class="icon-button" type="button" data-clear="bed" aria-label="Clear music bed">×</button>
               </div>
             </div>
             <div class="two-fields">
-              <div class="field"><label for="bed-volume">Bed level <output id="bed-output" for="bed-volume">−24 dB</output></label><input id="bed-volume" type="range" min="-40" max="-8" value="-24" step="1" /></div>
+              <div class="field"><label for="bed-volume">Music bed level <output id="bed-output" for="bed-volume">−24 dB</output></label><input id="bed-volume" type="range" min="-40" max="-8" value="-24" step="1" /></div>
               <div class="field"><label for="target-loudness">Voice target</label><select id="target-loudness"><option value="-16">−16 LUFS · podcast</option><option value="-19">−19 LUFS · mono voice</option><option value="-14">−14 LUFS · course/video</option></select></div>
             </div>
             <div class="two-fields output-fields">
@@ -101,7 +104,7 @@ app.innerHTML = `
         </section>
 
         <section class="queue-sheet" aria-labelledby="queue-title">
-          <div class="sheet-heading"><div><span class="step-number">02</span><h3 id="queue-title">Voice queue</h3></div><span class="stamp" id="queue-count">0 tracks</span></div>
+          <div class="sheet-heading"><div><span class="step-number">02</span>${demoMode ? '<h2 class="sheet-title" id="queue-title">Voice queue</h2>' : '<h3 id="queue-title">Voice queue</h3>'}</div><span class="stamp" id="queue-count">0 tracks</span></div>
           <label class="drop-zone" id="drop-zone" for="voice-files">
             <span class="drop-icon" aria-hidden="true">↓</span><strong>Drop finished voice tracks</strong><span>or choose WAV / MP3 files</span>
             <input id="voice-files" type="file" accept="audio/wav,audio/mpeg,.wav,.mp3" multiple />
@@ -133,7 +136,7 @@ app.innerHTML = `
       <div class="unlock-mark" aria-hidden="true">∞</div>
       <div><p class="eyebrow">One-time studio license</p><h2 id="unlock-title">Remove batch and recipe limits</h2><p>The free tier saves one recipe and renders three tracks per batch. A <strong>$29 one-time purchase</strong> unlocks unlimited tracks and saved recipes on your devices.</p></div>
       <div class="license-actions">
-        <a class="button primary" id="buy-link"${studioCheckoutAvailable ? ` href="${checkoutUrl}"` : ' aria-disabled="true"'}>${studioCheckoutAvailable ? 'Buy studio license · $29' : 'Studio checkout is preparing'}</a>
+        <a class="button primary" id="buy-link"${studioCheckoutAvailable ? ` href="${checkoutUrl}"` : ' aria-disabled="true"'}>${studioCheckoutAvailable ? 'Buy Studio license · $29 (external checkout)' : 'Studio checkout is preparing'}</a>
         ${studioCheckoutAvailable ? '' : '<p class="fine-print">Already have a Studio license? Paste it below to restore it on this device.</p>'}
         <form id="license-form"><label for="license-token">Already bought? Paste license</label><div><input id="license-token" autocomplete="off" spellcheck="false" /><button class="button quiet" type="submit">Verify license</button></div></form>
         <p id="license-message" class="form-message" aria-live="polite"></p>
@@ -194,7 +197,7 @@ function fillRecipeForm(): void {
   (['intro', 'outro', 'bed'] as const).forEach((key) => {
     const status = $(`#${key}-status`);
     const asset = current[key];
-    status.textContent = asset ? asset.name : `No ${key === 'bed' ? 'bed' : key} selected`;
+    status.textContent = asset ? asset.name : `No ${key === 'bed' ? 'music bed' : key} selected`;
   });
   $('#version-stamp').textContent = current.version ? `v${current.version}` : 'Unsaved';
   $<HTMLButtonElement>('#delete-recipe').hidden = !recipes.some((recipe) => recipe.id === current.id);
@@ -305,7 +308,7 @@ function updateLicenseUi(note?: string): void {
   unlocked = state.unlocked;
   $('#unlock').classList.toggle('is-unlocked', unlocked);
   const link = $<HTMLAnchorElement>('#buy-link');
-  link.textContent = unlocked ? 'Studio license active' : studioCheckoutAvailable ? 'Buy studio license · $29' : 'Studio checkout is preparing';
+  link.textContent = unlocked ? 'Studio license active' : studioCheckoutAvailable ? 'Buy Studio license · $29 (external checkout)' : 'Studio checkout is preparing';
   link.toggleAttribute('aria-disabled', unlocked || !studioCheckoutAvailable);
   if (!unlocked && studioCheckoutAvailable) link.href = checkoutUrl;
   else link.removeAttribute('href');
@@ -400,7 +403,7 @@ async function renderBatch(): Promise<void> {
       targetLufs: current.targetLufs,
       codec: current.outputFormat === 'mp3' ? 'MP3 CBR' : 'WAV PCM 16-bit',
       ...(current.outputFormat === 'mp3' ? { bitrateKbps: current.mp3Bitrate } : {}),
-      measurement: 'RMS-based LUFS estimate, ±12 dB gain cap; intro/outro unchanged; bed −7 dB under voice; sample-peak ceiling −0.18 dBFS',
+      measurement: 'RMS-based LUFS estimate, ±12 dB gain cap; intro/outro unchanged; music bed −7 dB under voice; sample-peak ceiling −0.18 dBFS',
       items: successful.map(({ job, output }) => ({ source: job.file.name, output: output.name, sourceSha256: output.sourceHash, durationSeconds: output.durationSeconds, appliedGainDb: output.gainDb, peakLimited: output.peakLimited })),
     };
     await saveReceipt(receipt);
@@ -446,12 +449,13 @@ function bindEvents(): void {
       }
     });
   }
-  window.addEventListener('beforeinstallprompt', (event) => { event.preventDefault(); deferredInstall = event; $<HTMLButtonElement>('#install-button').hidden = false; });
-  $('#install-button').addEventListener('click', async () => {
+  const installButton = document.querySelector<HTMLButtonElement>('#install-button');
+  window.addEventListener('beforeinstallprompt', (event) => { event.preventDefault(); deferredInstall = event; if (installButton) installButton.hidden = false; });
+  installButton?.addEventListener('click', async () => {
     if (!deferredInstall) return;
     (deferredInstall as Event & { prompt: () => Promise<void> }).prompt();
     deferredInstall = undefined;
-    $<HTMLButtonElement>('#install-button').hidden = true;
+    installButton.hidden = true;
   });
   $('#bed-volume').addEventListener('input', () => { const value = $<HTMLInputElement>('#bed-volume').value; $('#bed-output').textContent = `${value.replace('-', '−')} dB`; });
   $('#naming-template').addEventListener('input', renderQueue);
@@ -466,7 +470,7 @@ function bindEvents(): void {
   for (const key of ['intro', 'outro', 'bed'] as const) {
     $<HTMLInputElement>(`#${key}-file`).addEventListener('change', (event) => {
       const file = (event.currentTarget as HTMLInputElement).files?.[0];
-      if (!file || !validAudio(file)) return message('#recipe-message', 'Choose a WAV or MP3 intro, outro, or music-bed file.', true);
+      if (!file || !validAudio(file)) return message('#recipe-message', 'Choose a WAV or MP3 intro, outro, or music bed file.', true);
       preserveDraftFields();
       current[key] = assetFrom(file);
       fillRecipeForm();
@@ -503,7 +507,7 @@ function bindEvents(): void {
     } catch (error) { message('#recipe-message', error instanceof Error ? error.message : 'The recipe could not be saved because local storage failed. Check browser storage and try again.', true); }
   });
   $('#delete-recipe').addEventListener('click', async () => {
-    if (!confirm(`Delete “${current.name}” and its saved intro, outro, and music-bed files from this device?`)) return;
+    if (!confirm(`Delete “${current.name}” and its saved intro, outro, and music bed files from this device?`)) return;
     await deleteRecipe(current.id);
     recipes = await getRecipes(); current = freshRecipe(); renderRecipeOptions(); fillRecipeForm(); message('#recipe-message', 'Recipe deleted.');
   });

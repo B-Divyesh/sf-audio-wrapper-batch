@@ -179,7 +179,7 @@ test('route navigation focuses and announces the page heading', async ({ page })
   await page.getByRole('link', { name: 'Try it with sample data' }).click();
   await page.waitForURL('/demo');
   await expect(page.getByRole('heading', { level: 1 })).toBeFocused();
-  await expect(page.locator('#route-announcer')).toHaveText('Add intros and outros to voice tracks');
+  await expect(page.locator('#route-announcer')).toHaveText('Signal Desk sample workspace');
 
   await page.goBack();
   await expect(page).toHaveURL(/\/$/);
@@ -308,7 +308,7 @@ test('@claim:offline-demo The demo works offline after its first visit', async (
     // A new install must survive without relying on the browser's HTTP cache.
     await context.setOffline(true);
     await page.reload();
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('Add intros and outros');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Signal Desk sample workspace');
     await expect(page.getByText(/You’re offline/)).toBeVisible();
     await expect(page.locator('#queue-list .job-ticket')).toHaveCount(3);
     await page.getByRole('button', { name: 'Render batch' }).click();
@@ -318,14 +318,38 @@ test('@claim:offline-demo The demo works offline after its first visit', async (
 });
 
 test('@claim:demo-sample-data One click opens a useful three-track sample batch', async ({ page }) => {
-  await page.goto('/?demo=1');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  await page.getByRole('link', { name: 'Try it with sample data' }).click();
+  await page.waitForURL('/demo');
   await expect(page).toHaveTitle('Demo — Wrapline');
   await expect(page.getByText(/Demo — sample data, nothing is saved to your real data/)).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Signal Desk sample workspace' })).toBeVisible();
   await expect(page.locator('#queue-list .job-ticket')).toHaveCount(3);
   await expect(page.locator('#queue-list')).toContainText('harbour-forecast.wav');
   await expect(page.locator('#intro-status')).toHaveText('signal-desk-intro.wav');
   await expect(page.getByRole('button', { name: 'Reset demo' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Start for real' })).toBeVisible();
+  for (const locator of [page.getByRole('heading', { name: 'Signal Desk sample workspace' }), page.locator('#queue-list .job-ticket').first()]) {
+    const box = await locator.boundingBox();
+    expect(box).not.toBeNull();
+    expect((box?.y ?? 845) + (box?.height ?? 0)).toBeLessThanOrEqual(844);
+  }
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/');
+  await page.getByRole('link', { name: 'Try it with sample data' }).click();
+  await page.waitForURL('/demo');
+  for (const locator of [page.getByRole('heading', { name: 'Signal Desk sample workspace' }), page.locator('#queue-list .job-ticket').first()]) {
+    const box = await locator.boundingBox();
+    expect(box).not.toBeNull();
+    expect((box?.y ?? 901) + (box?.height ?? 0)).toBeLessThanOrEqual(900);
+  }
+
+  await page.goto('/?demo=1');
+  await expect(page.getByText(/Demo — sample data, nothing is saved to your real data/)).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Reset demo' })).toBeVisible();
+  await expect(page.locator('#queue-list .job-ticket')).toHaveCount(3);
   await page.locator('#recipe-name').fill('Changed sample');
   await page.getByRole('button', { name: 'Save recipe' }).click();
   await page.getByRole('button', { name: 'Reset demo' }).click();
@@ -490,7 +514,7 @@ test('@claim:audio-behavior Loudness, mixing, peak, rate, and bit depth match th
   const receipt = JSON.parse(readFileSync(receiptPath as string, 'utf8')) as { items: Array<{ appliedGainDb: number }>; measurement: string };
   expect(receipt.items.map((item) => item.appliedGainDb)).toEqual([12, -12]);
   expect(receipt.measurement).toContain('intro/outro unchanged');
-  expect(receipt.measurement).toContain('bed −7 dB under voice');
+  expect(receipt.measurement).toContain('music bed −7 dB under voice');
 });
 
 test('WAV output header and sample peak remain valid', async ({ page }) => {
@@ -548,11 +572,12 @@ test('@claim:source-receipt A receipt records the source hash and production fie
   });
 });
 
-test('@claim:studio-license The Studio call to action names the registered $29 one-time license', async ({ page }) => {
+test('@claim:studio-license The Studio call to action names the registered $29 one-time license and external checkout', async ({ page }) => {
   await page.goto('/demo');
   const link = page.locator('#buy-link');
-  await expect(link).toHaveText('Buy studio license · $29');
+  await expect(link).toHaveText('Buy Studio license · $29 (external checkout)');
   await expect(link).toHaveAttribute('href', 'https://api.sociobot.in/api/v1/products/audio-wrapper-batch/checkout');
+  await expect(link).not.toHaveAttribute('target');
   await expect(page.locator('#unlock')).toContainText('one-time purchase');
 });
 
@@ -674,7 +699,7 @@ test('@claim:free-tier An unverified license keeps the three-track free limit', 
   await page.locator('#license-token').fill('arbitrary-unverified-token');
   await page.getByRole('button', { name: 'Verify license' }).click();
   await expect(page.getByText(/could not be verified/)).toBeVisible();
-  await expect(page.locator('#buy-link')).toHaveText('Buy studio license · $29');
+  await expect(page.locator('#buy-link')).toHaveText('Buy Studio license · $29 (external checkout)');
 
   await page.locator('#voice-files').setInputFiles([1, 2, 3, 4].map((index) => ({
     name: `outage-${index}.wav`, mimeType: 'audio/wav', buffer: wavBuffer(),
@@ -762,7 +787,7 @@ test('controls use labels that name their result', async ({ page }) => {
 test('release build exposes the registered hosted Studio checkout', async ({ page }) => {
   await page.goto('/');
   const link = page.locator('#buy-link');
-  await expect(link).toHaveText('Buy studio license · $29');
+  await expect(link).toHaveText('Buy Studio license · $29 (external checkout)');
   await expect(link).toHaveAttribute('href', 'https://api.sociobot.in/api/v1/products/audio-wrapper-batch/checkout');
   await expect(link).not.toHaveAttribute('aria-disabled');
 });
