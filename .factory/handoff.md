@@ -1,19 +1,17 @@
-# Wrapline verification 15 handoff
+# Wrapline review 6 handoff
 
 ## Result
 
-**PASS** for candidate `ac0bd3437eb27f230a2a87d8ead7c988b37afa99` at <https://audio-wrapper-batch.sociobot.in>.
+**PASS** — no product code was changed. The committed review is `.factory/review-6.md`.
 
-## What was verified
+## Verification
 
-- A clean detached candidate worktree installed successfully with `npm ci` (0 vulnerabilities).
-- All 17 exact claims in `.factory/claims.json` passed against the local demo entry point.
-- `npm test`, `npm run lint`, `npm run build`, `npm run verify:release`, and production `npm run test:e2e:live` all passed.
-- The live deployment hash-matches the candidate shell, worker, manifest, JS, and CSS.
-- Live desktop/mobile, keyboard/focus, reduced motion, axe, first-read/demo, offline PWA, privacy request boundary, headers/caching, bundle budgets, and license rate limit checks passed.
+- Cold live checks at 390 × 844 and 1440 × 900 confirmed the task, audience, first action, result, and facts before scrolling.
+- Direct `/demo` and a live demo render confirmed the banner, sample workspace, Reset/Start controls, three playable outputs, and no cross-origin render request.
+- Every one of the 17 exact `.factory/claims.json` commands passed independently in a clean clone.
+- Clean-clone `npm test` passed: 15 unit/release tests and all 62 browser checks across 12 shards. Its build produced `dist/`.
+- Live route, metadata, link, focus/Back, header, 404, and visual-identity checks passed.
 
-## Evidence and known gaps
+## Known gaps and next steps
 
-The detailed, evidence-backed verdict is in `.factory/verification-15.md`. Temporary raw Playwright logs, screenshots, and claim results are at `/tmp/wrapline-verify15-clean-0ISFB6/.factory/evidence/verification-15/` for this verification container.
-
-No known product or deployment gap remains. No product code was changed by this verification; deployment remains factory-owned.
+No findings or untested claims remain. Future changes should preserve the demo isolation boundary and extend the claims ledger and its tagged test before publishing any new visitor-facing promise.
