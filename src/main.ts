@@ -35,7 +35,7 @@ app.innerHTML = `
     <span class="connection" id="connection"><span aria-hidden="true">●</span> <span>On device</span></span>
   </header>
   <div class="offline-banner" id="offline-banner" role="status" hidden>You’re offline. Local audio processing still works; license checks will resume later.</div>
-  ${demoMode ? '<aside class="demo-banner" role="status"><span><strong>Demo — sample data, nothing is saved to your real data.</strong> Three short sample tracks are ready to render.</span><span class="demo-actions"><button class="text-button" id="reset-demo" type="button">Reset demo</button><button class="button quiet" id="start-real" type="button">Start for real</button></span></aside>' : ''}
+  ${demoMode ? '<div class="demo-banner" role="status"><span><strong>Demo — sample data, nothing is saved to your real data.</strong> Three short sample tracks are ready to render.</span><span class="demo-actions"><button class="text-button" id="reset-demo" type="button">Reset demo</button><button class="button quiet" id="start-real" type="button">Start for real</button></span></div>' : ''}
   <main id="main" tabindex="-1">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
@@ -140,7 +140,7 @@ app.innerHTML = `
       </div>
     </section>
   </main>
-  <footer><div><a class="brand" href="/" aria-label="Wrapline home">Wrapline</a><p>Add intros, outros, and music to many voice tracks.</p></div><div><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://sociobot.in">Built by Param Factory (external site)</a></div><p><span data-build-id>Build 1.0.0-r12</span></p></footer>
+  <footer><div><a class="brand" href="/" aria-label="Wrapline home">Wrapline</a><p>Add intros, outros, and music to many voice tracks.</p></div><div><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://sociobot.in">Built by Param Factory (external site)</a></div><p><span data-build-id>Build 1.0.0-r13</span></p></footer>
   <div class="update-toast" id="update-toast" role="status" hidden><span>A fresh version is ready.</span><button class="button quiet" id="update-button" type="button">Install update</button></div>
 `;
 

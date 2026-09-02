@@ -1,6 +1,6 @@
 # Wrapline copy audit
 
-Audited 2026-09-01 after polish round 2 retry 1. Scope: every visitor-visible sentence, heading, control label, option, status, error, and route metadata description; every README sentence and heading; and all privacy, terms, offline, and 404 prose. Hyphenated terms count as one word. Every sentence is at most 22 words. No banned marketing word remains. Claim IDs refer to `.factory/claims.json`.
+Audited 2026-09-02 after polish round 3. Scope: every visitor-visible sentence, heading, control label, option, status, error, and route metadata description; every README sentence and heading; and all privacy, terms, offline, and 404 prose. Hyphenated terms count as one word. Every sentence is at most 22 words. No banned marketing word remains. Claim IDs refer to `.factory/claims.json`.
 
 ## Landing and app sentences
 
@@ -175,7 +175,7 @@ README headings—Wrapline (1), Try it safely (3), What it does (3), Run locally
 | Privacy license | When you verify a Studio license, Wrapline sends the token—not your audio—to the product verification URL. (16) · A completed check for the same token is reused for one day. (12) | `license-boundary`, `license-daily-check` |
 | Privacy network | This version has no analytics, advertising, tracking pixels, third-party fonts, or runtime CDN scripts. (14) · A render sends no network requests outside Wrapline. (8) · The installed demo can render offline after its first visit. (10) | `local-audio`, `offline-demo` |
 | Privacy choices | Delete an individual saved recipe in the app. (8) · Remove all local data using your browser’s site-data controls. (9) · Export recipes and receipts before clearing data if you want a copy. (11) | instructions |
-| Privacy contact | Privacy questions can be sent through Sociobot (external site). (9) · This policy will be updated if Wrapline’s data behavior changes. (10) | contact and policy notice |
+| Privacy contact | Privacy questions can be sent through Sociobot (external site). (9) | contact instruction; the untestable future-policy promise was removed in round 3 |
 | Terms use | You may use Wrapline to process audio you own or have permission to use. (14) · Check each output before publication and keep backups of source files and exported recipes. (13) | instruction |
 | Terms audio | Wrapline accepts browser-decodable WAV and MP3 inputs. (7) · It exports 48 kHz WAV or MP3 at 128 or 192 kbps. (12) · Loudness uses an RMS-based estimate with a ±12 dB gain cap. (11) · Peak control is sample-based, not broadcast-certified EBU R128 or true-peak measurement. (11) · Browser codec support varies by operating system. (7) | `wav-mp3-input`, `mp3-output`, `audio-behavior` |
 | Terms purchase | The free tier saves one recipe and renders up to three tracks per batch. (13) · A $29 one-time Studio license permits unlimited saved recipes and tracks per batch. (13) · Wrapline enables Studio only after a valid product-scoped license response. (10) | `free-tier`, `studio-license`, `studio-unlimited`, `license-boundary` |

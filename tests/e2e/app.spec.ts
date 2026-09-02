@@ -42,7 +42,7 @@ test('loads a clear, accessible empty bench', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'Try it with sample data' })).toHaveAttribute('href', '/demo');
   await expect(page.getByText('Added voice tracks appear here.')).toBeVisible();
   const results = await new AxeBuilder({ page }).analyze();
-  expect(results.violations.filter((violation) => ['serious', 'critical'].includes(violation.impact ?? ''))).toEqual([]);
+  expect(results.violations).toEqual([]);
   expect(consoleErrors).toEqual([]);
 });
 
@@ -129,7 +129,7 @@ test('@claim:route-shell Every public route has metadata, legal links, and a rea
       .toEqual(['/#bench', '/#method', '/#unlock']);
     await expect(page.locator('footer'), route.path).toContainText('Add intros, outros, and music to many voice tracks.');
     await expect(page.locator('footer'), route.path).toContainText('Built by Param Factory');
-    await expect(page.locator('footer [data-build-id]'), route.path).toHaveText('Build 1.0.0-r12');
+    await expect(page.locator('footer [data-build-id]'), route.path).toHaveText('Build 1.0.0-r13');
     await expect(page.locator('footer'), route.path).not.toContainText('Bench artwork generated for Wrapline with Azure AI Foundry.');
     await expect(page.locator('footer a[href="/privacy/"]'), route.path).toHaveCount(1);
     await expect(page.locator('footer a[href="/terms/"]'), route.path).toHaveCount(1);
@@ -137,6 +137,9 @@ test('@claim:route-shell Every public route has metadata, legal links, and a rea
       await expect(page.locator('meta[name="description"]')).not.toHaveAttribute('content', /refund/i);
       await expect(page.locator('meta[property="og:description"]')).not.toHaveAttribute('content', /refund/i);
       await expect(page.locator('meta[name="twitter:description"]')).not.toHaveAttribute('content', /refund/i);
+    }
+    if (route.path === '/privacy/') {
+      await expect(page.locator('main'), route.path).not.toContainText('This policy will be updated');
     }
 
     await page.keyboard.press('Tab');
@@ -146,7 +149,7 @@ test('@claim:route-shell Every public route has metadata, legal links, and a rea
     await expect.poll(() => page.evaluate(() => document.activeElement?.id), { message: route.path }).toBe('main');
 
     const results = await new AxeBuilder({ page }).analyze();
-    expect(results.violations.filter((violation) => ['serious', 'critical'].includes(violation.impact ?? '')), route.path).toEqual([]);
+    expect(results.violations, route.path).toEqual([]);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth), route.path).toBe(true);
   }
   // Chromium reports the intentionally missing top-level document as a

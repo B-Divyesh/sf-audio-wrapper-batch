@@ -1,1 +1,1 @@
-Add intros, outros, and music to voice tracks, then export a WAV or MP3 batch without uploading audio.
+Add intros, outros, and music to voice tracks, then export WAV or MP3 batches without uploading audio.
