@@ -42,6 +42,7 @@ Privacy, terms, and not-found routes use the same ink-block wordmark, compact pr
 - Recipe layers read top-to-bottom in render order: intro, voice, outro, with the bed shown beneath.
 - Output format and MP3 bitrate sit with loudness controls because they define the rendered deliverable.
 - Primary actions are tomato blocks with a small offset shadow; press moves the block onto its shadow.
+- First-screen facts use outlined registration squares, avoiding red × marks that could imply missing features.
 - Render progress advances along the ticket edge and is announced through a polite live region.
 - Save, export, and paid state use plain language and show where data lives: “Saved on this device.”
 - Keyboard users can add files, edit every recipe control, review audio, render, download, remove, and restore a license without custom gestures.

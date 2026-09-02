@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
-import type { Browser, BrowserContext, BrowserContextOptions } from '@playwright/test';
+import type { Browser, BrowserContext, BrowserContextOptions, Page } from '@playwright/test';
 
 function wavBuffer(duration = 0.08, amplitude = 6000 / 32767, frequency = 1_000, sampleRate = 8_000): Buffer {
   const samples = Math.floor(sampleRate * duration);
@@ -31,6 +31,51 @@ async function withOwnedContext<T>(
     // Never close the worker browser or a fixture-owned context here.
     await ownedContext.close().catch(() => undefined);
   }
+}
+
+async function snapshotRealStorage(page: Page): Promise<string> {
+  return page.evaluate(async () => {
+    const serialize = async (value: unknown): Promise<unknown> => {
+      if (value instanceof File) {
+        return {
+          kind: 'File',
+          name: value.name,
+          type: value.type,
+          lastModified: value.lastModified,
+          bytes: Array.from(new Uint8Array(await value.arrayBuffer())),
+        };
+      }
+      if (value instanceof Blob) {
+        return { kind: 'Blob', type: value.type, bytes: Array.from(new Uint8Array(await value.arrayBuffer())) };
+      }
+      if (Array.isArray(value)) return Promise.all(value.map((item) => serialize(item)));
+      if (value && typeof value === 'object') {
+        const entries = await Promise.all(Object.keys(value).sort().map(async (key) => [key, await serialize((value as Record<string, unknown>)[key])] as const));
+        return Object.fromEntries(entries);
+      }
+      return value;
+    };
+    const database = await new Promise<IDBDatabase>((resolve, reject) => {
+      const request = indexedDB.open('wrapline-local');
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    const stores: Record<string, unknown> = {};
+    for (const name of Array.from(database.objectStoreNames).sort()) {
+      const records = await new Promise<unknown[]>((resolve, reject) => {
+        const request = database.transaction(name, 'readonly').objectStore(name).getAll();
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      stores[name] = await serialize(records);
+    }
+    database.close();
+    const local = Object.fromEntries(Object.keys(localStorage)
+      .filter((key) => !key.startsWith('demo:'))
+      .sort()
+      .map((key) => [key, localStorage.getItem(key)]));
+    return JSON.stringify({ local, stores });
+  });
 }
 
 test('loads a clear, accessible empty bench', async ({ page }) => {
@@ -129,7 +174,7 @@ test('@claim:route-shell Every public route has metadata, legal links, and a rea
       .toEqual(['/#bench', '/#method', '/#unlock']);
     await expect(page.locator('footer'), route.path).toContainText('Add intros, outros, and music to many voice tracks.');
     await expect(page.locator('footer'), route.path).toContainText('Built by Param Factory');
-    await expect(page.locator('footer [data-build-id]'), route.path).toHaveText('Build 1.0.0-r14');
+    await expect(page.locator('footer [data-build-id]'), route.path).toHaveText('Build 1.0.0-r15');
     await expect(page.locator('footer'), route.path).not.toContainText('Bench artwork generated for Wrapline with Azure AI Foundry.');
     await expect(page.locator('footer a[href="/privacy/"]'), route.path).toHaveCount(1);
     await expect(page.locator('footer a[href="/terms/"]'), route.path).toHaveCount(1);
@@ -192,8 +237,13 @@ test('the 390px first screen states the concrete job and sample result', async (
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Add intros and outros to voice tracks');
   await expect(page.getByText(/same music, loudness, and filenames/)).toBeVisible();
   await expect(page.getByText('Opens three ready-to-render voice tracks.')).toBeVisible();
-  const bottom = await page.getByText('Opens three ready-to-render voice tracks.').evaluate((element) => element.getBoundingClientRect().bottom);
-  expect(bottom).toBeLessThanOrEqual(844);
+  const facts = ['Audio stays on this device', 'Demo renders offline after the first visit', 'Free: 3 tracks · Studio: $29 once'];
+  for (const fact of facts) {
+    const item = page.getByText(fact, { exact: true });
+    await expect(item).toBeVisible();
+    expect(await item.evaluate((element) => element.getBoundingClientRect().bottom), fact).toBeLessThanOrEqual(844);
+    expect(await item.evaluate((element) => getComputedStyle(element, '::before').content), fact).not.toContain('×');
+  }
 });
 
 test('release artifact keeps the trailing demo URL in the sample sandbox', async ({ page }) => {
@@ -266,10 +316,17 @@ test('@claim:wav-mp3-input Wrapline offers WAV and MP3 voice input', async ({ pa
   expect(outputs.every((output) => output.riff === 'RIFF' && output.bytes > 44)).toBe(true);
 });
 
-test('@claim:local-recipes Saved recipes, intro audio, and receipts persist on this device', async ({ page }) => {
+test('@claim:local-recipes Recipes, every added audio layer, and receipts persist on this device', async ({ page }) => {
+  const intro = wavBuffer(0.08, 0.11, 330);
+  const outro = wavBuffer(0.09, 0.12, 550);
+  const bed = wavBuffer(0.1, 0.13, 770);
   await page.goto('/');
   await page.locator('#recipe-name').fill('Field notes');
-  await page.locator('#intro-file').setInputFiles({ name: 'theme.wav', mimeType: 'audio/wav', buffer: wavBuffer() });
+  await page.locator('#intro-file').setInputFiles({ name: 'field-intro.wav', mimeType: 'audio/wav', buffer: intro });
+  await page.locator('#outro-file').setInputFiles({ name: 'field-outro.wav', mimeType: 'audio/wav', buffer: outro });
+  await page.locator('#bed-file').setInputFiles({ name: 'field-music-bed.wav', mimeType: 'audio/wav', buffer: bed });
+  await page.locator('#bed-volume').fill('-31');
+  await page.locator('#naming-template').fill('{recipe}-saved-{source}');
   await page.getByRole('button', { name: 'Save recipe' }).click();
   await expect(page.getByText(/Saved “Field notes” as version 1/)).toBeVisible();
   await page.locator('#voice-files').setInputFiles({ name: 'field-take.wav', mimeType: 'audio/wav', buffer: wavBuffer() });
@@ -277,8 +334,30 @@ test('@claim:local-recipes Saved recipes, intro audio, and receipts persist on t
   await expect(page.getByRole('link', { name: 'Download batch ZIP' })).toBeVisible({ timeout: 20_000 });
   await page.reload();
   await expect(page.locator('#recipe-name')).toHaveValue('Field notes');
-  await expect(page.locator('#intro-status')).toHaveText('theme.wav');
+  await expect(page.locator('#intro-status')).toHaveText('field-intro.wav');
+  await expect(page.locator('#outro-status')).toHaveText('field-outro.wav');
+  await expect(page.locator('#bed-status')).toHaveText('field-music-bed.wav');
+  await expect(page.locator('#bed-volume')).toHaveValue('-31');
+  await expect(page.locator('#naming-template')).toHaveValue('{recipe}-saved-{source}');
   await expect(page.locator('#receipt-list .receipt')).toHaveCount(1);
+  const stored = JSON.parse(await snapshotRealStorage(page)) as {
+    stores: {
+      recipes: Array<Record<'intro' | 'outro' | 'bed', { blob: { bytes: number[]; name: string; type: string } }>>;
+      receipts: unknown[];
+    };
+  };
+  expect(stored.stores.recipes).toHaveLength(1);
+  expect(stored.stores.receipts).toHaveLength(1);
+  for (const [key, expectedName, expectedBytes] of [
+    ['intro', 'field-intro.wav', intro],
+    ['outro', 'field-outro.wav', outro],
+    ['bed', 'field-music-bed.wav', bed],
+  ] as const) {
+    const asset = stored.stores.recipes[0]?.[key];
+    expect(asset?.blob.name).toBe(expectedName);
+    expect(asset?.blob.type).toBe('audio/wav');
+    expect(asset?.blob.bytes).toEqual(Array.from(expectedBytes));
+  }
 });
 
 test('@claim:offline-demo The demo works offline after its first visit', async ({ browser, baseURL }) => {
@@ -358,21 +437,66 @@ test('@claim:demo-sample-data One click opens a useful three-track sample batch'
   await expect(page.locator('#queue-list .job-ticket')).toHaveCount(3);
 });
 
-test('@claim:demo-isolation Demo storage never reads the real bench', async ({ page }) => {
+test('@claim:demo-isolation Demo storage never reads or changes any real storage', async ({ page }) => {
+  await page.addInitScript(() => {
+    const nativeFetch = window.fetch.bind(window);
+    window.fetch = (input, init) => {
+      if (!String(input).includes('/api/v1/products/audio-wrapper-batch/verify?license=')) return nativeFetch(input, init);
+      return Promise.resolve(new Response(JSON.stringify({ valid: false, reason: 'revoked' }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      }));
+    };
+  });
   await page.goto('/');
   await page.locator('#recipe-name').fill('Private production recipe');
+  await page.locator('#intro-file').setInputFiles({ name: 'private-intro.wav', mimeType: 'audio/wav', buffer: wavBuffer(0.08, 0.08, 310) });
+  await page.locator('#outro-file').setInputFiles({ name: 'private-outro.wav', mimeType: 'audio/wav', buffer: wavBuffer(0.09, 0.09, 510) });
+  await page.locator('#bed-file').setInputFiles({ name: 'private-music-bed.wav', mimeType: 'audio/wav', buffer: wavBuffer(0.1, 0.1, 710) });
   await page.getByRole('button', { name: 'Save recipe' }).click();
   await expect(page.locator('#recipe-message')).toContainText('Private production recipe');
+  await page.locator('#voice-files').setInputFiles({ name: 'private-voice.wav', mimeType: 'audio/wav', buffer: wavBuffer() });
+  await page.getByRole('button', { name: 'Render batch' }).click();
+  await expect(page.locator('#receipt-list .receipt')).toHaveCount(1, { timeout: 20_000 });
+  await page.evaluate(() => {
+    localStorage.setItem('sb_license:audio-wrapper-batch', 'real-private-token');
+    localStorage.setItem('sb_license_verdict:audio-wrapper-batch', JSON.stringify({ valid: true, checkedAt: Date.now(), reason: 'ok' }));
+  });
+  const before = await snapshotRealStorage(page);
 
   await page.goto('/demo');
   await expect(page.locator('#recipe-name')).toHaveValue('Signal Desk');
   const databaseNames = await page.evaluate(async () => (await indexedDB.databases()).map((database) => database.name));
   expect(databaseNames).toContain('wrapline-local');
   expect(databaseNames).toContain('demo:wrapline-local');
+  await page.locator('#recipe-name').fill('Changed demo only');
+  await page.getByRole('button', { name: 'Save recipe' }).click();
+  await page.getByRole('button', { name: 'Render batch' }).click();
+  await expect(page.locator('#receipt-list .receipt')).toHaveCount(1, { timeout: 20_000 });
+  await page.locator('#license-token').fill('demo-temporary-token');
+  await page.getByRole('button', { name: 'Verify license' }).click();
+  await expect(page.locator('#license-message')).toContainText('could not be verified');
+  expect(await page.evaluate(() => Object.keys(localStorage).filter((key) => key.startsWith('demo:')).sort())).toEqual([
+    'demo:sb_license:audio-wrapper-batch',
+    'demo:sb_license_verdict:audio-wrapper-batch',
+  ]);
+  expect(await snapshotRealStorage(page)).toBe(before);
+
+  await page.getByRole('button', { name: 'Reset demo' }).click();
+  await page.waitForURL('/demo');
+  await expect(page.locator('#recipe-name')).toHaveValue('Signal Desk');
+  await expect(page.locator('#receipt-list .receipt')).toHaveCount(0);
+  expect(await page.evaluate(() => Object.keys(localStorage).filter((key) => key.startsWith('demo:')))).toEqual([]);
   await page.getByRole('button', { name: 'Start for real' }).click();
   await page.waitForURL('/');
   await expect(page.locator('#recipe-name')).toHaveValue('Private production recipe');
+  await expect(page.locator('#intro-status')).toHaveText('private-intro.wav');
+  await expect(page.locator('#outro-status')).toHaveText('private-outro.wav');
+  await expect(page.locator('#bed-status')).toHaveText('private-music-bed.wav');
+  await expect(page.locator('#receipt-list .receipt')).toHaveCount(1);
+  expect(await snapshotRealStorage(page)).toBe(before);
   expect(await page.evaluate(async () => (await indexedDB.databases()).map((database) => database.name))).not.toContain('demo:wrapline-local');
+  expect(await page.evaluate(() => Object.keys(localStorage).filter((key) => key.startsWith('demo:')))).toEqual([]);
 });
 
 test('@claim:local-audio Demo rendering sends no audio or analytics off-device', async ({ page }) => {
@@ -663,9 +787,14 @@ test('@claim:license-boundary Verification sends only the license token and inva
 });
 
 test('@claim:recipe-controls A recipe can be exported with audio and deleted', async ({ page }) => {
+  const intro = wavBuffer(0.08, 0.07, 320);
+  const outro = wavBuffer(0.09, 0.09, 520);
+  const bed = wavBuffer(0.1, 0.11, 720);
   await page.goto('/');
   await page.locator('#recipe-name').fill('Portable show');
-  await page.locator('#intro-file').setInputFiles({ name: 'portable-intro.wav', mimeType: 'audio/wav', buffer: wavBuffer() });
+  await page.locator('#intro-file').setInputFiles({ name: 'portable-intro.wav', mimeType: 'audio/wav', buffer: intro });
+  await page.locator('#outro-file').setInputFiles({ name: 'portable-outro.wav', mimeType: 'audio/wav', buffer: outro });
+  await page.locator('#bed-file').setInputFiles({ name: 'portable-music-bed.wav', mimeType: 'audio/wav', buffer: bed });
   await page.getByRole('button', { name: 'Save recipe' }).click();
 
   const downloadPromise = page.waitForEvent('download');
@@ -673,9 +802,25 @@ test('@claim:recipe-controls A recipe can be exported with audio and deleted', a
   const download = await downloadPromise;
   const path = await download.path();
   expect(path).not.toBeNull();
-  const exported = JSON.parse(readFileSync(path as string, 'utf8')) as { format: string; name: string; intro?: { name: string; blob: string } };
-  expect(exported).toMatchObject({ format: 'wrapline-recipe-v1', name: 'Portable show', intro: { name: 'portable-intro.wav' } });
-  expect(exported.intro?.blob).toMatch(/^data:audio\/wav;base64,/);
+  const exported = JSON.parse(readFileSync(path as string, 'utf8')) as {
+    format: string;
+    name: string;
+    intro?: { name: string; blob: string };
+    outro?: { name: string; blob: string };
+    bed?: { name: string; blob: string };
+  };
+  expect(exported).toMatchObject({
+    format: 'wrapline-recipe-v1',
+    name: 'Portable show',
+    intro: { name: 'portable-intro.wav' },
+    outro: { name: 'portable-outro.wav' },
+    bed: { name: 'portable-music-bed.wav' },
+  });
+  for (const [key, expected] of [['intro', intro], ['outro', outro], ['bed', bed]] as const) {
+    const dataUrl = exported[key]?.blob ?? '';
+    expect(dataUrl).toMatch(/^data:audio\/wav;base64,/);
+    expect(Buffer.from(dataUrl.split(',')[1] ?? '', 'base64')).toEqual(expected);
+  }
 
   page.once('dialog', (dialog) => dialog.accept());
   await page.getByRole('button', { name: 'Delete recipe', exact: true }).click();
@@ -684,6 +829,9 @@ test('@claim:recipe-controls A recipe can be exported with audio and deleted', a
   await page.reload();
   await expect(page.locator('#recipe-name')).toHaveValue('My show');
   await expect(page.locator('#intro-status')).toHaveText('No intro selected');
+  await expect(page.locator('#outro-status')).toHaveText('No outro selected');
+  await expect(page.locator('#bed-status')).toHaveText('No music bed selected');
+  await expect(page.locator('#saved-recipes option')).toHaveCount(1);
 });
 
 test('@claim:free-tier An unverified license keeps the three-track free limit', async ({ page }) => {

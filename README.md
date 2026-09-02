@@ -22,7 +22,7 @@ See [`.factory/demo.md`](.factory/demo.md) for the sample contents and storage b
 - Adds a saved intro, outro, looping music bed, loudness target, and filename pattern.
 - Exports 48 kHz WAV or MP3 at 128 or 192 kbps.
 - Creates a ZIP with every rendered track and a JSON receipt.
-- Stores recipes, added audio, receipts, and license state in this browser.
+- Stores recipes with their added audio and receipts in this browser.
 - Exports a recipe with its audio files and deletes saved recipes on request.
 - Renders without analytics, trackers, runtime CDN scripts, or off-site audio requests.
 - Reloads the installed demo offline after its first visit.
@@ -53,13 +53,13 @@ Deploy `dist/` as the static output.
 
 ## Audio behavior
 
-Wrapline uses the browser Web Audio API. Browser and operating-system codec support can vary.
+Browser and operating-system codec support can vary.
 
 Voice loudness uses an RMS estimate with a ±12 dB gain cap. Intro and outro levels remain unchanged. The music bed drops 7 dB under voice. Sample peaks remain below −0.18 dBFS.
 
 This is not a broadcast-certified EBU R128 meter or true-peak limiter. Review each rendered track before publishing.
 
-MP3 output uses the bundled `@audio/encode-mp3` encoder. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for provenance and licenses.
+See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for dependency provenance and licenses.
 
 ## Privacy and legal
 
@@ -68,4 +68,4 @@ MP3 output uses the bundled `@audio/encode-mp3` encoder. See [THIRD_PARTY_NOTICE
 - [Visual thesis and art provenance](.factory/design.md)
 - [Release handoff](.factory/handoff.md)
 
-Wrapline is licensed under the MIT License. See [LICENSE](LICENSE).
+See [LICENSE](LICENSE).

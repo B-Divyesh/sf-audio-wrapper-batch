@@ -92,4 +92,20 @@ describe('release response policy', () => {
       'studio-unlimited', 'license-daily-check', 'recipe-controls', 'source-receipt', 'local-recipes',
     ]));
   });
+
+  it('keeps round-five first-screen and storage wording within tested scope', () => {
+    const app = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8');
+    const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
+    const claims = readFileSync(new URL('../.factory/claims.json', import.meta.url), 'utf8');
+
+    expect(app).toContain('Audio stays on this device');
+    expect(app).toContain('Demo renders offline after the first visit');
+    expect(app).toContain('Free: 3 tracks · Studio: $29 once');
+    expect(app).toContain('License checks need a connection');
+    expect(app).not.toContain('license checks will resume later');
+    expect(app).not.toContain('on your devices');
+    expect(readme).not.toMatch(/uses the browser Web Audio API|MP3 output uses the bundled|licensed under the MIT License/);
+    expect(claims).toContain('intro, outro, and music-bed audio');
+    expect(claims).toContain('byte-for-byte unchanged');
+  });
 });

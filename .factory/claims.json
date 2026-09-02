@@ -11,7 +11,7 @@
     "claim": "Demo data is separate from real Wrapline data and is discarded when leaving the demo.",
     "where": "Demo banner, privacy policy, .factory/demo.md, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:demo-isolation",
-    "sandbox": "Save a real recipe, enter /demo, assert the demo database and sample, leave through Start for real, and assert the real recipe remains."
+    "sandbox": "Seed a real recipe with intro, outro, and music-bed bytes, a receipt, and license state; snapshot all real IndexedDB records and non-demo localStorage; save, render, and verify a license in /demo; reset and leave; assert the real snapshot is byte-for-byte unchanged and every demo database and key is gone."
   },
   {
     "id": "local-audio",
@@ -64,10 +64,10 @@
   },
   {
     "id": "local-recipes",
-    "claim": "Saved recipes, intro audio, and receipts persist in local browser storage.",
+    "claim": "Saved recipes with intro, outro, and music-bed audio, plus rendered receipts, persist in local browser storage.",
     "where": "Privacy policy, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:local-recipes",
-    "sandbox": "Save a recipe and intro WAV, render a receipt, reload, and assert the recipe, audio name, and receipt remain."
+    "sandbox": "Save a recipe with three distinct WAV assets, render a receipt, reload, and assert every asset name and byte payload plus the recipe fields and receipt remain."
   },
   {
     "id": "free-tier",
@@ -109,7 +109,7 @@
     "claim": "A saved recipe can be exported with its audio files and deleted from the device.",
     "where": "Recipe controls, privacy policy, README",
     "test": "npm run build && npm run test:e2e -- --grep @claim:recipe-controls",
-    "sandbox": "Save a recipe with a WAV intro, inspect the downloaded JSON and embedded audio, confirm deletion, reload, and assert it is gone."
+    "sandbox": "Save a recipe with distinct intro, outro, and music-bed WAV files; assert every exported name, MIME data URL, and byte payload; delete, reload, and assert the saved record and all three asset statuses are gone."
   },
   {
     "id": "route-shell",

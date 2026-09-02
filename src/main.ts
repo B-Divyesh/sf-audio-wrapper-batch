@@ -33,7 +33,7 @@ const landingHero = demoMode ? '' : `
         <h1 id="hero-title" tabindex="-1">Add intros and outros to voice tracks</h1>
         <p class="lede">For podcasters, radio makers, and course creators who need the same music, loudness, and filenames across many tracks.</p>
         <div class="hero-actions"><span class="sample-action"><a class="button primary" href="/demo">Try it with sample data</a><small>Opens three ready-to-render voice tracks.</small></span><a class="button secondary" href="#bench">Set up a real batch</a><button class="button secondary" id="install-button" type="button" hidden>Install app</button></div>
-        <ul class="proof-list" aria-label="Product facts"><li>WAV and MP3 input</li><li>WAV or MP3 output</li><li>Audio stays on this device</li></ul>
+        <ul class="proof-list" aria-label="Product facts"><li>Audio stays on this device</li><li>Demo renders offline after the first visit</li><li>Free: 3 tracks · Studio: $29 once</li></ul>
       </div>
       <figure class="hero-art">
         <img src="/art/wrapline-bench.webp" width="1280" height="853" fetchpriority="high" decoding="async" alt="Risograph collage of waveform strips passing through a hand-operated printing jig" />
@@ -53,7 +53,7 @@ app.innerHTML = `
     </nav>
     <span class="connection" id="connection"><span aria-hidden="true">●</span> <span>On device</span></span>
   </header>
-  <div class="offline-banner" id="offline-banner" role="status" hidden>You’re offline. Local audio processing still works; license checks will resume later.</div>
+  <div class="offline-banner" id="offline-banner" role="status" hidden>You’re offline. Local audio processing still works offline. License checks need a connection.</div>
   ${demoMode ? '<div class="demo-banner" role="status"><span><strong>Demo — sample data, nothing is saved to your real data.</strong> Three short sample tracks are ready to render.</span><span class="demo-actions"><button class="text-button" id="reset-demo" type="button">Reset demo</button><button class="button quiet" id="start-real" type="button">Start for real</button></span></div>' : ''}
   <main id="main" class="${demoMode ? 'demo-main' : ''}" tabindex="-1">
     ${landingHero}
@@ -134,7 +134,7 @@ app.innerHTML = `
 
     <section class="unlock" id="unlock" aria-labelledby="unlock-title">
       <div class="unlock-mark" aria-hidden="true">∞</div>
-      <div><p class="eyebrow">One-time studio license</p><h2 id="unlock-title">Remove batch and recipe limits</h2><p>The free tier saves one recipe and renders three tracks per batch. A <strong>$29 one-time purchase</strong> unlocks unlimited tracks and saved recipes on your devices.</p></div>
+      <div><p class="eyebrow">One-time studio license</p><h2 id="unlock-title">Remove batch and recipe limits</h2><p>The free tier saves one recipe and renders three tracks per batch. A <strong>$29 one-time purchase</strong> unlocks unlimited tracks and saved recipes on this device.</p></div>
       <div class="license-actions">
         <a class="button primary" id="buy-link"${studioCheckoutAvailable ? ` href="${checkoutUrl}"` : ' aria-disabled="true"'}>${studioCheckoutAvailable ? 'Buy Studio license · $29 (external checkout)' : 'Studio checkout is preparing'}</a>
         ${studioCheckoutAvailable ? '' : '<p class="fine-print">Already have a Studio license? Paste it below to restore it on this device.</p>'}
@@ -143,7 +143,7 @@ app.innerHTML = `
       </div>
     </section>
   </main>
-  <footer><div><a class="brand" href="/" aria-label="Wrapline home">Wrapline</a><p>Add intros, outros, and music to many voice tracks.</p></div><div><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://sociobot.in">Built by Param Factory (external site)</a></div><p><span data-build-id>Build 1.0.0-r14</span></p></footer>
+  <footer><div><a class="brand" href="/" aria-label="Wrapline home">Wrapline</a><p>Add intros, outros, and music to many voice tracks.</p></div><div><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://sociobot.in">Built by Param Factory (external site)</a></div><p><span data-build-id>Build 1.0.0-r15</span></p></footer>
   <div class="update-toast" id="update-toast" role="status" hidden><span>A fresh version is ready.</span><button class="button quiet" id="update-button" type="button">Install update</button></div>
 `;
 

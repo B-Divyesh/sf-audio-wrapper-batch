@@ -3,7 +3,7 @@
   "name": "Wrapline — Add Intros and Outros",
   "short_name": "Wrapline",
   "description": "Add the same intro, outro, music bed, loudness, and filenames to many voice tracks on your device.",
-  "start_url": "/?v=4",
+  "start_url": "/?v=5",
   "scope": "/",
   "display": "standalone",
   "background_color": "#F2EBDD",
@@ -13,5 +13,5 @@
     { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ],
   "categories": ["music", "productivity", "utilities"],
-  "shortcuts": [{ "name": "New batch", "url": "/?v=4#bench", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }]
+  "shortcuts": [{ "name": "New batch", "url": "/?v=5#bench", "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }] }]
 }

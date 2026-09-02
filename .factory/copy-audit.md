@@ -1,19 +1,22 @@
 # Wrapline copy audit
 
-Audited 2026-09-02 after polish round 4. Scope: every visitor-visible sentence, heading, control label, option, status, error, and route metadata description; every README sentence and heading; and all privacy, terms, offline, and 404 prose. Hyphenated terms count as one word. Every sentence is at most 22 words. No banned marketing word remains. Claim IDs refer to `.factory/claims.json`.
+Audited 2026-09-02 after polish round 5. Scope: every visitor-visible sentence, heading, control label, option, status, error, and route metadata description; every README sentence and heading; and all privacy, terms, offline, and 404 prose. Hyphenated terms count as one word. Every sentence is at most 22 words. No banned marketing word remains. Claim IDs refer to `.factory/claims.json`.
 
 ## Landing and app sentences
 
 | Copy | Words | Claim / result |
 | --- | ---: | --- |
 | You’re offline. | 2 | `offline-demo` |
-| Local audio processing still works; license checks will resume later. | 10 | `offline-demo`, clear |
+| Local audio processing still works offline. | 6 | `offline-demo` |
+| License checks need a connection. | 5 | present limitation |
 | Demo — sample data, nothing is saved to your real data. | 10 | `demo-isolation` |
 | Three short sample tracks are ready to render. | 8 | `demo-sample-data` |
 | For podcasters, radio makers, and course creators who need the same music, loudness, and filenames across many tracks. | 18 | `audio-behavior`, audience named |
 | Opens three ready-to-render voice tracks. | 5 | `demo-sample-data` |
 | The saved Signal Desk recipe has an intro, outro, music bed, and three voice tracks. | 14 | `demo-sample-data` |
-| Audio stays on this device. | 6 | `local-audio` |
+| Audio stays on this device. | 6 | first-screen privacy fact; `local-audio` |
+| Demo renders offline after the first visit. | 7 | first-screen offline fact; `offline-demo` |
+| Free: 3 tracks · Studio: $29 once. | 6 | first-screen price fact; `free-tier`, `studio-license` |
 | Intro, voice, outro, and music bed. | 7 | clear |
 | Choose the added audio once, then review and download each rendered batch. | 12 | `wav-receipt`, `mp3-output` |
 | Used in filenames and receipts. | 5 | clear |
@@ -31,11 +34,11 @@ Audited 2026-09-02 after polish round 4. Scope: every visitor-visible sentence, 
 | Free batches include up to 3 tracks. | 7 | `free-tier` |
 | Each receipt records recipe version, source hashes, gain, limiter activity, and output names. | 13 | `source-receipt` |
 | No batches rendered on this device yet. | 7 | clear empty state |
-| Keep added audio, loudness, output format, and filenames together in one recipe. | 12 | `recipe-controls` |
+| Keep added audio, loudness, output format, and filenames together in one recipe. | 12 | `local-recipes`, `recipe-controls` |
 | Every source gets a predictable output name and an audio player after rendering. | 12 | `wav-receipt`, `mp3-output` |
 | Download one ZIP containing the selected audio format and a JSON receipt. | 12 | `wav-receipt`, `mp3-output` |
 | The free tier saves one recipe and renders three tracks per batch. | 12 | `free-tier` |
-| A $29 one-time purchase unlocks unlimited tracks and saved recipes on your devices. | 12 | `studio-license`, `studio-unlimited` |
+| A $29 one-time purchase unlocks unlimited tracks and saved recipes on this device. | 13 | `studio-license`, `studio-unlimited` |
 | Add intros, outros, and music to many voice tracks. | 9 | core workflow |
 | A fresh version is ready. | 5 | clear update state |
 | Sample batch ready: three short voice tracks with an intro, outro, and music bed. | 14 | `demo-sample-data` |
@@ -136,7 +139,7 @@ All are sentence-case action labels or short nouns. Counts include visible words
 | Adds a saved intro, outro, looping music bed, loudness target, and filename pattern. | 13 | `audio-behavior`, `local-recipes` |
 | Exports 48 kHz WAV or MP3 at 128 or 192 kbps. | 11 | `audio-behavior`, `mp3-output` |
 | Creates a ZIP with every rendered track and a JSON receipt. | 10 | `wav-receipt`, `mp3-output` |
-| Stores recipes, added audio, receipts, and license state in this browser. | 11 | `local-recipes`, `license-boundary` |
+| Stores recipes with their added audio and receipts in this browser. | 10 | `local-recipes` |
 | Exports a recipe with its audio files and deletes saved recipes on request. | 13 | `recipe-controls` |
 | Renders without analytics, trackers, runtime CDN scripts, or off-site audio requests. | 11 | `local-audio` |
 | Reloads the installed demo offline after its first visit. | 9 | `offline-demo` |
@@ -146,7 +149,6 @@ All are sentence-case action labels or short nouns. Counts include visible words
 | Open the printed local URL. | 5 | instruction |
 | Use `/demo` for the isolated sample or `/` for your own audio. | 11 | instruction |
 | Deploy `dist/` as the static output. | 6 | instruction |
-| Wrapline uses the browser Web Audio API. | 7 | implementation disclosure |
 | Browser and operating-system codec support can vary. | 7 | limitation |
 | Voice loudness uses an RMS estimate with a ±12 dB gain cap. | 12 | `audio-behavior` |
 | Intro and outro levels remain unchanged. | 6 | `audio-behavior` |
@@ -154,9 +156,7 @@ All are sentence-case action labels or short nouns. Counts include visible words
 | Sample peaks remain below −0.18 dBFS. | 6 | `audio-behavior` |
 | This is not a broadcast-certified EBU R128 meter or true-peak limiter. | 11 | limitation |
 | Review each rendered track before publishing. | 6 | safety instruction |
-| MP3 output uses the bundled `@audio/encode-mp3` encoder. | 7 | `mp3-output`; dependency lock and notice |
-| See `THIRD_PARTY_NOTICES.md` for provenance and licenses. | 7 | documentation pointer |
-| Wrapline is licensed under the MIT License. | 7 | repository license |
+| See `THIRD_PARTY_NOTICES.md` for dependency provenance and licenses. | 8 | documentation pointer |
 | See `LICENSE`. | 2 | documentation pointer |
 
 README headings—Wrapline (1), Try it safely (3), What it does (3), Run locally (2), Test and build (3), Audio behavior (2), Privacy and legal (3)—all name their section. Command lines and link-only lines are not prose sentences.
@@ -165,13 +165,13 @@ README headings—Wrapline (1), Try it safely (3), What it does (3), Run locally
 
 | Copy | Words | Result |
 | --- | ---: | --- |
-| Add intros, outros, and music to voice tracks, then export a WAV or MP3 batch without uploading audio. | 18 | Verb-first, 102 characters, plain wording; `wav-mp3-input`, `mp3-output`, and `local-audio` cover its product claims. |
+| Add intros, outros, and music to voice tracks, then export WAV or MP3 batches without uploads. | 17 | Verb-first, under 120 characters, plain wording; `wav-mp3-input`, output claims, and `local-audio` cover it. |
 
 ## Legal, offline, and not-found routes
 
 | Route | Sentence inventory | Result |
 | --- | --- | --- |
-| Privacy | Your audio does not leave your device during a render. (10) · Wrapline decodes, mixes, previews, and packages files inside your browser. (10) · Recipe settings, intro, outro, music bed files, receipts, and your license token use local browser storage. (16) · Export recipe JSON downloads the current recipe and its audio files. (10) | `local-audio`, `local-recipes`, `recipe-controls` |
+| Privacy | Your audio does not leave your device during a render. (10) · Wrapline decodes, mixes, previews, and packages files inside your browser. (10) · Recipe settings, intro, outro, music bed files, and receipts use local browser storage. (13) · Export recipe JSON downloads the current recipe and its audio files. (10) | `local-audio`, `local-recipes`, `recipe-controls` |
 | Privacy demo | The sample demo uses separate names beginning with `demo:`. (9) · Reset demo and Start for real delete that demo namespace. (10) · The demo does not open or copy real Wrapline recipes, receipts, or license state. (14) | `demo-isolation` |
 | Privacy license | When you verify a Studio license, Wrapline sends the token—not your audio—to the product verification URL. (16) · A completed check for the same token is reused for one day. (12) | `license-boundary`, `license-daily-check` |
 | Privacy network | This version has no analytics, advertising, tracking pixels, third-party fonts, or runtime CDN scripts. (14) · A render sends no network requests outside Wrapline. (8) · The installed demo can render offline after its first visit. (10) | `local-audio`, `offline-demo` |
