@@ -32,10 +32,10 @@ Completed 2026-09-02. I read every prior review and polish record: `review-1.md`
 - All 17 exact commands in `.factory/claims.json` passed independently from that clean clone. This includes isolated demo/reset, storage isolation, request privacy, offline reload/render, WAV/MP3 input and output, deterministic audio behavior, receipts, local persistence, limits, Studio licensing, recipe import/export, and route shell.
 - Clean-clone `npm test` passed 14 unit/release tests, built `dist/`, and completed all 62 desktop/mobile browser checks. The route shell runs Axe against landing, demo, privacy, terms, and not-found pages with zero violations.
 - Local production build: entry JavaScript 13.73 kB gzip, CSS 4.59 kB gzip, lazy MP3 encoder 86.49 kB gzip; `dist/index.html` is present.
-- Deployment: Static Web App deployment `08f75808-8aa7-4b20-97c8-37430d1aba1b` completed to <https://audio-wrapper-batch.sociobot.in>.
+- Deployment: final Static Web App deployment `27053bf5-fa21-4d70-a95f-6050ee0d2927` completed to <https://audio-wrapper-batch.sociobot.in>.
 - Cold live verifier for `/demo`: HTTP 200, title `Demo — Wrapline`, `lang=en`, one H1, main landmark, zero missing image alternatives, zero unlabeled buttons, and no console/page errors. See `.factory/evidence/polish-4/live/verify.json`.
 - `npm run test:e2e:live` completed all 62 checks against production with no retained failure artifacts. It repeats the route/Axe, privacy, offline, demo, and checkout assertions from cold contexts.
-- Production mobile Lighthouse on `/demo`: performance 100, accessibility 100, best practices 100, SEO 100; LCP 1.5 s, CLS 0, TBT 10 ms, 135 KiB total transfer. See `.factory/evidence/polish-4/live/lighthouse.json`.
+- Production mobile Lighthouse on `/demo`: performance 100, accessibility 100, best practices 100, SEO 100; LCP 1.5 s, CLS 0, TBT 60 ms, 141 KiB total transfer. See `.factory/evidence/polish-4/live/lighthouse.json`.
 
 ## Result
 

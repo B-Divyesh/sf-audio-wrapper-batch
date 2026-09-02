@@ -22,10 +22,10 @@ npm run test:e2e:live
 ## Exact evidence
 
 - Clean clone `/tmp/wrapline-polish4-clean-CmQHnc`: `npm ci --include=dev`, every one of the 17 exact `.factory/claims.json` commands, and `npm test` passed. The suite covers units, production build, 62 desktop/mobile browser checks, privacy/request logging, service-worker offline reload/render, and Playwright Axe route audits.
-- Production deployment `08f75808-8aa7-4b20-97c8-37430d1aba1b` completed successfully for `sf-audio-wrapper-batch`.
+- Final production deployment `27053bf5-fa21-4d70-a95f-6050ee0d2927` completed successfully for `sf-audio-wrapper-batch`.
 - Cold `/demo` verifier: 200; no console errors; title, language, H1, main, alt text, and control naming pass. [Verifier report](evidence/polish-4/live/verify.json).
 - Cold first-viewport evidence: [desktop](evidence/polish-4/live/demo-first-viewport-desktop.png) and [390 px mobile](evidence/polish-4/live/demo-first-viewport-mobile-390.png).
-- Production Lighthouse `/demo`: 100 performance, 100 accessibility, 100 best practices, 100 SEO; LCP 1.5 s, CLS 0, TBT 10 ms, 135 KiB transfer. [Report](evidence/polish-4/live/lighthouse.json).
+- Production Lighthouse `/demo`: 100 performance, 100 accessibility, 100 best practices, 100 SEO; LCP 1.5 s, CLS 0, TBT 60 ms, 141 KiB transfer. [Report](evidence/polish-4/live/lighthouse.json).
 - `npm run test:e2e:live` completed the same 62 checks against production with no retained failure artifacts.
 
 ## Known gaps and next steps
