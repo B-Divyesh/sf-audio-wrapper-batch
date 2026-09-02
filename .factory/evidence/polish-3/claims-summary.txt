@@ -1,0 +1,26 @@
+Wrapline polish round 3 claim run
+Date: 2026-09-02 UTC
+Clean clone: /tmp/wrapline-polish3-final-Gr7YSy
+Commit: 73cfd7c2ff0f3d06f6893411d2fabb5fd1fdd213
+
+Each command was read from .factory/claims.json and run independently after npm ci --include=dev.
+
+PASS demo-sample-data: 2 browser projects
+PASS demo-isolation: 2 browser projects
+PASS local-audio: 2 browser projects
+PASS offline-demo: 2 browser projects
+PASS wav-mp3-input: 2 browser projects
+PASS wav-receipt: 2 browser projects
+PASS mp3-output: 2 browser projects
+PASS audio-behavior: 2 browser projects
+PASS source-receipt: 2 browser projects
+PASS local-recipes: 2 browser projects
+PASS free-tier: 2 browser projects
+PASS studio-license: 2 browser projects
+PASS studio-unlimited: 2 browser projects
+PASS license-daily-check: 2 browser projects
+PASS license-boundary: 2 browser projects
+PASS recipe-controls: 2 browser projects
+PASS route-shell: 2 browser projects
+
+Result: all 17 claim commands passed.

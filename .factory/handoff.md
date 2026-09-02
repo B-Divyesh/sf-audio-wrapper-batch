@@ -1,21 +1,40 @@
-# Wrapline review 3 handoff
+# Wrapline polish round 3 handoff
 
 ## Result
 
-**FAIL.** This review made no product-code changes. The review is in `.factory/review-3.md`.
+**PASS.** Every finding in review rounds 1–3 is fixed and verified. The local-first PWA remains a distinct risograph finishing bench and completes the real WAV/MP3 batch job.
+
+## What changed
+
+- Replaced the invalid demo `aside[role=status]` with a valid `div[role=status]`.
+- Tightened automated accessibility checks to require zero Axe violations on every public route.
+- Removed the untestable future-policy promise and added a regression for its absence.
+- Updated the copy audit, 102-character verb-first catalog description, and public build ID to `1.0.0-r13`.
+- Stabilized the 62-test browser matrix with per-test sharding and Playwright 1.58.2’s pinned full Chromium build.
+- Preserved all earlier fixes for first-screen wording, isolated demo storage, real audio processing, claims, metadata, routing, focus, 404 behavior, legal links, and mobile targets.
 
 ## Verification
 
-- Clean clone `/tmp/wrapline-review-3-OHKyyl`: `npm ci --include=dev`, `npm run build`, and `npm test` passed (14 unit tests and the complete local browser suite).
-- All 17 exact `.factory/claims.json` commands passed independently from the clean clone, and every claim tag occurs once.
-- `npm run test:e2e:live` passed in desktop and 390 px projects.
-- Cold desktop/phone, demo, isolation, offline/privacy request logging, routing, metadata, links, and history checks were completed.
+- Final clean clone: `/tmp/wrapline-polish3-final-Gr7YSy` at `73cfd7c2ff0f3d06f6893411d2fabb5fd1fdd213`.
+- `npm ci --include=dev`: zero vulnerabilities.
+- All 17 exact claim commands passed independently; see `.factory/evidence/polish-3/claims-summary.txt`.
+- `npm test`: 14 unit/release tests and 62 browser tests passed with no retries.
+- `npm run verify:release`: production checkout redirect and build passed.
+- Production `npm run test:e2e:live`: 62/62 passed with no retries.
+- Production URL verifier: HTTP 200, 592 ms load, no errors, correct title/lang/H1/main/alt/button checks.
+- Production mobile Lighthouse: 100 performance, 100 accessibility, 100 best practices, 100 SEO; LCP 1.5 s; CLS 0; 135 KiB transfer.
+- Cold production demo: zero Axe violations, reset works, three outputs render, and requests remain same-origin.
+- Production route checks: all public routes return 200; unknown route returns the designed 404; deployed core-file hashes match `dist/`.
 
-## Remaining findings
+Run locally with `npm ci --include=dev && npm test`. Build with `npm run build`. Run production checks with `npm run test:e2e:live`.
 
-- `F-3-1` (minor): live Axe reports `aria-allowed-role` for `<aside role="status">` on the demo banner.
-- `F-3-2` (minor): the privacy page makes an unlisted, untestable future-policy promise.
+## Deployment
 
-## Next steps
+- URL: <https://audio-wrapper-batch.sociobot.in>
+- Scoped resource: `sf-audio-wrapper-batch`
+- Verified deployment ID: `c814d682-34d2-4ff4-948d-5cf26d28b9ba`
+- Build: `1.0.0-r13`
 
-Repair the two findings in `review-3.md`, then repeat the claim commands and live Axe scan. Existing unrelated `graphify-out/` changes remain unstaged and untouched.
+## Known gaps and next steps
+
+None.
