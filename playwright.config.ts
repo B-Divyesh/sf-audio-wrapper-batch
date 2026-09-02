@@ -2,7 +2,9 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests/e2e',
-  fullyParallel: false,
+  // The suite is one file, so per-test sharding keeps each browser process
+  // short-lived and prevents one long worker from owning every context.
+  fullyParallel: true,
   // Every test gets Playwright's owned context. Tests that need a different
   // service-worker policy create and close only their additional context.
   workers: 1,
@@ -10,6 +12,9 @@ export default defineConfig({
   timeout: 30_000,
   use: {
     baseURL: process.env.WRAPLINE_TEST_BASE_URL ?? 'http://127.0.0.1:4173',
+    // Use Playwright's pinned full Chromium build. Its legacy headless-shell
+    // binary can exit while creating contexts in this audio-heavy suite.
+    channel: 'chromium',
     trace: 'retain-on-failure',
     launchOptions: { args: ['--disable-dev-shm-usage', '--disable-gpu', '--no-sandbox'] },
   },
