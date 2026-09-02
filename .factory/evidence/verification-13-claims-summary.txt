@@ -1,0 +1,25 @@
+Independent verification 13 claims summary
+Candidate: f6ceaf317a73066e2f85a88a6e3e4ef4e8209c3b
+Clean worktree: /tmp/wrapline-qa13-LFfTJn/checkout
+Date: 2026-09-02 UTC
+
+PASS demo-sample-data
+PASS demo-isolation
+PASS local-audio
+PASS offline-demo
+PASS wav-mp3-input
+PASS wav-receipt
+PASS mp3-output
+PASS audio-behavior
+PASS source-receipt
+PASS local-recipes
+PASS free-tier
+PASS studio-license
+PASS studio-unlimited
+PASS license-daily-check
+PASS license-boundary
+PASS recipe-controls
+PASS route-shell
+
+All 17 exact commands from .factory/claims.json passed after npm ci.
+Each tagged command ran in both configured projects: 34 executions total.
