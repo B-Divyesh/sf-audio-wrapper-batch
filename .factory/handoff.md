@@ -1,33 +1,28 @@
-# Wrapline review 4 handoff
+# Wrapline verification 14 handoff
 
 ## Result
 
-**PASS.** Wrapline now opens the seeded Signal Desk workspace directly after one landing click. Demo mode remains isolated at `/demo` and `/?demo=1`, with its persistent banner, Reset demo, and Start for real controls. The repair source commit is `782b45518eab2cb01348a7179548eaad91742af8`.
+**PASS** — candidate `4629dc3050dc80c8b96c021d7e20e4f5ee963f5b` is deployed at <https://audio-wrapper-batch.sociobot.in> and meets the researched local-first audio-batch contract.
 
-The demo's mobile layout places the live queue above the recipe sheet, so a named sample track is visible in the first 390 × 844 viewport. Desktop retains the two-station layout. All visitor-facing references now use **music bed**, and the paid action names the external checkout without following it in tests.
+## What was verified
 
-## Run and verify
+- A clean detached checkout at the candidate SHA: `npm ci`, every one of the 17 exact claim commands, `npm test`, `npm run build`, and `npm run verify:release` all passed.
+- The complete live suite passed all 62 desktop/mobile Playwright executions.
+- Cold desktop and 390 px mobile pages plainly explain the job, audience, and one-click sample; the sample sandbox, real audio workflow, error recovery, receipts, license boundary, privacy boundary, keyboard focus, reduced motion, and offline PWA reload were exercised.
+- Live candidate bytes match the build for the app shell, assets, worker, manifest, route shell, legal pages, and 404. `verify-url.sh` evidence is committed in `.factory/evidence/verification-14/`.
+- Live headers, caching, CSP, accessibility/Axe coverage, and bundle budgets passed. The license verifier throttled a single client after 31 invalid requests, returning 429 with `Retry-After: 4`.
+
+## How to run and verify
 
 ```sh
 npm ci
 npm test
+npm run verify:release
 npm run test:e2e:live
 ```
 
-- App: <https://audio-wrapper-batch.sociobot.in>
-- Direct isolated sample: <https://audio-wrapper-batch.sociobot.in/?demo=1>
-- Primary demo route: <https://audio-wrapper-batch.sociobot.in/demo>
-- Static deployment output: `dist/`
-
-## Exact evidence
-
-- Clean clone `/tmp/wrapline-polish4-clean-CmQHnc`: `npm ci --include=dev`, every one of the 17 exact `.factory/claims.json` commands, and `npm test` passed. The suite covers units, production build, 62 desktop/mobile browser checks, privacy/request logging, service-worker offline reload/render, and Playwright Axe route audits.
-- Final production deployment `27053bf5-fa21-4d70-a95f-6050ee0d2927` completed successfully for `sf-audio-wrapper-batch`.
-- Cold `/demo` verifier: 200; no console errors; title, language, H1, main, alt text, and control naming pass. [Verifier report](evidence/polish-4/live/verify.json).
-- Cold first-viewport evidence: [desktop](evidence/polish-4/live/demo-first-viewport-desktop.png) and [390 px mobile](evidence/polish-4/live/demo-first-viewport-mobile-390.png).
-- Production Lighthouse `/demo`: 100 performance, 100 accessibility, 100 best practices, 100 SEO; LCP 1.5 s, CLS 0, TBT 60 ms, 141 KiB transfer. [Report](evidence/polish-4/live/lighthouse.json).
-- `npm run test:e2e:live` completed the same 62 checks against production with no retained failure artifacts.
+Use <https://audio-wrapper-batch.sociobot.in/demo> for the isolated Signal Desk sample.
 
 ## Known gaps and next steps
 
-None. The app is a static local-first PWA; deploy `dist/` for future releases.
+None found during this verification. Future changes should rerun the claim ledger and production suite before deployment.
