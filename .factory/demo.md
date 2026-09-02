@@ -8,4 +8,4 @@
 - **Start for real:** **Start for real** discards the same demo namespace and opens `/`. No sample recipe, audio, receipt, or license data is copied into real storage.
 - **Offline:** The sample WAV files are deterministically generated from shipped application source, so the seeded queue is available after the first service-worker installation even when the browser is offline.
 
-The browser regression tagged `@claim:demo-isolation` proves the namespace boundary. `@claim:offline-demo` owns a fresh browser context and proves the installed demo reloads and renders while offline.
+The browser regression tagged `@claim:demo-isolation` snapshots every real recipe, audio blob, receipt, and license field before and after a demo save, render, license check, reset, and exit. It also proves every demo database and key is removed on exit. `@claim:offline-demo` owns a fresh browser context and proves the installed demo reloads and renders while offline.

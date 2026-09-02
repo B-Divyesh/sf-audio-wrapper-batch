@@ -1,0 +1,23 @@
+Clean clone: /tmp/wrapline-polish5-clean-618aBb/repo
+Source commit: 335c6a6f840606dc4d70e587517dc4c8ce0a6cce
+Install: npm ci --include=dev — PASS, 0 vulnerabilities
+
+demo-sample-data   PASS  14.5s
+demo-isolation     PASS  23.1s
+local-audio        PASS  11.6s
+offline-demo       PASS  12.4s
+wav-mp3-input      PASS  11.3s
+wav-receipt        PASS  11.6s
+mp3-output         PASS  13.4s
+audio-behavior     PASS  15.7s
+source-receipt     PASS  11.6s
+local-recipes      PASS  16.1s
+free-tier          PASS  21.7s
+studio-license     PASS  11.0s
+studio-unlimited   PASS  20.7s
+license-daily-check PASS 14.0s
+license-boundary   PASS  13.5s
+recipe-controls    PASS  15.5s
+route-shell        PASS  20.5s
+
+Each line is the exact test command declared for that claim in .factory/claims.json, run independently after npm ci.

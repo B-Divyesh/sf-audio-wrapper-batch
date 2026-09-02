@@ -1,36 +1,48 @@
-# Wrapline adversarial review 5 handoff
+# Wrapline perfection-loop round 5 handoff
 
 ## Result
 
-**FAIL** — review 5 found eight issues: six blocking claim/verification gaps, one major first-screen fact-set gap, and one minor visual-semantic issue. Product code was not modified.
+**PASS.** Every finding from `review-1.md` through `review-5.md` is repaired and regression-tested. The production deployment is live at <https://audio-wrapper-batch.sociobot.in>.
 
-The complete report is in `.factory/review-5.md`.
+## What changed
 
-## What was done
+- Replaced the first-screen capability repeats with tested privacy, offline, and price facts. Outlined registration squares replace the misleading red × marks.
+- Limited the Studio promise to “this device” and replaced the offline future promise with a present connection requirement.
+- Expanded `local-recipes` to reload and compare the names and exact bytes of intro, outro, and music-bed files plus a receipt.
+- Expanded `recipe-controls` to export and byte-compare all three audio assets, then prove their saved record and statuses disappear after deletion and reload.
+- Expanded `demo-isolation` to seed and snapshot a real recipe, all three asset bytes, a receipt, and license state. The test changes and resets demo data, then proves the real snapshot is unchanged and every demo database/key is removed on exit.
+- Removed unsupported README implementation, encoder, and license assertions while retaining direct notice and license links.
+- Updated the copy audit, claims ledger, demo documentation, visual thesis, PWA start version, catalog description, route build ID, and cumulative repair map.
 
-- Opened production cold in fresh 390 × 844 and 1440 × 900 browser contexts before scrolling.
-- Entered the one-click Signal Desk demo, checked its initial viewport, banner, reset, requests, and manual three-asset recipe export.
-- Read the brief, visual thesis, claims ledger, README, every earlier review/polish record, and the previous handoff.
-- Ran all 17 exact claim commands independently from clean clone `9bc7ea993b99610f6e954521de693f678cebff65`.
-- Ran `npm test`, the 62-check production Playwright suite, the fleet URL verifier, Axe-backed route checks, and a same-origin link crawl.
-- Re-audited landing/app and README sentences, headings, actions, terminology, claims, public routes, accessibility, privacy, and missed leverage.
+Implementation commit: `335c6a6f840606dc4d70e587517dc4c8ce0a6cce`.
 
-## Verification results
+## Verification
 
-- All 17 declared commands exited 0, but `demo-isolation` and `recipe-controls` do not prove their complete claim text.
-- `npm test`: PASS — 14 unit/release tests, production build, and 62 browser checks.
-- `npm run test:e2e:live`: PASS — 62 production checks.
-- Build: `dist/` produced; initial JavaScript 13.73 kB gzip, CSS 4.59 kB gzip, lazy MP3 encoder 86.49 kB gzip.
-- URL verifier: HTTP 200, 573 ms load, no console errors, correct title/language/H1/main, no missing alt text, no unlabeled buttons.
-- Axe: zero violations on landing, demo, privacy, terms, and designed 404 routes.
-- Internal links: all real same-origin destinations returned 200; the unknown route returned the designed 404.
+- Clean clone: `/tmp/wrapline-polish5-clean-618aBb/repo` at `335c6a6`; `npm ci --include=dev` found zero vulnerabilities.
+- Every one of the 17 exact `.factory/claims.json` commands passed independently. See `.factory/evidence/polish-5/claims-summary.txt`.
+- Clean-clone `npm test`: 15 unit/release tests, production build, and all 62 desktop/mobile browser checks passed.
+- `npm run verify:release`: the product-scoped hosted checkout redirect passed and the production build completed.
+- Build: `dist/index.html` exists; entry JavaScript 13.74 kB gzip, CSS 4.59 kB gzip, and the lazy MP3 encoder 86.49 kB gzip.
+- Local URL verifier: HTTP 200, no console errors, correct title/lang/H1/main, zero missing image alternatives, and zero unlabeled buttons.
+- Local Lighthouse: performance 100, accessibility 100, best practices 100, SEO 100; LCP 1.8 s, CLS 0, TBT 0 ms, 140 KiB transfer.
+- Deployment: Azure Static Web Apps deployment `4a4f0ad6-d7f0-4ee3-b56a-869f35bca221` to the existing `sf-audio-wrapper-batch` resource.
+- Cold production verifiers for `/` and `/demo`: HTTP 200, no console/page errors, route-specific titles, one H1, main landmark, complete image alternatives, and labeled buttons.
+- Production `npm run test:e2e:live`: all 62 checks passed. This includes all claim paths, zero Axe violations on every public route, same-origin render requests, keyboard/focus checks, 44 px targets, offline reload/render, and designed 404 behavior.
+- Live Lighthouse: performance 100, accessibility 100, best practices 100, SEO 100; LCP 1.5 s, CLS 0, TBT 0 ms, 141 KiB transfer.
+- Production statuses: `/`, `/demo`, `/?demo=1`, `/privacy/`, and `/terms/` return 200; an unknown route returns the designed 404 document with status 404.
+- SHA-256 matched between `dist/` and production for `index.html`, `sw.js`, legal/404 pages, manifest, entry JS, CSS, and lazy MP3 chunk.
+- Production headers include CSP, Permissions-Policy, Referrer-Policy, HSTS, frame denial, and content-type protection.
 
-## Work left
+## Evidence
 
-1. Test export/deletion of intro, outro, and music-bed assets, not only an intro.
-2. Snapshot recipes, receipts, and license storage to prove demo isolation across the whole real namespace.
-3. Add or narrow claims for all-audio persistence, cross-device licensing, implementation/license facts, and offline license-check wording.
-4. Put privacy, offline, and price facts on the first screen.
-5. Replace the red × markers before positive product facts.
+- Finding map: `.factory/polish-5.md`
+- Landing phone first screen: `.factory/evidence/polish-5/live/landing-first-viewport-mobile-390.png`
+- Landing desktop first screen: `.factory/evidence/polish-5/live/landing-first-viewport-desktop.png`
+- One-click demo phone screen: `.factory/evidence/polish-5/live/demo-first-viewport-mobile-390.png`
+- Live root verifier: `.factory/evidence/polish-5/live/root/verify.json`
+- Live demo verifier: `.factory/evidence/polish-5/live/demo/verify.json`
+- Live Lighthouse: `.factory/evidence/polish-5/live/lighthouse.json`
 
-After repair, rerun all exact claim commands, `npm test`, `npm run test:e2e:live`, and the cold mobile/desktop audit.
+## Known gaps and next steps
+
+No known product, claim, copy, demo, accessibility, privacy, offline, mobile, routing, performance, or deployment gap remains. Deployment automation remains owned by the factory.
