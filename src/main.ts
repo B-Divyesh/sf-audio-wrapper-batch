@@ -143,7 +143,7 @@ app.innerHTML = `
       </div>
     </section>
   </main>
-  <footer><div><a class="brand" href="/" aria-label="Wrapline home">Wrapline</a><p>Add intros, outros, and music to many voice tracks.</p></div><div><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://sociobot.in">Built by Param Factory (external site)</a></div><p><span data-build-id>Build 1.0.0-r13</span></p></footer>
+  <footer><div><a class="brand" href="/" aria-label="Wrapline home">Wrapline</a><p>Add intros, outros, and music to many voice tracks.</p></div><div><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://sociobot.in">Built by Param Factory (external site)</a></div><p><span data-build-id>Build 1.0.0-r14</span></p></footer>
   <div class="update-toast" id="update-toast" role="status" hidden><span>A fresh version is ready.</span><button class="button quiet" id="update-button" type="button">Install update</button></div>
 `;
 

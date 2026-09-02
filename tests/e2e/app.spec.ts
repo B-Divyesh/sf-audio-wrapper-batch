@@ -129,7 +129,7 @@ test('@claim:route-shell Every public route has metadata, legal links, and a rea
       .toEqual(['/#bench', '/#method', '/#unlock']);
     await expect(page.locator('footer'), route.path).toContainText('Add intros, outros, and music to many voice tracks.');
     await expect(page.locator('footer'), route.path).toContainText('Built by Param Factory');
-    await expect(page.locator('footer [data-build-id]'), route.path).toHaveText('Build 1.0.0-r13');
+    await expect(page.locator('footer [data-build-id]'), route.path).toHaveText('Build 1.0.0-r14');
     await expect(page.locator('footer'), route.path).not.toContainText('Bench artwork generated for Wrapline with Azure AI Foundry.');
     await expect(page.locator('footer a[href="/privacy/"]'), route.path).toHaveCount(1);
     await expect(page.locator('footer a[href="/terms/"]'), route.path).toHaveCount(1);

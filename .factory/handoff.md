@@ -2,24 +2,11 @@
 
 ## Result
 
-**FAIL.** Review candidate `87a9519d4c596bb1b97f9a0a522dd62e83265184` has one blocking and two minor findings. Full details are in [`.factory/review-4.md`](review-4.md).
+**PASS.** Wrapline now opens the seeded Signal Desk workspace directly after one landing click. Demo mode remains isolated at `/demo` and `/?demo=1`, with its persistent banner, Reset demo, and Start for real controls. The repair source commit is `782b45518eab2cb01348a7179548eaad91742af8`.
 
-The blocker is the demo entry experience: one click loads `/demo`, but the first phone and desktop screens repeat the landing hero. The populated Signal Desk workspace remains below the fold behind a second **Open the sample batch** action.
+The demo's mobile layout places the live queue above the recipe sheet, so a named sample track is visible in the first 390 × 844 viewport. Desktop retains the two-station layout. All visitor-facing references now use **music bed**, and the paid action names the external checkout without following it in tests.
 
-The minor findings are inconsistent **bed/music bed** terminology and a paid checkout link that does not say it opens an external site.
-
-## Verification completed
-
-- Opened production cold in fresh 390 × 844 and 1440 × 900 browser contexts.
-- Exercised `/demo`, its banner, three sample tracks, Reset demo, storage separation, rendering, request privacy, and offline behavior.
-- Ran all 17 exact `.factory/claims.json` commands independently from `/tmp/wrapline-review4-JozvhX`; all passed in desktop and mobile projects.
-- Ran `npm test`; it exited 0 with 14 unit/release tests and 62 browser tests. One Chromium launch crashed and passed on retry; the isolated rerun passed 2/2.
-- Ran `npm run test:e2e:live`; all 62 production checks passed without retry.
-- Crawled all same-origin links, checked the expected 404, reviewed metadata and security headers, and ran zero-violation Axe checks.
-- Matched ten key production artifacts to the clean build by SHA-256.
-- Rechecked every finding from review rounds 1–3 against live behavior and current code; all earlier IDs remain fixed.
-
-## How to verify
+## Run and verify
 
 ```sh
 npm ci
@@ -27,12 +14,20 @@ npm test
 npm run test:e2e:live
 ```
 
-For the blocking check, open `/` at 390 × 844, activate **Try it with sample data**, and inspect `/demo` without scrolling or activating another control. The sample recipe and queue are not in the initial viewport.
+- App: <https://audio-wrapper-batch.sociobot.in>
+- Direct isolated sample: <https://audio-wrapper-batch.sociobot.in/?demo=1>
+- Primary demo route: <https://audio-wrapper-batch.sociobot.in/demo>
+- Static deployment output: `dist/`
 
-## Remaining work
+## Exact evidence
 
-1. Put the seeded demo workspace directly after the demo banner and before the repeated marketing hero, or omit that hero in demo mode.
-2. Replace visitor-facing **bed** labels with **music bed**.
-3. Add an external-checkout notice to the $29 purchase action and test it without following the link.
+- Clean clone `/tmp/wrapline-polish4-clean-CmQHnc`: `npm ci --include=dev`, every one of the 17 exact `.factory/claims.json` commands, and `npm test` passed. The suite covers units, production build, 62 desktop/mobile browser checks, privacy/request logging, service-worker offline reload/render, and Playwright Axe route audits.
+- Production deployment `08f75808-8aa7-4b20-97c8-37430d1aba1b` completed successfully for `sf-audio-wrapper-batch`.
+- Cold `/demo` verifier: 200; no console errors; title, language, H1, main, alt text, and control naming pass. [Verifier report](evidence/polish-4/live/verify.json).
+- Cold first-viewport evidence: [desktop](evidence/polish-4/live/demo-first-viewport-desktop.png) and [390 px mobile](evidence/polish-4/live/demo-first-viewport-mobile-390.png).
+- Production Lighthouse `/demo`: 100 performance, 100 accessibility, 100 best practices, 100 SEO; LCP 1.5 s, CLS 0, TBT 10 ms, 135 KiB transfer. [Report](evidence/polish-4/live/lighthouse.json).
+- `npm run test:e2e:live` completed the same 62 checks against production with no retained failure artifacts.
 
-No product code was modified during this review.
+## Known gaps and next steps
+
+None. The app is a static local-first PWA; deploy `dist/` for future releases.
