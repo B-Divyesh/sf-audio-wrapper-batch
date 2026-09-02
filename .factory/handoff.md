@@ -15,12 +15,13 @@
 
 ## Verification
 
-- Final clean clone: `/tmp/wrapline-polish3-final-Gr7YSy` at `73cfd7c2ff0f3d06f6893411d2fabb5fd1fdd213`.
+- Final product/test source clone: `/tmp/wrapline-polish3-final-Gr7YSy` at `73cfd7c2ff0f3d06f6893411d2fabb5fd1fdd213`.
 - `npm ci --include=dev`: zero vulnerabilities.
 - All 17 exact claim commands passed independently; see `.factory/evidence/polish-3/claims-summary.txt`.
 - `npm test`: 14 unit/release tests and 62 browser tests passed with no retries.
 - `npm run verify:release`: production checkout redirect and build passed.
 - Production `npm run test:e2e:live`: 62/62 passed with no retries.
+- Final post-deploy cold subset: route, demo, offline, and privacy claims passed 8/8.
 - Production URL verifier: HTTP 200, 592 ms load, no errors, correct title/lang/H1/main/alt/button checks.
 - Production mobile Lighthouse: 100 performance, 100 accessibility, 100 best practices, 100 SEO; LCP 1.5 s; CLS 0; 135 KiB transfer.
 - Cold production demo: zero Axe violations, reset works, three outputs render, and requests remain same-origin.
@@ -32,7 +33,7 @@ Run locally with `npm ci --include=dev && npm test`. Build with `npm run build`.
 
 - URL: <https://audio-wrapper-batch.sociobot.in>
 - Scoped resource: `sf-audio-wrapper-batch`
-- Verified deployment ID: `c814d682-34d2-4ff4-948d-5cf26d28b9ba`
+- Final deployment ID: `aeab4575-b5a5-4201-bade-ea541913bc13`
 - Build: `1.0.0-r13`
 
 ## Known gaps and next steps

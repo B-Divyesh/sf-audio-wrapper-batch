@@ -1,6 +1,6 @@
 # Wrapline perfection loop — polish round 3
 
-Completed 2026-09-02. I read `.factory/review-1.md`, `.factory/polish-1.md`, `.factory/review-2.md`, `.factory/polish-2.md`, and `.factory/review-3.md` in full. Product repair commit: `ef74b35`. Browser-runner hardening commit: `73cfd7c`. Verified deployment: `c814d682-34d2-4ff4-948d-5cf26d28b9ba` at <https://audio-wrapper-batch.sociobot.in>.
+Completed 2026-09-02. I read `.factory/review-1.md`, `.factory/polish-1.md`, `.factory/review-2.md`, `.factory/polish-2.md`, and `.factory/review-3.md` in full. Product repair commit: `ef74b35`. Browser-runner hardening commit: `73cfd7c`. Final deployment: `aeab4575-b5a5-4201-bade-ea541913bc13` at <https://audio-wrapper-batch.sociobot.in>.
 
 ## Finding closure
 
@@ -39,6 +39,7 @@ The suite covers the real sample and user-data flows, WAV/MP3 decoding, WAV/MP3 
 - Production URL verifier: 592 ms load with the same semantic checks and no console errors. See `.factory/evidence/polish-3/live/verify.json`.
 - Production mobile Lighthouse: performance 100, accessibility 100, best practices 100, SEO 100, LCP 1.5 s, CLS 0, total transfer 135 KiB. See `.factory/evidence/polish-3/live/lighthouse.json`.
 - `npm run test:e2e:live`: all 62 tests passed with no retries under desktop and 390 px projects.
+- After the final redeploy, the route, demo, offline, and privacy claim subset passed 8/8 from cold contexts.
 - Cold live `/?demo=1`: persistent valid status banner, three named tracks, Reset demo, Start for real, zero Axe violations, and successful reset.
 - Cold live render: three playable outputs and only same-origin HTTP requests. Mobile rendered-state audit measured all 42 visible controls at least 44 by 44 CSS pixels.
 - Cold live `/privacy/`: HTTP 200, title `Privacy — Wrapline`, zero Axe violations, and the removed promise absent.
