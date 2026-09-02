@@ -108,27 +108,6 @@
       "package_version"
     ],
     "4": [
-      "src_license",
-      "src_license_billingbase",
-      "src_license_cachedverdict",
-      "src_license_capturereturnedlicense",
-      "src_license_checkouturl",
-      "src_license_licensestate",
-      "src_license_scopedkey",
-      "src_license_setlicensestoragescope",
-      "src_license_storelicense",
-      "src_license_studiocheckoutavailable",
-      "src_license_verifylicense",
-      "tests_license_test",
-      "tests_license_test_memorystorage",
-      "tests_license_test_memorystorage_clear",
-      "tests_license_test_memorystorage_getitem",
-      "tests_license_test_memorystorage_key",
-      "tests_license_test_memorystorage_length",
-      "tests_license_test_memorystorage_removeitem",
-      "tests_license_test_memorystorage_setitem"
-    ],
-    "5": [
       "src_audio",
       "src_audio_clamp",
       "src_audio_concat",
@@ -148,7 +127,7 @@
       "src_audio_sha256",
       "tests_audio_test"
     ],
-    "6": [
+    "5": [
       "axe_core_playwright",
       "package_devdependencies",
       "package_devdependencies_axe_core_playwright",
@@ -163,7 +142,7 @@
       "vite",
       "vitest"
     ],
-    "7": [
+    "6": [
       "scripts_static_server",
       "scripts_static_server_argument",
       "scripts_static_server_config",
@@ -175,6 +154,19 @@
       "scripts_static_server_sendfile",
       "scripts_static_server_server",
       "scripts_static_server_types"
+    ],
+    "7": [
+      "src_license",
+      "src_license_billingbase",
+      "src_license_cachedverdict",
+      "src_license_capturereturnedlicense",
+      "src_license_checkouturl",
+      "src_license_licensestate",
+      "src_license_scopedkey",
+      "src_license_setlicensestoragescope",
+      "src_license_storelicense",
+      "src_license_studiocheckoutavailable",
+      "src_license_verifylicense"
     ],
     "8": [
       "scripts_run_e2e",
@@ -188,53 +180,64 @@
       "scripts_run_e2e_waitforpreview"
     ],
     "9": [
+      "tests_license_test",
+      "tests_license_test_memorystorage",
+      "tests_license_test_memorystorage_clear",
+      "tests_license_test_memorystorage_getitem",
+      "tests_license_test_memorystorage_key",
+      "tests_license_test_memorystorage_length",
+      "tests_license_test_memorystorage_removeitem",
+      "tests_license_test_memorystorage_setitem"
+    ],
+    "10": [
       "scripts_create_test_mp3",
       "scripts_create_test_mp3_body",
       "scripts_create_test_mp3_output",
       "scripts_create_test_mp3_samples",
       "scripts_create_test_mp3_tail"
     ],
-    "10": [
+    "11": [
+      "tests_e2e_app_spec",
+      "tests_e2e_app_spec_mp3fixture",
+      "tests_e2e_app_spec_snapshotrealstorage",
+      "tests_e2e_app_spec_wavbuffer",
+      "tests_e2e_app_spec_withownedcontext"
+    ],
+    "12": [
       "public_route_shell",
       "public_route_shell_announcer",
       "public_route_shell_focusrouteheading",
       "public_route_shell_skiplink"
     ],
-    "11": [
+    "13": [
       "src_sw_template",
       "src_sw_template_cachefirst",
       "src_sw_template_networkfirst",
       "src_sw_template_precacheshell"
     ],
-    "12": [
-      "tests_e2e_app_spec",
-      "tests_e2e_app_spec_mp3fixture",
-      "tests_e2e_app_spec_wavbuffer",
-      "tests_e2e_app_spec_withownedcontext"
-    ],
-    "13": [
+    "14": [
       "vite_config",
       "vite_config_offlineshell",
       "vite_config_workertemplatepath"
     ],
-    "14": [
+    "15": [
       "scripts_verify_checkout",
       "scripts_verify_checkout_location"
     ],
-    "15": [
+    "16": [
       "tests_release_test",
       "tests_release_test_repositoryroot"
     ],
-    "16": [
+    "17": [
       "playwright_config"
     ],
-    "17": [
+    "18": [
       "playwright_live_config"
     ],
-    "18": [
+    "19": [
       "src_vite_env_d"
     ],
-    "19": [
+    "20": [
       "vitest_config"
     ]
   },
@@ -243,22 +246,23 @@
     "1": 0.08333333333333333,
     "2": 0.1631578947368421,
     "3": 0.10526315789473684,
-    "4": 0.13450292397660818,
-    "5": 0.22875816993464052,
-    "6": 0.15384615384615385,
-    "7": 0.2545454545454545,
+    "4": 0.22875816993464052,
+    "5": 0.15384615384615385,
+    "6": 0.2545454545454545,
+    "7": 0.2727272727272727,
     "8": 0.2222222222222222,
-    "9": 0.4,
-    "10": 0.5,
-    "11": 0.5,
+    "9": 0.25,
+    "10": 0.4,
+    "11": 0.4,
     "12": 0.5,
-    "13": 0.6666666666666666,
-    "14": 1.0,
+    "13": 0.5,
+    "14": 0.6666666666666666,
     "15": 1.0,
     "16": 1.0,
     "17": 1.0,
     "18": 1.0,
-    "19": 1.0
+    "19": 1.0,
+    "20": 1.0
   },
   "gods": [
     {
@@ -307,8 +311,8 @@
       "degree": 7
     },
     {
-      "id": "src_main_addfiles",
-      "label": "addFiles()",
+      "id": "src_main_message",
+      "label": "message()",
       "degree": 7
     }
   ],
@@ -326,17 +330,6 @@
     },
     {
       "source": "bindEvents()",
-      "target": "sanitizeFilename()",
-      "source_files": [
-        "src/main.ts",
-        "src/audio.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "bindEvents()",
       "target": "deleteRecipe()",
       "source_files": [
         "src/main.ts",
@@ -349,6 +342,17 @@
     {
       "source": "bindEvents()",
       "target": "resetDemoStorage()",
+      "source_files": [
+        "src/main.ts",
+        "src/db.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "renderBatch()",
+      "target": "saveReceipt()",
       "source_files": [
         "src/main.ts",
         "src/db.ts"
